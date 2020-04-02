@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <androidx.core.widget.NestedScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity"
+        android:background="@color/add_bg"
+        >
+
+        <TableLayout
+            android:id="@+id/fa_root_tl"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TableRow
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp">
+
+                <TextView
+                    android:text="股票代码"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18sp"
+                    android:padding="2dp"
+                    android:paddingStart="25dp"
+                    android:layout_weight="0.4"
+                    />
+
+                <EditText
+                    android:id="@+id/fa_code"
+                    android:hint="必填"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="20sp"
+                    android:padding="2dp"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_selector"
+                    />
+
+            </TableRow>
+
+            <View
+                android:layout_marginTop="10dp"
+                android:layout_height="0.5dp"
+                android:background="@color/colorWhite" />
+
+            <TableRow
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp">
+
+                <TextView
+                    android:text="股票名称"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18sp"
+                    android:padding="2dp"
+                    android:paddingStart="25dp"
+                    android:layout_weight="0.4"
+                    />
+
+                <EditText
+                    android:id="@+id/fa_name"
+                    android:hint="可选填"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="20sp"
+                    android:padding="2dp"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_selector"
+                    />
+
+            </TableRow>
+
+            <View
+                android:layout_marginTop="10dp"
+                android:layout_height="0.5dp"
+                android:background="@color/colorWhite" />
+
+            <TableRow
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp">
+
+                <TextView
+                    android:text="当前日期"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18sp"
+                    android:padding="2dp"
+                    android:paddingStart="25dp"
+                    android:layout_weight="0.4"
+                    />
+
+                <EditText
+                    android:id="@+id/fa_date"
+                    android:hint="必填"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="20sp"
+                    android:padding="2dp"
+                    android:layout_weight="1"
+                    android:layout_height="45dp"
+                    android:background="@drawable/edit_selector"
+                    />
+
+            </TableRow>
+
+            <View
+                android:layout_marginTop="10dp"
+                android:layout_height="0.5dp"
+                android:background="@color/colorWhite" />
+
+            <TableRow
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp">
+
+                <TextView
+                    android:text="该日开盘价"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18sp"
+                    android:padding="2dp"
+                    android:paddingStart="25dp"
+                    android:layout_weight="0.4"
+                    />
+
+                <EditText
+                    android:id="@+id/fa_open_pri"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="20sp"
+                    android:padding="2dp"
+                    android:hint="必填"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_selector"
+                    android:layout_height="45dp"
+                    />
+
+            </TableRow>
+
+            <View
+                android:layout_marginTop="10dp"
+                android:layout_height="0.5dp"
+                android:background="@color/colorWhite" />
+
+            <TableRow
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp">
+
+                <TextView
+                    android:text="该日最高价"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18sp"
+                    android:padding="2dp"
+                    android:paddingStart="25dp"
+                    android:layout_weight="0.4"
+                    />
+
+                <EditText
+                    android:id="@+id/fa_max_pri"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="20sp"
+                    android:padding="2dp"
+                    android:hint="必填"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_selector"
+                    android:layout_height="45dp"
+                    />
+
+            </TableRow>
+
+            <View
+                android:layout_marginTop="10dp"
+                android:layout_height="0.5dp"
+                android:background="@color/colorWhite" />
+
+            <TableRow
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp">
+
+                <TextView
+                    android:text="该日最低价"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18sp"
+                    android:padding="2dp"
+                    android:paddingStart="25dp"
+                    android:layout_weight="0.4"
+                    />
+
+                <EditText
+                    android:id="@+id/fa_min_pri"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="20sp"
+                    android:padding="2dp"
+                    android:hint="必填"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_selector"
+                    />
+
+            </TableRow>
+
+            <View
+                android:layout_marginTop="10dp"
+                android:layout_height="0.5dp"
+                android:background="@color/colorWhite" />
+
+            <TableRow
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp">
+
+                <TextView
+                    android:text="该日收盘价"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18sp"
+                    android:padding="2dp"
+                    android:paddingStart="25dp"
+                    android:layout_weight="0.4"
+                    />
+
+                <EditText
+                    android:id="@+id/fa_close_pri"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="20sp"
+                    android:padding="2dp"
+                    android:hint="必填"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_selector"
+                    />
+
+            </TableRow>
+
+            <View
+                android:layout_marginTop="10dp"
+                android:layout_height="0.5dp"
+                android:background="@color/colorWhite" />
+
+            <TableRow
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                >
+
+                <TextView
+                    android:text="该日成交量"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18sp"
+                    android:padding="2dp"
+                    android:paddingStart="25dp"
+                    android:layout_weight="0.4"
+                    />
+
+                <EditText
+                    android:id="@+id/fa_volume_num"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="20sp"
+                    android:hint="必填"
+                    android:layout_height="45dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_selector"
+                    />
+
+            </TableRow>
+
+            <Button
+                android:id="@+id/fa_ok_btn"
+                android:layout_marginTop="36dp"
+                android:layout_marginStart="22dp"
+                android:layout_marginEnd="22dp"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@drawable/bg_radius_btn"
+                android:text="添加"
+                android:textSize="26sp"
+                android:textColor="#fff"
+                />
+
+        </TableLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</layout>

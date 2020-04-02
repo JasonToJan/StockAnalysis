@@ -108,13 +108,18 @@ dependencies {
     androidTestImplementation test.espresso
 
     implementation google.appcompat
+    implementation google.material
     implementation google.constraintlayout
     implementation google.core_ktx
     implementation google.kotlin_stdlib
+    implementation google.viewpager2
 
     kapt google.room_compiler
     implementation google.persistence_runtime
     implementation google.room_common
+
+    implementation common.fragmentationx
+    implementation common.fragmentationx_swipeback
 
 }
 
