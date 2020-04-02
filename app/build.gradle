@@ -1,0 +1,128 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.didiglobal.booster'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+
+    compileSdkVersion config.compileSdkVersion
+    buildToolsVersion config.buildToolsVersion
+
+    defaultConfig {
+        applicationId "jason.jan.stockanalysis"
+        minSdkVersion config.minSdkVersion
+        targetSdkVersion config.targetSdkVersion
+        versionCode config.versionCode
+        versionName config.versionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        //如果没有组装在一起，处理一些使用了注解的组件，主要是用了annotation-processor这种的三方库
+        if (!config.isAssembling) {
+            javaCompileOptions {
+                annotationProcessorOptions {
+                    arguments = [moduleName: project.getName()] //把当前组件的名称传进去，估计有地方会用这个名字
+                }
+            }
+        }
+
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+
+    dataBinding {
+        enabled true
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    signingConfigs {
+        release {
+            storeFile file(config.SIGN_STOREFILE)
+            storePassword config.SIGN_STORE_PASSWORD
+            keyAlias config.SIGN_KEY_ALIAS
+            keyPassword config.SIGN_KEY_PASSWORD
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            ndk {
+                abiFilters 'armeabi-v7a', 'arm64-v8a'
+            }
+        }
+        debug {
+            //ext.enableCrashlytics = false
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+        }
+    }
+
+    applicationVariants.all {
+        def buildType = it.buildType.name
+        def fileName
+        def createTime = new Date().format("YYYYMMdd", TimeZone.getTimeZone("GMT+08:00"))
+        if (buildType == "release") {
+            it.getPackageApplication().outputDirectory = new File(project.rootDir.absolutePath + "/apks/${createTime}")
+        }
+        it.outputs.each {
+            if (buildType == "release") {
+                fileName = "Weather13_v${defaultConfig.versionName}_release().apk"
+                println "文件名：-----------------${fileName}"
+                it.outputFileName = fileName
+            }
+        }
+    }
+}
+
+
+repositories {
+    flatDir {
+        dirs '../aar'
+    }
+}
+
+
+dependencies {
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    testImplementation test.junit
+    androidTestImplementation test.runner
+    androidTestImplementation test.espresso
+
+    implementation google.appcompat
+    implementation google.constraintlayout
+    implementation google.core_ktx
+    implementation google.kotlin_stdlib
+
+    kapt google.room_compiler
+    implementation google.persistence_runtime
+    implementation google.room_common
+
+}
+
+configurations.all {
+    //10分钟强制更新
+    resolutionStrategy {
+        cacheChangingModulesFor 10, 'minutes'
+    }
+}
+
+

@@ -1,0 +1,168 @@
+ext {
+
+    //基础配置
+    config = [
+            compileSdkVersion: 29,
+            buildToolsVersion: "29.0.2",
+            minSdkVersion    : 21,
+            targetSdkVersion : 29,
+            versionCode      : 1,
+            versionName      : "1.0.0",
+            kotlin_version   : "1.3.50",
+
+            isAssembling     : true, //是否组装在一起，组装成一个大型App，如果不是就是零碎的组件
+            isUseAar         : false, //是否使用本地Aar 比如地理位置库，字符串库 什么的
+            isUseLeakcanary  : false, //是否使用内存泄漏2.2新版本
+
+            //SIGN_STOREFILE      : "D:\\Coocent\\Weather13\\sign\\appokuco",
+            SIGN_STOREFILE      : "../sign/appokuco",
+            SIGN_STORE_PASSWORD : "kuxun328",
+            SIGN_KEY_ALIAS      : "weather13",
+            SIGN_KEY_PASSWORD   : "kuxun328",
+    ]
+
+    //测试相关
+    test = [
+            junit                           :   "junit:junit:4.12",
+            runner                          :   "androidx.test:runner:1.2.0",
+            espresso                        :   "androidx.test.espresso:espresso-core:3.2.0",
+            canary_debug                    :   "com.squareup.leakcanary:leakcanary-android:2.2",
+            stetho                          :   "com.facebook.stetho:stetho:1.5.1",//数据库查看工具
+            stetho_okhttp                   :   "com.facebook.stetho:stetho-okhttp3:1.5.1",
+            stetho_no_op                    :   "net.igenius:stetho-no-op:1.1",
+            anrwatchdog                     :   "com.github.anrwatchdog:anrwatchdog:1.4.0",
+    ]
+
+    //google官方库
+    google = [
+
+            //基本组件
+            appcompat                       :   "androidx.appcompat:appcompat:1.1.0",
+            material                        :   "com.google.android.material:material:1.0.0",
+            legacy_support_v4               :   "androidx.legacy:legacy-support-v4:1.0.0",
+            recyclerview                    :   "androidx.recyclerview:recyclerview:1.0.0",
+            viewpager2                      :   "androidx.viewpager2:viewpager2:1.0.0-beta04",
+            constraintlayout                :   "androidx.constraintlayout:constraintlayout:1.1.3",
+            cardview                        :   "androidx.cardview:cardview:1.0.0",
+
+
+            //kotlin
+            core_ktx                        :   "androidx.core:core-ktx:+",
+            kotlin_stdlib                   :   "org.jetbrains.kotlin:kotlin-stdlib:1.3.50",
+            kotlin_stdlib_jdk7              :   "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.50",
+
+
+            //AAC组件
+            lifecycle_runtime               :   "android.arch.lifecycle:extensions:1.1.1",
+            lifecycle_extensions            :   "android.arch.lifecycle:extensions:1.1.1",
+            lifecycle_compiler              :   "android.arch.lifecycle:compiler:1.1.1",
+            persistence_runtime             :   "android.arch.persistence.room:runtime:1.1.1",
+            room_compiler                   :   "android.arch.persistence.room:compiler:1.1.1",
+            room_rxjava2                    :   "android.arch.persistence.room:rxjava2:1.1.1",
+            room_common                     :   "androidx.room:room-common:2.1.0",
+            room_runtime                    :   "androidx.room:room-runtime:2.1.0",
+            arch_core_runtime               :   "androidx.arch.core:core-runtime:2.0.1",
+
+
+            //Dagger2
+            dagger2                         :   "com.google.dagger:dagger:2.16",
+            dagger2_android                 :   "com.google.dagger:dagger-android:2.16",
+            dagger2_android_support         :   "com.google.dagger:dagger-android-support:2.16",
+            dagger2_android_processor       :   "com.google.dagger:dagger-android-processor:2.16",
+            dagger2_compiler                :   "com.google.dagger:dagger-compiler:2.16",
+
+
+            //gson
+            gson                            :   "com.google.code.gson:gson:2.8.5",
+
+            //地理位置
+            gms                             :   "com.google.android.gms:play-services-ads:18.3.0",
+            location                        :   "com.google.android.gms:play-services-location:17.0.0",
+            map                             :   "com.google.android.gms:play-services-maps:17.0.0",
+            play_service_auth               :   "com.google.android.gms:play-services-auth:15.0.0",
+            play_service_base               :   "com.google.android.gms:play-services-base:17.0.0",
+            play_service_auth_phone         :   "com.google.android.gms:play-services-auth-api-phone:17.3.0",
+            firebase_core                   :   "com.google.firebase:firebase-core:17.3.0",
+            crashlytics                     :   "com.crashlytics.sdk.android:crashlytics:2.10.1",
+
+    ]
+
+    //常用的三方库
+    common = [
+
+            //Retrofit
+            retrofit                        :   "com.squareup.retrofit2:retrofit:2.4.0",
+            retrofit_converter_gson         :   "com.squareup.retrofit2:converter-gson:2.4.0",
+            retrofit_adapter_rxjava         :   "com.squareup.retrofit2:adapter-rxjava:2.4.0",
+            retrofit_adapter_rxjava2        :   "com.squareup.retrofit2:adapter-rxjava2:2.4.0",
+            okhttp3                         :   "com.squareup.okhttp3:okhttp:3.9.0",
+            okhttp_urlconnection            :   "com.squareup.okhttp:okhttp-urlconnection:2.0.0",
+            moshi                           :   "com.squareup.moshi:moshi:1.9.2",//解析json贼快
+            log_interceptor                 :   "com.squareup.okhttp3:logging-interceptor:3.9.1",
+
+            //网络解析
+            jsoup                           :   "org.jsoup:jsoup:1.12.2",
+
+
+            //rx2
+            rxjava2                         :   "io.reactivex.rxjava2:rxjava:2.2.6",
+            rxandroid2                      :   "io.reactivex.rxjava2:rxandroid:2.1.1",
+
+            //Glide
+            glide                           :   "com.github.bumptech.glide:glide:4.9.0",
+            glide_loader_okhttp3            :   "com.github.bumptech.glide:okhttp3-integration:4.9.0",
+            glide_compiler                  :   "com.github.bumptech.glide:compiler:4.9.0",
+
+            //webview
+            agentWeb                        :   "com.just.agentweb:agentweb:4.0.2",
+
+            //Arouter
+            arouter                         :   "com.alibaba:arouter-api:1.5.0",
+            arouter_compiler                :   "com.alibaba:arouter-compiler:1.2.2",
+
+            //recyclerview
+            baserecyclerview_adapter        :   "com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.34",
+
+            //fragment
+            fragmentationx                  :   "me.yokeyword:fragmentationx:1.0.2",
+            fragmentationx_swipeback        :   "me.yokeyword:fragmentationx-swipeback:1.0.2",
+
+            //utils
+            utilcodex                       :   "com.blankj:utilcodex:1.26.0",
+
+            //dialog
+            //material_dialog                 :   'com.afollestad.material-dialogs:core:3.1.1'
+            //dialogplus                      :    'com.orhanobut:dialogplus:1.11@aar'
+
+            //动画
+            //lottie                          :   "com.airbnb.android:lottie:3.3.1",
+            transitionseverywhere           :   "com.andkulikov:transitionseverywhere:2.1.0",
+            transitionx                     :   "androidx.transition:transition:1.2.0",
+
+            //umeng
+            umeng_analytics                 :   'com.umeng.analytics:analytics:latest.integration',
+
+            //屏幕适配
+            dimens_make                      :   'com.github.Mangosir:DimensMake:1.0.4',
+
+    ]
+
+    coocent = [
+            promotionSDK_x                  :   "com.coocent.xmlparser:promotion-androidx:1.2.0-SNAPSHOT",
+            weather_widget                  :   "coocent.lib.weather.widget:WeatherAppwidgetLib:1.1.80-SNAPSHOT",
+            weather_location                :   "coocent.lib.weather.location:LocationUtils:1.2.3-SNAPSHOT",
+            weather_string                  :   "coocent.lib.string:weather:1.1.2.8-SNAPSHOT",
+            weather_air                     :   "coocent.lib.weather.air:WeatherAir:1.0.7-SNAPSHOT",
+            weather_new_location            :   "coocent.lib.weather.location:WeatherLocation:1.1.1-SNAPSHOT",
+    ]
+
+    //不常用的三方库
+    rare = [
+            //日志
+            timber                          :   "com.jakewharton.timber:timber:4.6.0",
+            rxerrorhandler2                 :   "me.jessyan:rxerrorhandler:2.1.0",
+            rxcache                         :   "com.github.VictorAlbertos.RxCache:runtime:1.8.1-2.x",
+            rxcache_jolyglot_gson           :   "com.github.VictorAlbertos.Jolyglot:gson:0.0.3",
+            android_eventbus                :   "org.simple:androideventbus:1.0.5.1",
+    ]
+}
