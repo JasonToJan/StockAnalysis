@@ -83,7 +83,7 @@ android {
         }
         it.outputs.each {
             if (buildType == "release") {
-                fileName = "Weather13_v${defaultConfig.versionName}_release().apk"
+                fileName = "StockAnalysis_v${defaultConfig.versionName}_release().apk"
                 println "文件名：-----------------${fileName}"
                 it.outputFileName = fileName
             }
@@ -106,6 +106,7 @@ dependencies {
     testImplementation test.junit
     androidTestImplementation test.runner
     androidTestImplementation test.espresso
+    implementation test.anrwatchdog
 
     implementation google.appcompat
     implementation google.material
@@ -117,7 +118,16 @@ dependencies {
     kapt google.room_compiler
     implementation google.persistence_runtime
     implementation google.room_common
+    implementation google.lifecyclex_extensions
 
+    implementation common.retrofit
+    implementation common.retrofit_converter_gson
+    implementation common.persistent_cookiejar
+    implementation common.retrofit_adapter_rxjava2
+    implementation common.rxjava2
+    implementation common.rxandroid2
+    implementation common.rxlifecycle2
+    implementation common.moshi
     implementation common.fragmentationx
     implementation common.fragmentationx_swipeback
 

@@ -1,4 +1,4 @@
-package jason.jan.stockanalysis.ui;
+package jason.jan.stockanalysis.mvvm.ui.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,7 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import jason.jan.stockanalysis.R;
+import jason.jan.stockanalysis.base.BaseFragment;
 import jason.jan.stockanalysis.databinding.FragmentAddBinding;
+import jason.jan.stockanalysis.mvvm.viewmodel.AddFViewModel;
 import me.yokeyword.fragmentation.SupportFragment;
 
 /**
@@ -18,25 +20,34 @@ import me.yokeyword.fragmentation.SupportFragment;
  * Creator: Wang
  * Date: 2020/4/2 20:19
  */
-public class QueryFragment extends SupportFragment {
+public class AddFragment extends BaseFragment<AddFViewModel,FragmentAddBinding> {
 
-    FragmentAddBinding mBinding;
-
-    public static QueryFragment newInstance() {
+    public static AddFragment newInstance() {
 
         Bundle args = new Bundle();
 
-        QueryFragment fragment = new QueryFragment();
+        AddFragment fragment = new AddFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    protected int getContentViewId() {
+        return  R.layout.fragment_add;
+    }
 
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_add, container, false);
+    @Override
+    protected void processLogic(Bundle savedInstanceState) {
 
-        return mBinding.getRoot();
+    }
+
+    @Override
+    protected void setListener() {
+
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }

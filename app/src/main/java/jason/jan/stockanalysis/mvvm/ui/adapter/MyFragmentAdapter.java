@@ -1,16 +1,15 @@
-package jason.jan.stockanalysis.ui.adapter;
+package jason.jan.stockanalysis.mvvm.ui.adapter;
 
 import android.util.ArrayMap;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
-import jason.jan.stockanalysis.ui.AddFragment;
-import jason.jan.stockanalysis.ui.AnalysisFragment;
+import jason.jan.stockanalysis.mvvm.ui.fragment.AddFragment;
+import jason.jan.stockanalysis.mvvm.ui.fragment.AnalysisFragment;
+import jason.jan.stockanalysis.mvvm.ui.fragment.QueryFragment;
+import jason.jan.stockanalysis.mvvm.ui.fragment.TestFragment;
 
 /**
  * Description:
@@ -30,6 +29,8 @@ public class MyFragmentAdapter extends FragmentStateAdapter {
         arrayMap.clear();
         arrayMap.put(AddFragment.class.getSimpleName(),AddFragment.newInstance());
         arrayMap.put(AnalysisFragment.class.getSimpleName(),AnalysisFragment.newInstance());
+        arrayMap.put(QueryFragment.class.getSimpleName(),QueryFragment.newInstance());
+        arrayMap.put(TestFragment.class.getSimpleName(),TestFragment.newInstance());
     }
 
     @NonNull
@@ -66,6 +67,24 @@ public class MyFragmentAdapter extends FragmentStateAdapter {
                 fragment = arrayMap.get(key);
                 if (fragment == null) {
                     fragment = AnalysisFragment.newInstance();
+                    arrayMap.put(key,fragment);
+                }
+                break;
+
+            case 2 :
+                key = QueryFragment.class.getSimpleName();
+                fragment = arrayMap.get(key);
+                if (fragment == null) {
+                    fragment = QueryFragment.newInstance();
+                    arrayMap.put(key,fragment);
+                }
+                break;
+
+            case 3 :
+                key = TestFragment.class.getSimpleName();
+                fragment = arrayMap.get(key);
+                if (fragment == null) {
+                    fragment = TestFragment.newInstance();
                     arrayMap.put(key,fragment);
                 }
                 break;

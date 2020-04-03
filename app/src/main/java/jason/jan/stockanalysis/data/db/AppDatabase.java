@@ -1,4 +1,4 @@
-package jason.jan.stockanalysis.db;
+package jason.jan.stockanalysis.data.db;
 
 import android.content.Context;
 

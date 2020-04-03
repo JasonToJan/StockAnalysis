@@ -7,10 +7,14 @@
     <color name="colorWhite">#fff</color>
     <color name="colorBlue">#5b9beb</color>
     <color name="colorGreen">#76EE00</color>
-    <color name="add_bg">#deebfb</color>
-    <color name="analysis_bg">#FAE5E3</color>
     <color name="colorBlack">#212121</color>
     <color name="selected_bg">#5b9beb</color>
     <color name="unselected_bg">#9CC6FC</color>
     <color name="bg_divider">#DCDDDD</color>
+
+    <color name="add_bg">#deebfb</color>
+    <color name="analysis_bg">#FAE5E3</color>
+    <color name="query_bg">#9BBE9E</color>
+    <color name="test_bg">#54A6CC</color>
+
 </resources>
