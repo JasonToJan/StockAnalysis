@@ -148,6 +148,9 @@ ext {
             //屏幕适配
             dimens_make                      :   'com.github.Mangosir:DimensMake:1.0.4',
 
+            smartrefresh                    :   'com.scwang.smartrefresh:SmartRefreshLayout:1.1.2',
+            smartrefresh_header             :   'com.scwang.smartrefresh:SmartRefreshHeader:1.1.2',
+
     ]
 
     coocent = [

@@ -2,41 +2,38 @@ package jason.jan.stockanalysis.mvvm.ui.fragment;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.blankj.utilcode.util.TimeUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
 import jason.jan.stockanalysis.R;
 import jason.jan.stockanalysis.base.BaseFragment;
+import jason.jan.stockanalysis.data.DataSource;
 import jason.jan.stockanalysis.databinding.FragmentAddBinding;
+import jason.jan.stockanalysis.databinding.FragmentUpdateBinding;
 import jason.jan.stockanalysis.entity.Stock;
 import jason.jan.stockanalysis.mvvm.viewmodel.AddFViewModel;
+import jason.jan.stockanalysis.mvvm.viewmodel.UpdateFViewModel;
 import jason.jan.stockanalysis.utils.CommonUtils;
 import jason.jan.stockanalysis.utils.LogUtils;
 import jason.jan.stockanalysis.utils.ToastUtils;
-import me.yokeyword.fragmentation.SupportFragment;
 
 /**
- * Description: 增加股票记录碎片
+ * Description: 更新股票记录碎片
  * *
  * Creator: Wang
  * Date: 2020/4/2 20:19
  */
-public class AddFragment extends BaseFragment<AddFViewModel, FragmentAddBinding> {
+public class UpdateFragment extends BaseFragment<UpdateFViewModel, FragmentUpdateBinding> {
 
-    public static AddFragment newInstance() {
+    public static UpdateFragment newInstance() {
 
         Bundle args = new Bundle();
 
-        AddFragment fragment = new AddFragment();
+        UpdateFragment fragment = new UpdateFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -45,24 +42,24 @@ public class AddFragment extends BaseFragment<AddFViewModel, FragmentAddBinding>
 
     @Override
     protected int getContentViewId() {
-        return R.layout.fragment_add;
+        return R.layout.fragment_update;
     }
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
-        initDefaultData();
+        initDefuultData();
     }
 
     @Override
     protected void setListener() {
-        binding.faOkBtn.setOnClickListener(this);
+        binding.fuOkBtn.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.fa_ok_btn:
-                addToDatabase();
+            case R.id.fu_ok_btn:
+                updateToDatabase();
                 break;
         }
     }
@@ -71,44 +68,32 @@ public class AddFragment extends BaseFragment<AddFViewModel, FragmentAddBinding>
      * 设置默认数据，以免每次都手动输入
      *
      */
-    private void initDefaultData(){
-        binding.faCode.setText("100100");
-        binding.faName.setText("测试股票");
-        binding.faDate.setText("2020-4-3");
-        binding.faClosePri.setText("8.88");
-        binding.faOpenPri.setText("7.79");
-        binding.faMaxPri.setText("8.99");
-        binding.faMinPri.setText("7.72");
-        binding.faVolumeNum.setText("10203");
+    private void initDefuultData(){
+        Stock stock = DataSource.getInstance().getUpdateStock();
+        if (stock == null) return;
+
+        binding.fuCode.setText(stock.getCode()+"");
+        binding.fuName.setText(stock.getName());
+        binding.fuDate.setText(stock.getDate());
+        binding.fuClosePri.setText(stock.getClosePrice()+"");
+        binding.fuOpenPri.setText(stock.getOpenPrice()+"");
+        binding.fuMaxPri.setText(stock.getMaxPrice()+"");
+        binding.fuMinPri.setText(stock.getMinPrice()+"");
+        binding.fuVolumeNum.setText(stock.getVolume()+"");
     }
 
-    /**
-     * 设置默认数据，以免每次都手动输入
-     *
-     */
-    private void clearData(){
-        binding.faCode.setText("");
-        binding.faName.setText("");
-        binding.faDate.setText("");
-        binding.faClosePri.setText("");
-        binding.faOpenPri.setText("");
-        binding.faMaxPri.setText("");
-        binding.faMinPri.setText("");
-        binding.faVolumeNum.setText("");
-    }
-
-    private void addToDatabase() {
+    private void updateToDatabase() {
         if (!CommonUtils.doFirstClick200()) return;
 
-        String code = binding.faCode.getText().toString().trim();
-        String date = binding.faDate.getText().toString().trim();
-        String name = binding.faName.getText().toString().trim();
-        String closePrice = binding.faClosePri.getText().toString().trim();
-        String openPrice = binding.faOpenPri.getText().toString().trim();
-        String minPrice = binding.faMinPri.getText().toString().trim();
-        String maxPrice = binding.faMaxPri.getText().toString().trim();
-        String volume = binding.faVolumeNum.getText().toString().trim();
-        boolean isForecast = binding.faForecastCb.isChecked();
+        String code = binding.fuCode.getText().toString().trim();
+        String date = binding.fuDate.getText().toString().trim();
+        String name = binding.fuName.getText().toString().trim();
+        String closePrice = binding.fuClosePri.getText().toString().trim();
+        String openPrice = binding.fuOpenPri.getText().toString().trim();
+        String minPrice = binding.fuMinPri.getText().toString().trim();
+        String maxPrice = binding.fuMaxPri.getText().toString().trim();
+        String volume = binding.fuVolumeNum.getText().toString().trim();
+        boolean isForecast = binding.fuForecastCb.isChecked();
 
         if (TextUtils.isEmpty(code)
                 || TextUtils.isEmpty(date)
@@ -123,7 +108,8 @@ public class AddFragment extends BaseFragment<AddFViewModel, FragmentAddBinding>
 
         try {
 
-            Stock stock = new Stock();
+            Stock stock = DataSource.getInstance().getUpdateStock();
+            stock.setId(stock.getId());
             stock.setCode(Integer.parseInt(code));
             stock.setDate(date);
             stock.setName(name);
@@ -135,9 +121,9 @@ public class AddFragment extends BaseFragment<AddFViewModel, FragmentAddBinding>
             stock.setCurrentTime(TimeUtils.string2Millis(date,formatToTarget));
             stock.setVolume(Float.parseFloat(volume));
 
-            mViewModel.addStock(stock);
+            mViewModel.updateStock(stock);
 
-            clearData();
+            ToastUtils.showToast("更新成功^_^");
 
         } catch (Throwable e) {
             LogUtils.d("Error", "##" + e.getMessage());

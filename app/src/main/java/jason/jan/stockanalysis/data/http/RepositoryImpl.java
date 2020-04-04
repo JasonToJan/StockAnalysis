@@ -25,4 +25,6 @@ public class RepositoryImpl extends BaseModel {
         MutableLiveData<Resource<List<BannerBean>>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().getBanner(), liveData);
     }
+
+
 }

@@ -8,274 +8,130 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".mvvm.ui.MainActivity"
-        android:background="@color/query_bg"
-        >
+        android:background="@color/colorWhite">
 
-        <TableLayout
-            android:id="@+id/fa_root_tl"
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TableRow
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_80">
+
 
                 <TextView
-                    android:text="股票代码"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="代号"
                     android:textColor="@color/colorBlack"
-                    android:textSize="18sp"
-                    android:padding="2dp"
-                    android:paddingStart="25dp"
-                    android:layout_weight="0.4"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="16sp"
+                    android:layout_marginStart="@dimen/sp_10"
                     />
 
                 <EditText
-                    android:id="@+id/fa_code"
-                    android:hint="必填"
+                    android:id="@+id/fq_code_et"
+                    android:layout_width="@dimen/dp_65"
+                    android:layout_height="@dimen/dp_30"
+                    android:hint="选填"
                     android:textColor="@color/colorBlack"
-                    android:textSize="20sp"
-                    android:padding="2dp"
-                    android:layout_height="45dp"
-                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="16sp"
+                    android:layout_marginStart="@dimen/sp_10"
                     android:background="@drawable/edit_selector"
                     />
 
-            </TableRow>
-
-            <View
-                android:layout_marginTop="10dp"
-                android:layout_height="0.5dp"
-                android:background="@color/colorWhite" />
-
-            <TableRow
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp">
-
                 <TextView
-                    android:text="股票名称"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="日期"
                     android:textColor="@color/colorBlack"
-                    android:textSize="18sp"
-                    android:padding="2dp"
-                    android:paddingStart="25dp"
-                    android:layout_weight="0.4"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="16sp"
+                    android:layout_marginStart="@dimen/sp_10"
                     />
 
                 <EditText
-                    android:id="@+id/fa_name"
-                    android:hint="可选填"
+                    android:id="@+id/fq_date_et"
+                    android:layout_width="@dimen/dp_65"
+                    android:layout_height="@dimen/dp_30"
+                    android:hint="选填"
                     android:textColor="@color/colorBlack"
-                    android:textSize="20sp"
-                    android:padding="2dp"
-                    android:layout_height="45dp"
-                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="16sp"
+                    android:layout_marginStart="@dimen/sp_10"
                     android:background="@drawable/edit_selector"
                     />
 
-            </TableRow>
-
-            <View
-                android:layout_marginTop="10dp"
-                android:layout_height="0.5dp"
-                android:background="@color/colorWhite" />
-
-            <TableRow
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp">
-
-                <TextView
-                    android:text="当前日期"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="18sp"
-                    android:padding="2dp"
-                    android:paddingStart="25dp"
-                    android:layout_weight="0.4"
+                <CheckBox
+                    android:id="@+id/fq_forecast_on"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_20"
+                    android:text="预测"
+                    android:checked="true"
+                    android:gravity="end|center_vertical"
+                    android:layout_gravity="center_vertical"
                     />
 
-                <EditText
-                    android:id="@+id/fa_date"
-                    android:hint="必填"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="20sp"
-                    android:padding="2dp"
-                    android:layout_weight="1"
-                    android:layout_height="45dp"
-                    android:background="@drawable/edit_selector"
+                <CheckBox
+                    android:text="不预测"
+                    android:id="@+id/fq_forecast_off"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_20"
+                    android:layout_marginStart="@dimen/dp_16"
+                    android:gravity="end|center_vertical"
+                    android:checked="true"
+                    android:layout_gravity="center_vertical"
                     />
 
-            </TableRow>
+            </LinearLayout>
 
-            <View
-                android:layout_marginTop="10dp"
-                android:layout_height="0.5dp"
-                android:background="@color/colorWhite" />
-
-            <TableRow
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp">
-
-                <TextView
-                    android:text="该日开盘价"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="18sp"
-                    android:padding="2dp"
-                    android:paddingStart="25dp"
-                    android:layout_weight="0.4"
-                    />
-
-                <EditText
-                    android:id="@+id/fa_open_pri"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="20sp"
-                    android:padding="2dp"
-                    android:hint="必填"
-                    android:layout_weight="1"
-                    android:background="@drawable/edit_selector"
-                    android:layout_height="45dp"
-                    />
-
-            </TableRow>
-
-            <View
-                android:layout_marginTop="10dp"
-                android:layout_height="0.5dp"
-                android:background="@color/colorWhite" />
-
-            <TableRow
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp">
-
-                <TextView
-                    android:text="该日最高价"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="18sp"
-                    android:padding="2dp"
-                    android:paddingStart="25dp"
-                    android:layout_weight="0.4"
-                    />
-
-                <EditText
-                    android:id="@+id/fa_max_pri"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="20sp"
-                    android:padding="2dp"
-                    android:hint="必填"
-                    android:layout_weight="1"
-                    android:background="@drawable/edit_selector"
-                    android:layout_height="45dp"
-                    />
-
-            </TableRow>
-
-            <View
-                android:layout_marginTop="10dp"
-                android:layout_height="0.5dp"
-                android:background="@color/colorWhite" />
-
-            <TableRow
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp">
-
-                <TextView
-                    android:text="该日最低价"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="18sp"
-                    android:padding="2dp"
-                    android:paddingStart="25dp"
-                    android:layout_weight="0.4"
-                    />
-
-                <EditText
-                    android:id="@+id/fa_min_pri"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="20sp"
-                    android:padding="2dp"
-                    android:hint="必填"
-                    android:layout_height="45dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/edit_selector"
-                    />
-
-            </TableRow>
-
-            <View
-                android:layout_marginTop="10dp"
-                android:layout_height="0.5dp"
-                android:background="@color/colorWhite" />
-
-            <TableRow
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp">
-
-                <TextView
-                    android:text="该日收盘价"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="18sp"
-                    android:padding="2dp"
-                    android:paddingStart="25dp"
-                    android:layout_weight="0.4"
-                    />
-
-                <EditText
-                    android:id="@+id/fa_close_pri"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="20sp"
-                    android:padding="2dp"
-                    android:hint="必填"
-                    android:layout_height="45dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/edit_selector"
-                    />
-
-            </TableRow>
-
-            <View
-                android:layout_marginTop="10dp"
-                android:layout_height="0.5dp"
-                android:background="@color/colorWhite" />
-
-            <TableRow
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_80"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="start"
                 >
 
-                <TextView
-                    android:text="该日成交量"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="18sp"
-                    android:padding="2dp"
-                    android:paddingStart="25dp"
-                    android:layout_weight="0.4"
+                <Button
+                    android:id="@+id/fq_search_btn"
+                    android:layout_width="200dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:text="搜索"
+                    android:background="@drawable/btn_selector"
                     />
 
-                <EditText
-                    android:id="@+id/fa_volume_num"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="20sp"
-                    android:hint="必填"
-                    android:layout_height="45dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/edit_selector"
-                    />
+            </LinearLayout>
 
-            </TableRow>
+<!--            <com.scwang.smartrefresh.layout.SmartRefreshLayout-->
+<!--                android:id="@+id/fq_smartRefreshLayout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:layout_weight="1"-->
+<!--                app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+<!--                app:srlEnableAutoLoadMore="false"-->
+<!--                app:srlEnableLoadMoreWhenContentNotFull="true">-->
 
-            <Button
-                android:id="@+id/fa_ok_btn"
-                android:layout_marginTop="36dp"
-                android:layout_marginStart="22dp"
-                android:layout_marginEnd="22dp"
+<!--             -->
+
+<!--            </com.scwang.smartrefresh.layout.SmartRefreshLayout>-->
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fq_recyclerView"
+                android:layout_margin="@dimen/dp_16"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="@drawable/btn_selector"
-                android:text="添加"
-                android:textSize="26sp"
-                android:textColor="#fff"
-                android:layout_marginBottom="300dp"
-                />
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:paddingTop="@dimen/dp_11"
+                android:paddingBottom="@dimen/dp_11"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-        </TableLayout>
+        </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 

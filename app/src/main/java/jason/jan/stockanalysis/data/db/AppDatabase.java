@@ -6,7 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import jason.jan.stockanalysis.dao.StockDao;
+import jason.jan.stockanalysis.data.dao.StockDao;
 import jason.jan.stockanalysis.entity.Stock;
 import jason.jan.stockanalysis.utils.Constants;
 

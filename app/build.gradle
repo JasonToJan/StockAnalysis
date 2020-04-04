@@ -130,6 +130,9 @@ dependencies {
     implementation common.moshi
     implementation common.fragmentationx
     implementation common.fragmentationx_swipeback
+    implementation common.baserecyclerview_adapter
+    implementation common.smartrefresh
+    implementation common.utilcodex
 
 }
 

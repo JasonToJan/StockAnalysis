@@ -2,13 +2,13 @@
 <layout>
 
     <FrameLayout
-        android:id="@+id/am_frameLayout"
+        android:id="@+id/ab_frameLayout"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".mvvm.ui.MainActivity">
+        tools:context=".mvvm.ui.activity.OperateActivity">
 
     </FrameLayout>
 

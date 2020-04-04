@@ -14,6 +14,8 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import jason.jan.stockanalysis.MyApplication;
+import jason.jan.stockanalysis.data.db.AppDatabase;
 import jason.jan.stockanalysis.data.http.Interceptor.NetCacheInterceptor;
 import jason.jan.stockanalysis.data.http.Interceptor.OfflineCacheInterceptor;
 import jason.jan.stockanalysis.data.http.RetrofitManager;
@@ -35,9 +37,20 @@ public abstract class BaseModel {
     public LifecycleTransformer objectLifecycleTransformer;
     public ArrayList<String> onNetTags;
 
-
+    /**
+     * 网络服务
+     * @return
+     */
     public StockApiService getApiService() {
         return RetrofitManager.getRetrofitManager().getApiService();
+    }
+
+    /**
+     * 数据库
+     * @return
+     */
+    public AppDatabase getDatabase(){
+        return AppDatabase.getInstance(MyApplication.getInstance());
     }
 
     public void setObjectLifecycleTransformer(LifecycleTransformer objectLifecycleTransformer) {

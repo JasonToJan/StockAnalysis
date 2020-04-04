@@ -1,21 +1,15 @@
 package jason.jan.stockanalysis.entity;
 
 
-import androidx.room.Entity;
-import androidx.room.Index;
-import androidx.room.PrimaryKey;
-
 /**
  * desc: 股票实体
  * *
  * user: JasonJan 1211241203@qq.com
  * time: 2020/4/2 12:49
  **/
-@Entity(indices = {@Index(value = {"id"}, unique = true)})
-public class Stock {
+public class BulkStock {
 
-    @PrimaryKey(autoGenerate = true)
-    private long id;//股票id
+    private long id;
 
     private int code;//股票代码
 
@@ -37,18 +31,9 @@ public class Stock {
 
     private int isForecast;//是否是预测 0表示不预测 1表示预测 2表示都行
 
-    public Stock() {
-    }
+    private boolean isChoose;//是否选择了
 
-    public Stock(String name, String date, float maxPrice, float minPrice, float openPrice, float closePrice, float volume, int isForecast) {
-        this.name = name;
-        this.date = date;
-        this.maxPrice = maxPrice;
-        this.minPrice = minPrice;
-        this.openPrice = openPrice;
-        this.closePrice = closePrice;
-        this.volume = volume;
-        this.isForecast = isForecast;
+    public BulkStock() {
     }
 
     public long getId() {
@@ -57,6 +42,14 @@ public class Stock {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public boolean isChoose() {
+        return isChoose;
+    }
+
+    public void setChoose(boolean choose) {
+        isChoose = choose;
     }
 
     public int getCode() {
@@ -139,29 +132,4 @@ public class Stock {
         this.isForecast = isForecast;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Stock that = (Stock) o;
-        return id == that.id;
-    }
-
-    @Override
-    public int hashCode() {
-
-        return hashCode(id);
-    }
-
-    public static int hashCode(Object... a) {
-        if (a == null)
-            return 0;
-
-        int result = 1;
-
-        for (Object element : a)
-            result = 31 * result + (element == null ? 0 : element.hashCode());
-
-        return result;
-    }
 }

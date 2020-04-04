@@ -7,12 +7,12 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".mvvm.ui.MainActivity"
-        android:background="@color/add_bg"
+        tools:context=".mvvm.ui.activity.OperateActivity"
+        android:background="@color/update_bg"
         >
 
         <TableLayout
-            android:id="@+id/fa_root_tl"
+            android:id="@+id/fu_root_tl"
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -31,9 +31,8 @@
                     android:layout_weight="0.4"
                     />
 
-                <EditText
-                    android:id="@+id/fa_code"
-                    android:hint="必填"
+                <TextView
+                    android:id="@+id/fu_code"
                     android:textColor="@color/colorBlack"
                     android:textSize="20sp"
                     android:padding="2dp"
@@ -63,7 +62,7 @@
                     />
 
                 <EditText
-                    android:id="@+id/fa_name"
+                    android:id="@+id/fu_name"
                     android:hint="可选填"
                     android:textColor="@color/colorBlack"
                     android:textSize="20sp"
@@ -94,7 +93,7 @@
                     />
 
                 <EditText
-                    android:id="@+id/fa_date"
+                    android:id="@+id/fu_date"
                     android:hint="必填"
                     android:textColor="@color/colorBlack"
                     android:textSize="20sp"
@@ -125,7 +124,7 @@
                     />
 
                 <EditText
-                    android:id="@+id/fa_open_pri"
+                    android:id="@+id/fu_open_pri"
                     android:textColor="@color/colorBlack"
                     android:textSize="20sp"
                     android:padding="2dp"
@@ -156,7 +155,7 @@
                     />
 
                 <EditText
-                    android:id="@+id/fa_max_pri"
+                    android:id="@+id/fu_max_pri"
                     android:textColor="@color/colorBlack"
                     android:textSize="20sp"
                     android:padding="2dp"
@@ -187,7 +186,7 @@
                     />
 
                 <EditText
-                    android:id="@+id/fa_min_pri"
+                    android:id="@+id/fu_min_pri"
                     android:textColor="@color/colorBlack"
                     android:textSize="20sp"
                     android:padding="2dp"
@@ -218,7 +217,7 @@
                     />
 
                 <EditText
-                    android:id="@+id/fa_close_pri"
+                    android:id="@+id/fu_close_pri"
                     android:textColor="@color/colorBlack"
                     android:textSize="20sp"
                     android:padding="2dp"
@@ -250,7 +249,7 @@
                     />
 
                 <EditText
-                    android:id="@+id/fa_volume_num"
+                    android:id="@+id/fu_volume_num"
                     android:textColor="@color/colorBlack"
                     android:textSize="20sp"
                     android:hint="必填"
@@ -268,7 +267,7 @@
                 >
 
                 <CheckBox
-                    android:id="@+id/fa_forecast_cb"
+                    android:id="@+id/fu_forecast_cb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -277,21 +276,20 @@
                     />
 
                 <Button
-                    android:id="@+id/fa_ok_btn"
+                    android:id="@+id/fu_ok_btn"
                     android:layout_marginStart="22dp"
                     android:layout_marginEnd="22dp"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:background="@drawable/btn_selector"
                     android:layout_gravity="center_vertical"
-                    android:text="添加"
+                    android:text="更新"
                     android:textSize="26sp"
                     android:textColor="#fff"
 
                     />
 
             </LinearLayout>
-
 
 
         </TableLayout>
