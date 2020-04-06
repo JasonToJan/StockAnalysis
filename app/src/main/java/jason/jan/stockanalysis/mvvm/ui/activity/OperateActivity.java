@@ -7,12 +7,13 @@ import android.view.View;
 import jason.jan.stockanalysis.R;
 import jason.jan.stockanalysis.base.BaseActivity;
 import jason.jan.stockanalysis.databinding.ActivityBulkBinding;
+import jason.jan.stockanalysis.mvvm.ui.fragment.AnalysisResultFragment;
 import jason.jan.stockanalysis.mvvm.ui.fragment.BulkFragment;
 import jason.jan.stockanalysis.mvvm.ui.fragment.UpdateFragment;
 import jason.jan.stockanalysis.mvvm.viewmodel.HomeViewModel;
 
 /**
- * Description: 操作页面，可以删除，可以更新
+ * Description: 操作页面，可以删除，可以更新,查看分析结果页
  * *
  * Creator: Wang
  * Date: 2020/4/4 12:15
@@ -22,6 +23,7 @@ public class OperateActivity extends BaseActivity<HomeViewModel, ActivityBulkBin
     public static final String OPERATE_CODE = "operate_code";//操作代码
     public static final int OPERATE_BULK = 0;
     public static final int OPERATE_UPDATE = 1;
+    public static final int OPERATE_ANALYSIS = 2;
 
 
     /**
@@ -79,6 +81,10 @@ public class OperateActivity extends BaseActivity<HomeViewModel, ActivityBulkBin
 
             case OPERATE_UPDATE:
                 loadRootFragment(R.id.ab_frameLayout, UpdateFragment.newInstance());
+                break;
+
+            case OPERATE_ANALYSIS:
+                loadRootFragment(R.id.ab_frameLayout, AnalysisResultFragment.newInstance());
                 break;
         }
     }

@@ -2,7 +2,9 @@ package jason.jan.stockanalysis.data;
 
 import java.util.List;
 
+import jason.jan.stockanalysis.entity.AnalysisStock;
 import jason.jan.stockanalysis.entity.BulkStock;
+import jason.jan.stockanalysis.entity.Condition;
 import jason.jan.stockanalysis.entity.Stock;
 
 /**
@@ -36,6 +38,42 @@ public class DataSource {
      * 记录此时在哪个Type页，保证返回的时候恢复
      */
     private int currentPosition = -1;
+    /**
+     * 分析列表
+     */
+    private List<AnalysisStock> analysisList;
+    /**
+     * 分析参数
+     */
+    private List<Condition> analysisParams;
+    /**
+     * 搜索列表
+     */
+    private List<Stock> searchList;
+
+    public List<Stock> getSearchList() {
+        return searchList;
+    }
+
+    public void setSearchList(List<Stock> searchList) {
+        this.searchList = searchList;
+    }
+
+    public List<Condition> getAnalysisParams() {
+        return analysisParams;
+    }
+
+    public void setAnalysisParams(List<Condition> analysisParams) {
+        this.analysisParams = analysisParams;
+    }
+
+    public List<AnalysisStock> getAnalysisList() {
+        return analysisList;
+    }
+
+    public void setAnalysisList(List<AnalysisStock> analysisList) {
+        this.analysisList = analysisList;
+    }
 
     public int getCurrentPosition() {
         return currentPosition;

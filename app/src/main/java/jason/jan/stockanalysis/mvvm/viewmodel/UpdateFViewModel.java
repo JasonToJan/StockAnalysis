@@ -24,14 +24,10 @@ public class UpdateFViewModel extends BaseViewModel<RepositoryImpl> {
         super(application);
     }
 
-    //获取banner轮播
-    public LiveData<Resource<List<BannerBean>>> getBanner() {
-        return getRepository().getBannerList();
-    }
 
     public void updateStock(Stock stock){
         getRepository().getDatabase().stockDao().updateStockInfo(
-                stock.getId(),
+                stock.getCode(),
                 stock.getName(),
                 stock.getDate(),
                 stock.getCurrentTime(),

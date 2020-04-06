@@ -127,12 +127,12 @@ dependencies {
     implementation common.rxjava2
     implementation common.rxandroid2
     implementation common.rxlifecycle2
-    implementation common.moshi
     implementation common.fragmentationx
     implementation common.fragmentationx_swipeback
     implementation common.baserecyclerview_adapter
-    implementation common.smartrefresh
     implementation common.utilcodex
+    implementation common.date_picker
+    implementation common.smartrefresh
 
 }
 

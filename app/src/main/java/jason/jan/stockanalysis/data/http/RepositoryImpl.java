@@ -1,12 +1,11 @@
 package jason.jan.stockanalysis.data.http;
 
 import androidx.lifecycle.MutableLiveData;
-
-import java.util.List;
-
+import io.reactivex.Observable;
 import jason.jan.stockanalysis.base.BaseModel;
-import jason.jan.stockanalysis.entity.BannerBean;
+import jason.jan.stockanalysis.entity.HttpStockResponse;
 import jason.jan.stockanalysis.entity.Resource;
+import jason.jan.stockanalysis.utils.DataUtils;
 
 /**
  * desc:
@@ -17,14 +16,27 @@ import jason.jan.stockanalysis.entity.Resource;
 public class RepositoryImpl extends BaseModel {
 
     /**
-     * 获取 banner列表
+     * 请求API
+     * @param code
+     * @param begin
+     * @param end
      * @return
      */
-    public MutableLiveData<Resource<List<BannerBean>>> getBannerList() {
+    public MutableLiveData<Resource<HttpStockResponse.ShowapiResBodyBean>> getHttpStockList(String code, String begin, String end) {
 
-        MutableLiveData<Resource<List<BannerBean>>> liveData = new MutableLiveData<>();
-        return observeGo(getApiService().getBanner(), liveData);
+        MutableLiveData<Resource<HttpStockResponse.ShowapiResBodyBean>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getStockAPI(DataUtils.getRequestMapParams(code, begin, end)), liveData);
     }
 
+    /**
+     * 请求API方式2
+     * @param code
+     * @param begin
+     * @param end
+     * @return
+     */
+    public void getHttpStockList2(String code, String begin, String end,DataCallback callback){
 
+        observeGoAsync(getApiService().getStockAPI2(DataUtils.getRequestMapParams(code, begin, end)),callback);
+    }
 }

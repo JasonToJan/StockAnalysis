@@ -418,4 +418,6 @@
     <dimen name="sp_42">42sp</dimen>
     <dimen name="sp_48">48sp</dimen>
 
+    <dimen name="dialogplus_default_center_margin">@dimen/dp_16</dimen>
+
 </resources>

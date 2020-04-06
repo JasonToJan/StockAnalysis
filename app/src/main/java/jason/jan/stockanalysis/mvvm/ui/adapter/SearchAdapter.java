@@ -31,5 +31,7 @@ public class SearchAdapter extends BaseQuickAdapter<Stock, BaseViewHolder> {
                 .setText(R.id.is_min_pri_tv, "最低价：" + item.getMinPrice() + "")
                 .setText(R.id.is_max_pri_tv, "最高价：" + item.getMaxPrice() + "")
                 .setText(R.id.is_volume_tv, "成交量：" + item.getVolume() + "");
+
+        helper.setVisible(R.id.is_forecast_tv,item.getIsForecast() == 1);
     }
 }

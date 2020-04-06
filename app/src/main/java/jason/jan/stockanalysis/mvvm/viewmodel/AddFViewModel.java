@@ -25,12 +25,11 @@ public class AddFViewModel extends BaseViewModel<RepositoryImpl> {
         super(application);
     }
 
-    //获取banner轮播
-    public LiveData<Resource<List<BannerBean>>> getBanner() {
-        return getRepository().getBannerList();
-    }
-
     public void addStock(Stock stock){
         getRepository().getDatabase().stockDao().insert(stock);
+    }
+
+    public LiveData<String> queryStockName(String code){
+        return getRepository().getDatabase().stockNameDao().queryStockName(code);
     }
 }

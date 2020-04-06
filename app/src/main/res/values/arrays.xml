@@ -1,0 +1,31 @@
+<resources>
+
+    <string-array name="stock_field">
+        <item>开盘价</item>
+        <item>收盘价</item>
+        <item>最高价</item>
+        <item>最低价</item>
+        <item>成交量</item>
+        <item>属性值</item>
+    </string-array>
+
+    <string-array name="stock_day">
+        <item>今天</item>
+        <item>昨天</item>
+        <item>前天</item>
+        <item>某一天</item>
+    </string-array>
+
+    <string-array name="stock_up_down">
+        <item>高</item>
+        <item>低</item>
+        <item>…</item>
+    </string-array>
+
+    <string-array name="stock_volums_up_down">
+        <item>以上</item>
+        <item>以下</item>
+        <item>…</item>
+    </string-array>
+
+</resources>

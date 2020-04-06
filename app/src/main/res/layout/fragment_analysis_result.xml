@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <androidx.core.widget.NestedScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".mvvm.ui.MainActivity"
+        android:background="@color/colorWhite">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_60">
+
+                <TextView
+                    android:id="@+id/far_all_size_tv"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:text="共找到n条数据"
+                    android:textColor="@color/colorWhite"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_16"
+                    android:textSize="@dimen/sp_16"
+                    android:background="@color/colorAccent"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_60"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="start"
+                >
+
+                <TextView
+                    android:id="@+id/far_up2_pro_tv"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:textColor="@color/colorWhite"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_16"
+                    android:textSize="@dimen/sp_13"
+                    android:background="@color/red5"
+                    />
+
+                <TextView
+                    android:id="@+id/far_down2_pro_tv"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:textColor="@color/colorBlack"
+                    android:gravity="center"
+                    android:textSize="@dimen/sp_13"
+                    android:background="@color/green5"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_60"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="start"
+                >
+
+                <TextView
+                    android:id="@+id/far_up4_pro_tv"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:textColor="@color/colorWhite"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_16"
+                    android:textSize="@dimen/sp_13"
+                    android:background="@color/red4"
+                    />
+
+                <TextView
+                    android:id="@+id/far_down4_pro_tv"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:textColor="@color/colorBlack"
+                    android:gravity="center"
+                    android:textSize="@dimen/sp_13"
+                    android:background="@color/green4"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_60"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="start"
+                >
+
+                <TextView
+                    android:id="@+id/far_up6_pro_tv"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:textColor="@color/colorWhite"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_16"
+                    android:textSize="@dimen/sp_13"
+                    android:background="@color/red3"
+                    />
+
+                <TextView
+                    android:id="@+id/far_down6_pro_tv"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:textColor="@color/colorBlack"
+                    android:gravity="center"
+                    android:textSize="@dimen/sp_13"
+                    android:background="@color/green3"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_60"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="start"
+                >
+
+                <TextView
+                    android:id="@+id/far_up8_pro_tv"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:textColor="@color/colorWhite"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_16"
+                    android:textSize="@dimen/sp_13"
+                    android:background="@color/red2"
+                    />
+
+                <TextView
+                    android:id="@+id/far_down8_pro_tv"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:textColor="@color/colorBlack"
+                    android:gravity="center"
+                    android:textSize="@dimen/sp_13"
+                    android:background="@color/green2"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_60"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="start"
+                >
+
+                <TextView
+                    android:id="@+id/far_up10_pro_tv"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:textColor="@color/colorWhite"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_16"
+                    android:textSize="@dimen/sp_13"
+                    android:background="@color/red1"
+                    />
+
+                <TextView
+                    android:id="@+id/far_down10_pro_tv"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:textColor="@color/colorBlack"
+                    android:gravity="center"
+                    android:textSize="@dimen/sp_13"
+                    android:background="@color/green1"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_60"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="start"
+                >
+
+                <TextView
+                    android:id="@+id/far_up0_10_pro_tv"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:textColor="@color/colorWhite"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_16"
+                    android:textSize="@dimen/sp_13"
+                    android:background="@color/colorAccent"
+                    />
+
+                <TextView
+                    android:id="@+id/far_down0_10_pro_tv"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:textColor="@color/colorBlack"
+                    android:gravity="center"
+                    android:textSize="@dimen/sp_12"
+                    android:background="@color/colorGreen"
+                    />
+
+            </LinearLayout>
+
+            <com.scwang.smartrefresh.layout.SmartRefreshLayout
+                android:id="@+id/far_smartRefreshLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:srlEnableAutoLoadMore="false"
+                app:srlEnableLoadMoreWhenContentNotFull="true">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/far_recyclerView"
+                    android:layout_margin="@dimen/dp_16"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:overScrollMode="never"
+                    android:paddingTop="@dimen/dp_11"
+                    android:paddingBottom="@dimen/dp_11"
+                    android:layout_marginBottom="@dimen/dp_330"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+
+            </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</layout>

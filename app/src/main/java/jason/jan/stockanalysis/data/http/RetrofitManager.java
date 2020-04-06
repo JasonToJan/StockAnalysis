@@ -66,7 +66,7 @@ public class RetrofitManager {
 
     private void initRetrofit() {
         retrofit = new Retrofit.Builder()
-                .baseUrl(Api.APP_DOMAIN)
+                .baseUrl(Api.YI_YUAN_API)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(okHttpClient)

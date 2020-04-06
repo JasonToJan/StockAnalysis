@@ -64,10 +64,6 @@ public class UpdateFragment extends BaseFragment<UpdateFViewModel, FragmentUpdat
         }
     }
 
-    /**
-     * 设置默认数据，以免每次都手动输入
-     *
-     */
     private void initDefuultData(){
         Stock stock = DataSource.getInstance().getUpdateStock();
         if (stock == null) return;
@@ -80,6 +76,7 @@ public class UpdateFragment extends BaseFragment<UpdateFViewModel, FragmentUpdat
         binding.fuMaxPri.setText(stock.getMaxPrice()+"");
         binding.fuMinPri.setText(stock.getMinPrice()+"");
         binding.fuVolumeNum.setText(stock.getVolume()+"");
+        binding.fuForecastCb.setChecked(stock.getIsForecast() == 1);
     }
 
     private void updateToDatabase() {
@@ -109,8 +106,7 @@ public class UpdateFragment extends BaseFragment<UpdateFViewModel, FragmentUpdat
         try {
 
             Stock stock = DataSource.getInstance().getUpdateStock();
-            stock.setId(stock.getId());
-            stock.setCode(Integer.parseInt(code));
+            stock.setCode(code);
             stock.setDate(date);
             stock.setName(name);
             stock.setClosePrice(Float.parseFloat(closePrice));

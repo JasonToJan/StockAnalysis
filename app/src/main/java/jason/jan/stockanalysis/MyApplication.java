@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.github.anrwatchdog.ANRWatchDog;
 
+import jason.jan.stockanalysis.data.prefs.PreferenceImpl;
 import jason.jan.stockanalysis.utils.LogUtils;
 import me.yokeyword.fragmentation.Fragmentation;
 
@@ -17,7 +18,9 @@ public class MyApplication extends Application {
 
     private static MyApplication context;
 
-    public static Application getInstance(){
+    private PreferenceImpl preference;
+
+    public static MyApplication getInstance(){
         return context;
     }
 
@@ -28,6 +31,7 @@ public class MyApplication extends Application {
 
         initDebug();
         initFragment();
+        initData();
     }
 
     private void initDebug(){
@@ -54,6 +58,20 @@ public class MyApplication extends Application {
                     LogUtils.e("", "##" + "Fragment catch Error:" + e.getMessage());
                 })
                 .install();
+    }
+
+    private void initData(){
+
+        preference = new PreferenceImpl(this);
+        preference.getRecordAllNameFirst();
+    }
+
+    public PreferenceImpl getPreference(){
+        if (preference == null) {
+            preference = new PreferenceImpl(this);
+        }
+
+        return preference;
     }
 
 }

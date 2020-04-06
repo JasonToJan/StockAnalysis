@@ -11,271 +11,1761 @@
         android:background="@color/analysis_bg"
         >
 
-        <TableLayout
-            android:id="@+id/fa_root_tl"
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
 
-            <TableRow
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_30"
+                android:text="条件一："
+                android:gravity="center"
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_10"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50">
+
 
                 <TextView
-                    android:text="股票代码"
+                    android:id="@+id/fa_condition1_day1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="某一天"
+                    android:gravity="center"
                     android:textColor="@color/colorBlack"
-                    android:textSize="18sp"
-                    android:padding="2dp"
-                    android:paddingStart="25dp"
-                    android:layout_weight="0.4"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition1_attribute1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="属性值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="比"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0.2"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition1_day2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="某一天"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition1_attribute2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="属性值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition1_up_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="高"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
                     />
 
                 <EditText
-                    android:id="@+id/fa_code"
-                    android:hint="必填"
+                    android:id="@+id/fa_condition1_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_40"
+                    android:hint="比例值"
+                    android:gravity="center"
                     android:textColor="@color/colorBlack"
-                    android:textSize="20sp"
-                    android:padding="2dp"
-                    android:layout_height="45dp"
+                    android:textSize="14sp"
+                    android:maxLines="1"
+                    android:inputType="number"
+                    android:digits="-1234567890."
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
                     android:layout_weight="1"
                     android:background="@drawable/edit_selector"
                     />
-
-            </TableRow>
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="%"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+                
+            </LinearLayout>
 
             <View
                 android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/colorWhite" />
+                android:background="@color/colorBlack"
+                />
 
-            <TableRow
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_30"
+                android:text="条件二："
+                android:gravity="center"
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_10"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50">
+
 
                 <TextView
-                    android:text="股票名称"
+                    android:id="@+id/fa_condition2_day1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="某一天"
+                    android:gravity="center"
                     android:textColor="@color/colorBlack"
-                    android:textSize="18sp"
-                    android:padding="2dp"
-                    android:paddingStart="25dp"
-                    android:layout_weight="0.4"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition2_attribute1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="属性值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="比"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0.2"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition2_day2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="某一天"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition2_attribute2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="属性值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition2_up_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="高"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
                     />
 
                 <EditText
-                    android:id="@+id/fa_name"
-                    android:hint="可选填"
+                    android:id="@+id/fa_condition2_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_40"
+                    android:hint="比例值"
+                    android:gravity="center"
                     android:textColor="@color/colorBlack"
-                    android:textSize="20sp"
-                    android:padding="2dp"
-                    android:layout_height="45dp"
+                    android:textSize="14sp"
+                    android:maxLines="1"
+                    android:inputType="number"
+                    android:digits="-1234567890."
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
                     android:layout_weight="1"
                     android:background="@drawable/edit_selector"
                     />
 
-            </TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="%"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+            </LinearLayout>
 
             <View
                 android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/colorWhite" />
+                android:background="@color/colorBlack"
+                />
 
-            <TableRow
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_30"
+                android:text="条件三："
+                android:gravity="center"
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_10"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50">
+
 
                 <TextView
-                    android:text="当前日期"
+                    android:id="@+id/fa_condition3_day1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="某一天"
+                    android:gravity="center"
                     android:textColor="@color/colorBlack"
-                    android:textSize="18sp"
-                    android:padding="2dp"
-                    android:paddingStart="25dp"
-                    android:layout_weight="0.4"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition3_attribute1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="属性值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="比"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0.2"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition3_day2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="某一天"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition3_attribute2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="属性值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition3_up_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="高"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
                     />
 
                 <EditText
-                    android:id="@+id/fa_date"
-                    android:hint="必填"
+                    android:id="@+id/fa_condition3_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_40"
+                    android:hint="比例值"
+                    android:gravity="center"
                     android:textColor="@color/colorBlack"
-                    android:textSize="20sp"
-                    android:padding="2dp"
+                    android:textSize="14sp"
+                    android:maxLines="1"
+                    android:inputType="number"
+                    android:digits="-1234567890."
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
                     android:layout_weight="1"
-                    android:layout_height="45dp"
                     android:background="@drawable/edit_selector"
                     />
 
-            </TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="%"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+            </LinearLayout>
 
             <View
                 android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/colorWhite" />
+                android:background="@color/colorBlack"
+                />
 
-            <TableRow
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_30"
+                android:text="条件四："
+                android:gravity="center"
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_10"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50">
+
 
                 <TextView
-                    android:text="该日开盘价"
+                    android:id="@+id/fa_condition4_day1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="某一天"
+                    android:gravity="center"
                     android:textColor="@color/colorBlack"
-                    android:textSize="18sp"
-                    android:padding="2dp"
-                    android:paddingStart="25dp"
-                    android:layout_weight="0.4"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition4_attribute1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="属性值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="比"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0.2"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition4_day2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="某一天"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition4_attribute2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="属性值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition4_up_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="高"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
                     />
 
                 <EditText
-                    android:id="@+id/fa_open_pri"
+                    android:id="@+id/fa_condition4_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_40"
+                    android:hint="比例值"
+                    android:gravity="center"
                     android:textColor="@color/colorBlack"
-                    android:textSize="20sp"
-                    android:padding="2dp"
-                    android:hint="必填"
+                    android:textSize="14sp"
+                    android:maxLines="1"
+                    android:inputType="number"
+                    android:digits="-1234567890."
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
                     android:layout_weight="1"
                     android:background="@drawable/edit_selector"
-                    android:layout_height="45dp"
                     />
 
-            </TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="%"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+            </LinearLayout>
 
             <View
                 android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/colorWhite" />
+                android:background="@color/colorBlack"
+                />
 
-            <TableRow
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_30"
+                android:text="条件五："
+                android:gravity="center"
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_10"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50">
+
 
                 <TextView
-                    android:text="该日最高价"
+                    android:id="@+id/fa_condition5_day1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="某一天"
+                    android:gravity="center"
                     android:textColor="@color/colorBlack"
-                    android:textSize="18sp"
-                    android:padding="2dp"
-                    android:paddingStart="25dp"
-                    android:layout_weight="0.4"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition5_attribute1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="属性值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="比"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0.2"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition5_day2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="某一天"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition5_attribute2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="属性值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition5_up_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="高"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
                     />
 
                 <EditText
-                    android:id="@+id/fa_max_pri"
+                    android:id="@+id/fa_condition5_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_40"
+                    android:hint="比例值"
+                    android:gravity="center"
                     android:textColor="@color/colorBlack"
-                    android:textSize="20sp"
-                    android:padding="2dp"
-                    android:hint="必填"
+                    android:textSize="14sp"
+                    android:maxLines="1"
+                    android:inputType="number"
+                    android:digits="-1234567890."
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
                     android:layout_weight="1"
                     android:background="@drawable/edit_selector"
-                    android:layout_height="45dp"
                     />
 
-            </TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="%"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+            </LinearLayout>
 
             <View
                 android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/colorWhite" />
+                android:background="@color/colorBlack"
+                />
 
-            <TableRow
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_30"
+                android:text="条件六："
+                android:gravity="center"
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_10"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50">
+
 
                 <TextView
-                    android:text="该日最低价"
+                    android:id="@+id/fa_condition6_day1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="某一天"
+                    android:gravity="center"
                     android:textColor="@color/colorBlack"
-                    android:textSize="18sp"
-                    android:padding="2dp"
-                    android:paddingStart="25dp"
-                    android:layout_weight="0.4"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition6_attribute1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="属性值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="比"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0.2"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition6_day2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="某一天"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition6_attribute2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="属性值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition6_up_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="高"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
                     />
 
                 <EditText
-                    android:id="@+id/fa_min_pri"
+                    android:id="@+id/fa_condition6_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_40"
+                    android:hint="比例值"
+                    android:gravity="center"
                     android:textColor="@color/colorBlack"
-                    android:textSize="20sp"
-                    android:padding="2dp"
-                    android:hint="必填"
-                    android:layout_height="45dp"
+                    android:textSize="14sp"
+                    android:maxLines="1"
+                    android:inputType="number"
+                    android:digits="-1234567890."
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
                     android:layout_weight="1"
                     android:background="@drawable/edit_selector"
                     />
 
-            </TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="%"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+            </LinearLayout>
 
             <View
                 android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/colorWhite" />
+                android:background="@color/colorBlack"
+                />
 
-            <TableRow
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_30"
+                android:text="条件七："
+                android:gravity="center"
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_10"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50">
+
 
                 <TextView
-                    android:text="该日收盘价"
+                    android:id="@+id/fa_condition7_day1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="某一天"
+                    android:gravity="center"
                     android:textColor="@color/colorBlack"
-                    android:textSize="18sp"
-                    android:padding="2dp"
-                    android:paddingStart="25dp"
-                    android:layout_weight="0.4"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
                     />
 
-                <EditText
-                    android:id="@+id/fa_close_pri"
+                <TextView
+                    android:id="@+id/fa_condition7_attribute1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="成交量"
+                    android:gravity="center"
                     android:textColor="@color/colorBlack"
-                    android:textSize="20sp"
-                    android:padding="2dp"
-                    android:hint="必填"
-                    android:layout_height="45dp"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="是历史最大的"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_10"
+                    android:layout_weight="0.5"
+                    />
+
+
+                <EditText
+                    android:id="@+id/fa_condition7_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_40"
+                    android:hint="比例值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:maxLines="1"
+                    android:inputType="number"
+                    android:digits="-1234567890."
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
                     android:layout_weight="1"
                     android:background="@drawable/edit_selector"
                     />
 
-            </TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="%"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition7_up_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="以上"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+            </LinearLayout>
 
             <View
                 android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/colorWhite" />
+                android:background="@color/colorBlack"
+                />
 
-            <TableRow
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_30"
+                android:text="条件八："
+                android:gravity="center"
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_10"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50">
+
 
                 <TextView
-                    android:text="该日成交量"
+                    android:id="@+id/fa_condition8_day1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="某一天"
+                    android:gravity="center"
                     android:textColor="@color/colorBlack"
-                    android:textSize="18sp"
-                    android:padding="2dp"
-                    android:paddingStart="25dp"
-                    android:layout_weight="0.4"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
                     />
 
-                <EditText
-                    android:id="@+id/fa_volume_num"
+                <TextView
+                    android:id="@+id/fa_condition8_attribute1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="成交量"
+                    android:gravity="center"
                     android:textColor="@color/colorBlack"
-                    android:textSize="20sp"
-                    android:hint="必填"
-                    android:layout_height="45dp"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="是历史最大的"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_10"
+                    android:layout_weight="0.5"
+                    />
+
+
+                <EditText
+                    android:id="@+id/fa_condition8_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_40"
+                    android:hint="比例值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:maxLines="1"
+                    android:inputType="number"
+                    android:digits="-1234567890."
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
                     android:layout_weight="1"
                     android:background="@drawable/edit_selector"
                     />
 
-            </TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="%"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition8_up_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="以上"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+            </LinearLayout>
+
+            <View
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/colorBlack"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_30"
+                android:text="条件九："
+                android:gravity="center"
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_10"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50">
+
+
+                <TextView
+                    android:id="@+id/fa_condition9_day1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="某一天"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition9_attribute1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="成交量"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="是历史最大的"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_10"
+                    android:layout_weight="0.5"
+                    />
+
+
+                <EditText
+                    android:id="@+id/fa_condition9_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_40"
+                    android:hint="比例值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:maxLines="1"
+                    android:inputType="number"
+                    android:digits="-1234567890."
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_selector"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="%"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition9_up_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="以上"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+            </LinearLayout>
+
+            <View
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/colorBlack"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_30"
+                android:text="条件十："
+                android:gravity="center"
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_10"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50">
+
+
+                <TextView
+                    android:id="@+id/fa_condition10_day1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="某一天"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition10_attribute1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="属性值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="是"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0.2"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition10_day2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="某一天"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition10_attribute2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="属性值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="的"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+            </LinearLayout>
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50">
+
+                <EditText
+                    android:id="@+id/fa_condition10_value1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_40"
+                    android:hint="比例值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:maxLines="1"
+                    android:inputType="number"
+                    android:digits="-1234567890."
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_selector"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="%到"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <EditText
+                    android:id="@+id/fa_condition10_value2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_40"
+                    android:hint="比例值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:maxLines="1"
+                    android:inputType="number"
+                    android:digits="-1234567890."
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_selector"
+                    />
+                
+            </LinearLayout>
+
+            <View
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/colorBlack"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_30"
+                android:text="条件十一："
+                android:gravity="center"
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/dp_11"
+                android:layout_marginTop="@dimen/dp_11"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50">
+
+
+                <TextView
+                    android:id="@+id/fa_condition11_day1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="某一天"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition11_attribute1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="属性值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="是"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0.2"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition11_day2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="某一天"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition11_attribute2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="属性值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="的"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50">
+
+                <EditText
+                    android:id="@+id/fa_condition11_value1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_40"
+                    android:hint="比例值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:maxLines="1"
+                    android:inputType="number"
+                    android:digits="-1234567890."
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_selector"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="%到"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <EditText
+                    android:id="@+id/fa_condition11_value2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_40"
+                    android:hint="比例值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:maxLines="1"
+                    android:inputType="number"
+                    android:digits="-1234567890."
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_selector"
+                    />
+
+            </LinearLayout>
+            
+            <View
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/colorBlack"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_30"
+                android:text="条件十二："
+                android:gravity="center"
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/dp_12"
+                android:layout_marginTop="@dimen/dp_12"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50">
+
+
+                <TextView
+                    android:id="@+id/fa_condition12_day1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="某一天"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition12_attribute1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="属性值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="是"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0.2"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition12_day2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="某一天"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition12_attribute2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="属性值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="的"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50">
+
+                <EditText
+                    android:id="@+id/fa_condition12_value1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_40"
+                    android:hint="比例值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:maxLines="1"
+                    android:inputType="number"
+                    android:digits="-1234567890."
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_selector"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="%到"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <EditText
+                    android:id="@+id/fa_condition12_value2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_40"
+                    android:hint="比例值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:maxLines="1"
+                    android:inputType="number"
+                    android:digits="-1234567890."
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_selector"
+                    />
+
+            </LinearLayout>
+
+            <View
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/colorBlack"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_30"
+                android:text="条件十三："
+                android:gravity="center"
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/dp_13"
+                android:layout_marginTop="@dimen/dp_13"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50">
+
+
+                <TextView
+                    android:id="@+id/fa_condition13_day1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="某一天"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition13_attribute1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="属性值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="是"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0.2"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition13_day2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="某一天"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:id="@+id/fa_condition13_attribute2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="属性值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="的"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50">
+
+                <EditText
+                    android:id="@+id/fa_condition13_value1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_40"
+                    android:hint="比例值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:maxLines="1"
+                    android:inputType="number"
+                    android:digits="1334567890."
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_selector"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="%到"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    />
+
+                <EditText
+                    android:id="@+id/fa_condition13_value2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_40"
+                    android:hint="比例值"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:maxLines="1"
+                    android:inputType="number"
+                    android:digits="1334567890."
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dp_5"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_selector"
+                    />
+
+            </LinearLayout>
+
+            <View
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/colorBlack"
+                />
 
             <Button
                 android:id="@+id/fa_ok_btn"
-                android:layout_marginTop="36dp"
                 android:layout_marginStart="22dp"
                 android:layout_marginEnd="22dp"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:background="@drawable/btn_selector"
-                android:text="添加"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="@dimen/dp_50"
+                android:text="分析"
                 android:textSize="26sp"
                 android:textColor="#fff"
-                android:layout_marginBottom="300dp"
-                />
+                android:layout_marginBottom="@dimen/dp_200"
 
-        </TableLayout>
+                />
+            
+        </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 

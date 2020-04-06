@@ -38,11 +38,29 @@ public abstract class BaseModel {
     public ArrayList<String> onNetTags;
 
     /**
+     * 第一次时间
+     */
+    private static long firstReqestTime;
+    /**
+     * 总时间
+     */
+    private static final int DEALY_TIME = 2000;
+
+    public ArrayList<Observable> observables = new ArrayList<>();
+
+    /**
      * 网络服务
      * @return
      */
     public StockApiService getApiService() {
         return RetrofitManager.getRetrofitManager().getApiService();
+    }
+
+    public interface DataCallback {
+
+        void successGetData(Object object);
+
+        void failedGetData(Throwable e);
     }
 
     /**
@@ -64,6 +82,30 @@ public abstract class BaseModel {
 
     public <T> MutableLiveData<T> observeGo(Observable observable, final MutableLiveData<T> liveData) {
         return observe(observable, liveData, null);
+    }
+
+    public void observeGoAsync(Observable observable, DataCallback callback){
+
+        observable
+                .subscribeOn(Schedulers.io())
+                .compose(objectLifecycleTransformer)
+                .subscribe(o -> {
+                    callback.successGetData(o);
+                }, throwable -> {
+                    callback.failedGetData((Throwable) throwable);
+                });
+
+    }
+
+    /**
+     * 两秒类加入的
+     * @param observable
+     * @param liveData
+     * @param <T>
+     * @return
+     */
+    public <T> MutableLiveData<T> observeGoToTwoSeconds(Observable observable, final MutableLiveData<T> liveData) {
+        return observeTwoSecond(observable, liveData, null);
     }
 
     public <T> MutableLiveData<T> observeGo(Observable observable, final MutableLiveData<T> liveData, ParamsBuilder paramsBuilder) {
@@ -102,7 +144,60 @@ public abstract class BaseModel {
                 return liveData;
             }
         }
-        observable.subscribeOn(Schedulers.io())
+
+
+        observable
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable1 -> {
+                    if (!TextUtils.isEmpty(oneTag)) {
+                        onNetTags.add(oneTag);
+                    }
+                    if (showDialog) {
+                        liveData.postValue((T) Resource.loading(loadingMessage));
+                    }
+                })
+                .doFinally(() -> {
+                    if (!TextUtils.isEmpty(oneTag)) {
+                        onNetTags.remove(oneTag);
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(objectLifecycleTransformer)
+                .subscribe(o -> {
+                    liveData.postValue((T) Resource.response((ResponModel<Object>) o));
+                }, throwable -> {
+                    liveData.postValue((T) Resource.error((Throwable) throwable));
+                });
+
+        return liveData;
+    }
+
+    //把统一操作全部放在这，不会重连
+    @SuppressLint("CheckResult")
+    public <T> MutableLiveData<T> observeTwoSecond(Observable observable, final MutableLiveData<T> liveData, ParamsBuilder paramsBuilder) {
+        if (paramsBuilder == null) {
+            paramsBuilder = paramsBuilder.build();
+        }
+        boolean showDialog = paramsBuilder.isShowDialog();
+        String loadingMessage = paramsBuilder.getLoadingMessage();
+        int onlineCacheTime = paramsBuilder.getOnlineCacheTime();
+        int offlineCacheTime = paramsBuilder.getOfflineCacheTime();
+
+        if (onlineCacheTime > 0) {
+            setOnlineCacheTime(onlineCacheTime);
+        }
+        if (offlineCacheTime > 0) {
+            setOfflineCacheTime(offlineCacheTime);
+        }
+        String oneTag = paramsBuilder.getOneTag();
+        if (!TextUtils.isEmpty(oneTag)) {
+            if (onNetTags.contains(oneTag)) {
+                return liveData;
+            }
+        }
+
+        observable
+                .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable1 -> {
                     if (!TextUtils.isEmpty(oneTag)) {
                         onNetTags.add(oneTag);

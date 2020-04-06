@@ -133,12 +133,12 @@ public class BulkFragment extends BaseFragment<BulkFViewModel, FragmentBulkBindi
             return;
         }
 
-        long[] ids = new long[needRemove.size()];
+        long[] currentTimes = new long[needRemove.size()];
         for (int i = 0; i < needRemove.size(); i++) {
-            ids[i] = needRemove.get(i).getId();
+            currentTimes[i] = needRemove.get(i).getCurrentTime();
         }
 
-        mViewModel.deleteSome(ids);
+        mViewModel.deleteSome(currentTimes,needRemove.get(0).getCode());
 
         //这里应该也有刷新一下adapter
         bulkAdatper.replaceData(newList);

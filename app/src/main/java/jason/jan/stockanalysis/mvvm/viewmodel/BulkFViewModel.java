@@ -28,21 +28,17 @@ public class BulkFViewModel extends BaseViewModel<RepositoryImpl> {
         super(application);
     }
 
-    //获取banner轮播
-    public LiveData<Resource<List<BannerBean>>> getBanner() {
-        return getRepository().getBannerList();
-    }
 
     /**
      * 删除某些条目 id in (12,13,1414)
-     * @param ids = 12,13,1414
+     * @param currentTimes = 12,13,1414
      */
-    public void deleteSome(long[] ids){
-        if (ids == null || ids.length == 0) return;
+    public void deleteSome(long[] currentTimes,String code){
+        if (currentTimes == null || currentTimes.length == 0) return;
 
         StockDao dao = getRepository().getDatabase().stockDao();
 
-        dao.deleteSome(ids);
+        dao.deleteSome(currentTimes,code);
     }
 
 }

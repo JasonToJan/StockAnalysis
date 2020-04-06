@@ -25,13 +25,10 @@ import jason.jan.stockanalysis.utils.LogUtils;
  **/
 public class QueryFViewModel extends BaseViewModel<RepositoryImpl> {
 
+    private static final String TAG = "QueryFViewModel";
+
     public QueryFViewModel(@NonNull Application application) {
         super(application);
-    }
-
-    //获取banner轮播
-    public LiveData<Resource<List<BannerBean>>> getBanner() {
-        return getRepository().getBannerList();
     }
 
     /**
@@ -47,7 +44,7 @@ public class QueryFViewModel extends BaseViewModel<RepositoryImpl> {
             return dao.getSearchListNoParams();
         }
 
-        boolean hasCode = parms.getCode() != 0;
+        boolean hasCode = !TextUtils.isEmpty(parms.getCode());
         boolean hasDate = !TextUtils.isEmpty(parms.getDate());
         boolean hasForecast = parms.getIsForecast() != 2;//2表示都可以，1表示预测，0表示不预测
 
@@ -70,7 +67,7 @@ public class QueryFViewModel extends BaseViewModel<RepositoryImpl> {
             searchType = 8;
         }
 
-        LogUtils.d("searchType=" + searchType);
+        LogUtils.d(TAG,"searchType=" + searchType);
 
         switch (searchType) {
             case 1:

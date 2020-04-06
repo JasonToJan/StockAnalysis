@@ -7,10 +7,12 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import jason.jan.stockanalysis.data.dao.StockDao;
+import jason.jan.stockanalysis.data.dao.StockNameDao;
 import jason.jan.stockanalysis.entity.Stock;
+import jason.jan.stockanalysis.entity.StockName;
 import jason.jan.stockanalysis.utils.Constants;
 
-@Database(entities = {Stock.class}, version = 1,exportSchema = false)
+@Database(entities = {Stock.class, StockName.class}, version = 1,exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static final Object mLock = new Object();
@@ -29,5 +31,7 @@ public abstract class AppDatabase extends RoomDatabase {
     }
 
     public abstract StockDao stockDao();
+
+    public abstract StockNameDao stockNameDao();
 
 }

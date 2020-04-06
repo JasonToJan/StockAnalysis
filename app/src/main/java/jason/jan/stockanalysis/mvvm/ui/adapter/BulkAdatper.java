@@ -33,5 +33,6 @@ public class BulkAdatper extends BaseQuickAdapter<BulkStock, BaseViewHolder> {
                 .setText(R.id.ib_volume_tv, "成交量：" + item.getVolume() + "");
 
         helper.setChecked(R.id.ib_choose_cb, item.isChoose());
+        helper.setVisible(R.id.ib_forecast_tv,item.getIsForecast() == 1);
     }
 }

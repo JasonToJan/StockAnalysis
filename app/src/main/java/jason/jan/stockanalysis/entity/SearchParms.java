@@ -10,14 +10,14 @@ public class SearchParms {
 
     private String date;//日期
 
-    private int code;//股票代号
+    private String code;//股票代号
 
     private int isForecast;//是否预测
 
     public SearchParms() {
     }
 
-    public SearchParms(String date, int code, int isForecast) {
+    public SearchParms(String date, String code, int isForecast) {
         this.date = date;
         this.code = code;
         this.isForecast = isForecast;
@@ -31,11 +31,11 @@ public class SearchParms {
         this.date = date;
     }
 
-    public int getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(String code) {
         this.code = code;
     }
 

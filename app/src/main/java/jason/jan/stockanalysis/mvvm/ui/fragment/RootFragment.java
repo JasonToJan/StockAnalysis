@@ -1,30 +1,21 @@
 package jason.jan.stockanalysis.mvvm.ui.fragment;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 
-import com.blankj.utilcode.util.TimeUtils;
 import com.google.android.material.tabs.TabLayout;
-
-import java.text.SimpleDateFormat;
-import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.viewpager2.widget.ViewPager2;
 import jason.jan.stockanalysis.R;
 import jason.jan.stockanalysis.base.BaseFragment;
 import jason.jan.stockanalysis.data.DataSource;
-import jason.jan.stockanalysis.databinding.FragmentAddBinding;
 import jason.jan.stockanalysis.databinding.FragmentRootBinding;
-import jason.jan.stockanalysis.entity.Stock;
-import jason.jan.stockanalysis.mvvm.ui.adapter.MyFragmentAdapter;
-import jason.jan.stockanalysis.mvvm.viewmodel.AddFViewModel;
+import jason.jan.stockanalysis.mvvm.ui.adapter.MyFragment1Adapter;
+import jason.jan.stockanalysis.mvvm.ui.adapter.MyFragment2Adapter;
 import jason.jan.stockanalysis.mvvm.viewmodel.RootFViewModel;
-import jason.jan.stockanalysis.utils.CommonUtils;
 import jason.jan.stockanalysis.utils.LogUtils;
 import jason.jan.stockanalysis.utils.TabLayoutMediator;
-import jason.jan.stockanalysis.utils.ToastUtils;
 
 /**
  * Description: 增加股票记录碎片
@@ -47,9 +38,18 @@ public class RootFragment extends BaseFragment<RootFViewModel, FragmentRootBindi
 
     TabLayoutMediator tabLayoutMediator;
 
+    public static final boolean IS_USE_VIEWPAGER2 = false;
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        LogUtils.d(TAG, "可见了哦");
+    }
+
     @Override
     public void onResume() {
         super.onResume();
+
         if (DataSource.getInstance().getCurrentPosition() >= 0) {
             binding.frViewpager2.setCurrentItem(DataSource.getInstance().getCurrentPosition());
         }
@@ -80,42 +80,59 @@ public class RootFragment extends BaseFragment<RootFViewModel, FragmentRootBindi
         }
     }
 
-    private void initView(){
-        binding.frViewpager2.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
-        binding.frViewpager2.setAdapter(new MyFragmentAdapter(_mActivity));
-        binding.frViewpager2.setOffscreenPageLimit(3);
+    private void initView() {
+        if (IS_USE_VIEWPAGER2) {
+            binding.frViewpager2.setVisibility(View.VISIBLE);
+            binding.frViewpager.setVisibility(View.GONE);
+            binding.frViewpager2.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
+            binding.frViewpager2.setAdapter(new MyFragment2Adapter(_mActivity));
+            binding.frViewpager2.setOffscreenPageLimit(5);
 
-        //关联TabLayout
-        tabLayoutMediator = new TabLayoutMediator(binding.frTablayout, binding.frViewpager2,
-                true, this::doInConfigureTab);
-        tabLayoutMediator.attach();
+            //关联TabLayout
+            tabLayoutMediator = new TabLayoutMediator(binding.frTablayout, binding.frViewpager2,
+                    true, this::doInConfigureTab);
+            tabLayoutMediator.attach();
+
+        } else {
+            binding.frViewpager.setVisibility(View.VISIBLE);
+            binding.frViewpager2.setVisibility(View.GONE);
+            binding.frViewpager.setOffscreenPageLimit(5);
+            binding.frViewpager.setAdapter(new MyFragment1Adapter(_mActivity));
+            binding.frTablayout.setupWithViewPager(binding.frViewpager);
+        }
+
     }
 
-    private void initData(){
+    private void initData() {
 
     }
 
     /**
      * Tab切换时处理逻辑
+     *
      * @param tab
      * @param position
      */
     private void doInConfigureTab(@NonNull TabLayout.Tab tab, int position) {
         switch (position) {
-            case 0 :
+            case 0:
                 tab.setText("新增");
                 break;
 
-            case 1 :
+            case 1:
                 tab.setText("分析");
                 break;
 
-            case 2 :
+            case 2:
                 tab.setText("查询");
                 break;
 
             case 3:
                 tab.setText("测试");
+                break;
+
+            case 4:
+                tab.setText("数据");
                 break;
         }
     }

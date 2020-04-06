@@ -51,10 +51,10 @@ public class Resource<T> {
 
     public static <T> Resource<T> response(ResponModel<T> data) {
         if (data != null) {
-            if (data.isSuccess()) {
-                return new Resource<>(SUCCESS, data.getData(), null);
+            if (data.getShowapi_res_code() == 0) {
+                return new Resource<T>(SUCCESS, data.getShowapi_res_body(), null);
             }
-            return new Resource<>(FAIL, null, data.getErrorMsg());
+            return new Resource<T>(FAIL, null, data.getShowapi_res_error());
         }
         return new Resource<>(ERROR, null, null);
     }

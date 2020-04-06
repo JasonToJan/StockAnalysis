@@ -1,6 +1,7 @@
 package jason.jan.stockanalysis.entity;
 
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
@@ -11,13 +12,11 @@ import androidx.room.PrimaryKey;
  * user: JasonJan 1211241203@qq.com
  * time: 2020/4/2 12:49
  **/
-@Entity(indices = {@Index(value = {"id"}, unique = true)})
+@Entity(primaryKeys = {"code", "currentTime"})
 public class Stock {
 
-    @PrimaryKey(autoGenerate = true)
-    private long id;//股票id
-
-    private int code;//股票代码
+    @NonNull
+    private String code;//股票代码
 
     private long currentTime;//今日时间戳，0点的即可
 
@@ -51,19 +50,12 @@ public class Stock {
         this.isForecast = isForecast;
     }
 
-    public long getId() {
-        return id;
-    }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public int getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(String code) {
         this.code = code;
     }
 
@@ -144,13 +136,26 @@ public class Stock {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Stock that = (Stock) o;
-        return id == that.id;
+        return (currentTime + code).equals(that.currentTime + that.code);
     }
 
     @Override
     public int hashCode() {
 
-        return hashCode(id);
+        return hashCode(currentTime + code);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "\nname = " + name
+                + "\ndate = " + date
+                + "\nname = " + name
+                + "\nmaxPrice = " + maxPrice
+                + "\nminPrice = " + minPrice
+                + "\nopenPrice = " + openPrice
+                + "\nclosePrice = " + closePrice
+                + "\nvolume = " + volume;
     }
 
     public static int hashCode(Object... a) {

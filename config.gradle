@@ -151,6 +151,8 @@ ext {
             smartrefresh                    :   'com.scwang.smartrefresh:SmartRefreshLayout:1.1.2',
             smartrefresh_header             :   'com.scwang.smartrefresh:SmartRefreshHeader:1.1.2',
 
+            date_picker                     :   'com.wdullaer:materialdatetimepicker:4.2.3',
+
     ]
 
     coocent = [

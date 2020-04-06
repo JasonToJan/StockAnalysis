@@ -11,7 +11,7 @@ public class BulkStock {
 
     private long id;
 
-    private int code;//股票代码
+    private String code;//股票代码
 
     private long currentTime;//今日时间戳，0点的即可
 
@@ -52,11 +52,11 @@ public class BulkStock {
         isChoose = choose;
     }
 
-    public int getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(String code) {
         this.code = code;
     }
 

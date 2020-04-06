@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dialogplus_outmost_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+  <LinearLayout
+      android:id="@+id/dialogplus_top_title_ll"
+      android:orientation="horizontal"
+      android:layout_width="match_parent"
+      android:layout_height="50dp">
+
+    <TextView
+        android:id="@+id/dialogplus_top_title_tv"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:textSize="22sp"
+        tools:text = "This is a title."
+        android:gravity="left|center_vertical"
+        android:textColor="@android:color/black"
+        android:layout_marginStart="25dp"
+        />
+
+  </LinearLayout>
+
+  <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/dialogplus_list"
+      android:layout_marginStart="16dp"
+      android:layout_marginEnd="16dp"
+      android:layout_width="match_parent"
+      android:layout_weight="1"
+      android:layout_height="0dp"
+      android:divider="@null" />
+
+  <LinearLayout
+      android:id="@+id/dialogplus_bottom_ll"
+      android:orientation="horizontal"
+      android:layout_width="match_parent"
+      android:gravity="end"
+      android:layout_height="50dp">
+
+    <Button
+        android:id="@+id/dialogplus_positive_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:textSize="16sp"
+        tools:text = "Ok"
+        android:textAllCaps="false"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        android:layout_marginStart="16dp"
+        android:background="?android:attr/selectableItemBackground"
+        />
+
+    <Button
+        android:id="@+id/dialogplus_negative_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:textSize="16sp"
+        tools:text ="Cancel"
+        android:textAllCaps="false"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="?android:attr/selectableItemBackground"
+        />
+
+  </LinearLayout>
+
+</LinearLayout>
