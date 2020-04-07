@@ -43,6 +43,10 @@ public class DataSource {
      */
     private List<AnalysisStock> analysisList;
     /**
+     * 分析列表2
+     */
+    private List<AnalysisStock> analysisList2;
+    /**
      * 分析参数
      */
     private List<Condition> analysisParams;
@@ -50,6 +54,14 @@ public class DataSource {
      * 搜索列表
      */
     private List<Stock> searchList;
+
+    public List<AnalysisStock> getAnalysisList2() {
+        return analysisList2;
+    }
+
+    public void setAnalysisList2(List<AnalysisStock> analysisList2) {
+        this.analysisList2 = analysisList2;
+    }
 
     public List<Stock> getSearchList() {
         return searchList;

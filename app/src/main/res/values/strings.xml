@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">StockAnalysis</string>
+
 
     <string name="result_network_error">网络不给力，请检查网络</string>
     <string name="result_server_error">服务器连接失败，请稍后再试</string>

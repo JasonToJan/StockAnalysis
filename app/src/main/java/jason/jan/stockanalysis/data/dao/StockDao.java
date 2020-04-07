@@ -55,6 +55,9 @@ public interface StockDao {
     @Query("SELECT max(volume) FROM Stock WHERE code = :code AND currentTime > currentTime - :range AND currentTime < currentTime + :range")
     float getMaxVolumeByCode(String code,long range);
 
+    @Query("SELECT max(volume) FROM Stock WHERE code = :code LIMIT :limit Offset :offset")
+    float getMaxVolumeByCode(String code, int limit,int offset);
+
     @Transaction
     @Query("SELECT * FROM Stock WHERE code = :code AND date = :date AND isForecast = :isForecast ORDER BY currentTime DESC")
     LiveData<List<Stock>> getSearchList(String code, String date, int isForecast);

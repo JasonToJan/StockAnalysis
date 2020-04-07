@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentPagerAdapter;
 import jason.jan.stockanalysis.mvvm.ui.fragment.AddFragment;
+import jason.jan.stockanalysis.mvvm.ui.fragment.Analysis2Fragment;
 import jason.jan.stockanalysis.mvvm.ui.fragment.AnalysisFragment;
 import jason.jan.stockanalysis.mvvm.ui.fragment.DataFragment;
 import jason.jan.stockanalysis.mvvm.ui.fragment.QueryFragment;
@@ -31,6 +32,7 @@ public class MyFragment1Adapter extends FragmentPagerAdapter {
         arrayMap.clear();
         arrayMap.put(AddFragment.class.getSimpleName(),AddFragment.newInstance());
         arrayMap.put(AnalysisFragment.class.getSimpleName(),AnalysisFragment.newInstance());
+        arrayMap.put(Analysis2Fragment.class.getSimpleName(),Analysis2Fragment.newInstance());
         arrayMap.put(QueryFragment.class.getSimpleName(),QueryFragment.newInstance());
         arrayMap.put(TestFragment.class.getSimpleName(),TestFragment.newInstance());
         arrayMap.put(DataFragment.class.getSimpleName(),DataFragment.newInstance());
@@ -67,14 +69,18 @@ public class MyFragment1Adapter extends FragmentPagerAdapter {
                 break;
 
             case 2 :
-                title = "查询";
+                title = "GO";
                 break;
 
             case 3 :
-                title = "测试";
+                title = "查询";
                 break;
 
             case 4 :
+                title = "测试";
+                break;
+
+            case 5 :
                 title = "数据";
                 break;
         }
@@ -108,6 +114,15 @@ public class MyFragment1Adapter extends FragmentPagerAdapter {
                 break;
 
             case 2 :
+                key = Analysis2Fragment.class.getSimpleName();
+                fragment = arrayMap.get(key);
+                if (fragment == null) {
+                    fragment = Analysis2Fragment.newInstance();
+                    arrayMap.put(key,fragment);
+                }
+                break;
+
+            case 3 :
                 key = QueryFragment.class.getSimpleName();
                 fragment = arrayMap.get(key);
                 if (fragment == null) {
@@ -116,7 +131,7 @@ public class MyFragment1Adapter extends FragmentPagerAdapter {
                 }
                 break;
 
-            case 3 :
+            case 4 :
                 key = TestFragment.class.getSimpleName();
                 fragment = arrayMap.get(key);
                 if (fragment == null) {
@@ -125,7 +140,7 @@ public class MyFragment1Adapter extends FragmentPagerAdapter {
                 }
                 break;
 
-            case 4 :
+            case 5 :
                 key = DataFragment.class.getSimpleName();
                 fragment = arrayMap.get(key);
                 if (fragment == null) {

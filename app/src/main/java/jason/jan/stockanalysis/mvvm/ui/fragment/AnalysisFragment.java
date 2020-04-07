@@ -22,7 +22,6 @@ import jason.jan.stockanalysis.utils.DataUtils;
 import jason.jan.stockanalysis.utils.DialogUtils;
 import jason.jan.stockanalysis.utils.LogUtils;
 import jason.jan.stockanalysis.utils.ToastUtils;
-import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * Description:

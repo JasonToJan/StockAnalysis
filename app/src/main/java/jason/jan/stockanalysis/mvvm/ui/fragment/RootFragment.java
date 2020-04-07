@@ -96,7 +96,7 @@ public class RootFragment extends BaseFragment<RootFViewModel, FragmentRootBindi
         } else {
             binding.frViewpager.setVisibility(View.VISIBLE);
             binding.frViewpager2.setVisibility(View.GONE);
-            binding.frViewpager.setOffscreenPageLimit(5);
+            binding.frViewpager.setOffscreenPageLimit(6);
             binding.frViewpager.setAdapter(new MyFragment1Adapter(_mActivity));
             binding.frTablayout.setupWithViewPager(binding.frViewpager);
         }
@@ -124,14 +124,18 @@ public class RootFragment extends BaseFragment<RootFViewModel, FragmentRootBindi
                 break;
 
             case 2:
-                tab.setText("查询");
+                tab.setText("分析2");
                 break;
 
             case 3:
-                tab.setText("测试");
+                tab.setText("查询");
                 break;
 
             case 4:
+                tab.setText("测试");
+                break;
+
+            case 5:
                 tab.setText("数据");
                 break;
         }

@@ -4,30 +4,28 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import jason.jan.stockanalysis.R;
 import jason.jan.stockanalysis.base.BaseFragment;
 import jason.jan.stockanalysis.data.DataSource;
 import jason.jan.stockanalysis.databinding.FragmentQueryBinding;
-import jason.jan.stockanalysis.entity.AnalysisStock;
 import jason.jan.stockanalysis.entity.BulkStock;
 import jason.jan.stockanalysis.entity.SearchParms;
 import jason.jan.stockanalysis.entity.Stock;
 import jason.jan.stockanalysis.mvvm.ui.activity.OperateActivity;
-import jason.jan.stockanalysis.mvvm.ui.adapter.AnalysisResultAdatper;
 import jason.jan.stockanalysis.mvvm.ui.adapter.SearchAdapter;
 import jason.jan.stockanalysis.mvvm.viewmodel.QueryFViewModel;
 import jason.jan.stockanalysis.utils.CommonUtils;
 import jason.jan.stockanalysis.utils.DataUtils;
 import jason.jan.stockanalysis.utils.DialogUtils;
-import jason.jan.stockanalysis.view.CustomProgress;
 
 import static jason.jan.stockanalysis.utils.LogUtils.d;
 

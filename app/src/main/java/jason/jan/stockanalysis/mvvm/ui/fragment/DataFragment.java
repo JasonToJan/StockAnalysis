@@ -49,7 +49,7 @@ public class DataFragment extends BaseFragment<DataFViewModel, FragmentDataBindi
 
     private static final int OFFSET_NUM = 250;//间隔大小
 
-    public static final int BEGIN_NUM = 400;//开始大小
+    public static final int BEGIN_NUM = 0;//开始大小
 
 
     //属性集合------------end-------------------//
