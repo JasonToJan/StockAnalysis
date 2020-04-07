@@ -180,9 +180,8 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
             }
 
             List<Float> listVolumeMaxs = new ArrayList<>();
-            long range = 24 * 3600 * 1000 * 30L;
             for (int i = 0; i < theCodeStocks.size(); i++) {
-                float maxVolume = getRepository().getDatabase().stockDao().getMaxVolumeByCode(code, range);
+                float maxVolume = findRecentlyMax(theCodeStocks,i);
 
                 //d(TAG, "maxVolume = " + maxVolume);
                 listVolumeMaxs.add(maxVolume);
@@ -235,12 +234,24 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
         }
 
         //分析今天涨幅是否符合 -0.8 -0.64
-        float ratioTarget = (todayStock.getClosePrice() - todayStock.getOpenPrice()) / todayStock.getOpenPrice();
-        float ratioCondition = (condition2.getTodayStock().getClosePrice() - condition2.getTodayStock().getOpenPrice()) / condition2.getTodayStock().getOpenPrice();
+        float ratioTarget = (todayStock.getClosePrice() - yesStock.getClosePrice()) / yesStock.getClosePrice();
+        float ratioCondition = (condition2.getTodayStock().getClosePrice() - condition2.getYesStock().getClosePrice()) / condition2.getYesStock().getClosePrice();
         float ratioRange1 = ratioCondition * proximity1;//0.64 -0.64
         float ratioRange2 = ratioCondition * proximity2;//0.96 -0.96
         float max = ratioRange1 > ratioRange2 ? ratioRange1 : ratioRange2;
         float min = ratioRange1 < ratioRange2 ? ratioRange1 : ratioRange2;
+        if (ratioCondition > 0) {
+            //上涨
+            if (ratioCondition >= 0.08) {
+                max = 0.12f;//最大可以
+            }
+
+        } else {
+            //下跌
+            if (ratioCondition <= -0.08) {
+                min = - 0.12f;
+            }
+        }
 
         if (ratioTarget > max || ratioTarget < min) {
             if (isSelf) {
@@ -249,6 +260,10 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
             }
             return false;
         }
+//        if (isSelf) {
+//            LogUtils.d("ratioTarget = " + ratioTarget + " ratioCondition=" + ratioCondition + " ratioRange1=" + ratioRange1);
+//            LogUtils.d("ratioRange2 = " + ratioTarget + " max=" + max + " min=" + min);
+//        }
 
         //分析昨天涨幅
         ratioTarget = (yesStock.getClosePrice() - yesStock.getOpenPrice()) / yesStock.getOpenPrice();
@@ -257,6 +272,18 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
         ratioRange2 = ratioCondition * proximity2;
         max = ratioRange1 > ratioRange2 ? ratioRange1 : ratioRange2;
         min = ratioRange1 < ratioRange2 ? ratioRange1 : ratioRange2;
+        if (ratioCondition > 0) {
+            //上涨
+            if (ratioCondition >= 0.08) {
+                max = 0.12f;//最大可以
+            }
+
+        } else {
+            //下跌
+            if (ratioCondition <= -0.08) {
+                min = - 0.12f;
+            }
+        }
 
         if (ratioTarget > max || ratioTarget < min) {
             if (isSelf) {
@@ -265,6 +292,10 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
             }
             return false;
         }
+//        if (isSelf) {
+//            LogUtils.d("ratioTarget = " + ratioTarget + " ratioCondition=" + ratioCondition + " ratioRange1=" + ratioRange1);
+//            LogUtils.d("ratioRange2 = " + ratioTarget + " max=" + max + " min=" + min);
+//        }
 
         //分析前天涨幅
         ratioTarget = (beforYesStock.getClosePrice() - beforYesStock.getOpenPrice()) / beforYesStock.getOpenPrice();
@@ -273,6 +304,18 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
         ratioRange2 = ratioCondition * proximity2;
         max = ratioRange1 > ratioRange2 ? ratioRange1 : ratioRange2;
         min = ratioRange1 < ratioRange2 ? ratioRange1 : ratioRange2;
+        if (ratioCondition > 0) {
+            //上涨
+            if (ratioCondition >= 0.08) {
+                max = 0.12f;//最大可以
+            }
+
+        } else {
+            //下跌
+            if (ratioCondition <= -0.08) {
+                min = - 0.12f;
+            }
+        }
 
         if (ratioTarget > max || ratioTarget < min) {
             if (isSelf) {
@@ -281,10 +324,14 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
             }
             return false;
         }
+//        if (isSelf) {
+//            LogUtils.d("ratioTarget = " + ratioTarget + " ratioCondition=" + ratioCondition + " ratioRange1=" + ratioRange1);
+//            LogUtils.d("ratioRange2 = " + ratioTarget + " max=" + max + " min=" + min);
+//        }
 
         //分析今天成交量占历史成交量的多少
-        ratioTarget = (todayStock.getVolume() - maxVolume) / maxVolume;
-        ratioCondition = (condition2.getTodayStock().getVolume() - condition2.getMaxVolume()) / condition2.getMaxVolume();
+        ratioTarget = todayStock.getVolume() / maxVolume;
+        ratioCondition = condition2.getTodayStock().getVolume() / condition2.getMaxVolume();
         ratioRange1 = ratioCondition * proximity1;
         ratioRange2 = ratioCondition * proximity2;
         max = ratioRange1 > ratioRange2 ? ratioRange1 : ratioRange2;
@@ -293,14 +340,18 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
         if (ratioTarget > max || ratioTarget < min) {
             if (isSelf) {
                 LogUtils.d("ratioTarget = " + ratioTarget + " ratioCondition=" + ratioCondition + " ratioRange1=" + ratioRange1);
-                LogUtils.d("ratioRange2 = " + ratioTarget + " max=" + max + " min=" + min);
+                LogUtils.d("ratioRange = " + ratioTarget + " max=" + max + " min=" + min);
             }
             return false;
         }
+//        if (isSelf) {
+//            LogUtils.d("ratioTarget = " + ratioTarget + " ratioCondition=" + ratioCondition + " ratioRange1=" + ratioRange1);
+//            LogUtils.d("ratioRange2 = " + ratioTarget + " max=" + max + " min=" + min);
+//        }
 
         //分析昨天成交量占历史成交量的多少
-        ratioTarget = (yesStock.getVolume() - maxVolume) / maxVolume;
-        ratioCondition = (condition2.getYesStock().getVolume() - condition2.getMaxVolume()) / condition2.getMaxVolume();
+        ratioTarget = yesStock.getVolume() / maxVolume;
+        ratioCondition = condition2.getYesStock().getVolume() / condition2.getMaxVolume();
         ratioRange1 = ratioCondition * proximity1;
         ratioRange2 = ratioCondition * proximity2;
         max = ratioRange1 > ratioRange2 ? ratioRange1 : ratioRange2;
@@ -313,10 +364,14 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
             }
             return false;
         }
+//        if (isSelf) {
+//            LogUtils.d("ratioTarget = " + ratioTarget + " ratioCondition=" + ratioCondition + " ratioRange1=" + ratioRange1);
+//            LogUtils.d("ratioRange2 = " + ratioTarget + " max=" + max + " min=" + min);
+//        }
 
         //分析前日成交量占历史成交量的多少
-        ratioTarget = (beforYesStock.getVolume() - maxVolume) / maxVolume;
-        ratioCondition = (condition2.getBeforeYesStock().getVolume() - condition2.getMaxVolume()) / condition2.getMaxVolume();
+        ratioTarget = beforYesStock.getVolume() / maxVolume;
+        ratioCondition = condition2.getBeforeYesStock().getVolume() / condition2.getMaxVolume();
         ratioRange1 = ratioCondition * proximity1;
         ratioRange2 = ratioCondition * proximity2;
         max = ratioRange1 > ratioRange2 ? ratioRange1 : ratioRange2;
@@ -329,6 +384,76 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
             }
             return false;
         }
+//        if (isSelf) {
+//            LogUtils.d("ratioTarget = " + ratioTarget + " ratioCondition=" + ratioCondition + " ratioRange1=" + ratioRange1);
+//            LogUtils.d("ratioRange2 = " + ratioTarget + " max=" + max + " min=" + min);
+//        }
+
+        //分析前天开盘和昨天开盘位置
+        ratioTarget = (yesStock.getClosePrice() - beforYesStock.getClosePrice()) / beforYesStock.getClosePrice();
+        ratioCondition = (condition2.getYesStock().getClosePrice() - condition2.getBeforeYesStock().getClosePrice()) / condition2.getBeforeYesStock().getClosePrice();
+        ratioRange1 = ratioCondition * proximity1;//0.64 -0.64
+        ratioRange2 = ratioCondition * proximity2;//0.96 -0.96
+        max = ratioRange1 > ratioRange2 ? ratioRange1 : ratioRange2;
+        min = ratioRange1 < ratioRange2 ? ratioRange1 : ratioRange2;
+        if (ratioCondition > 0) {
+            //上涨
+            if (ratioCondition >= 0.08) {
+                max = 0.12f;//最大可以
+            }
+
+        } else {
+            //下跌
+            if (ratioCondition <= -0.08) {
+                min = - 0.12f;
+            }
+        }
+
+        if (ratioTarget > max || ratioTarget < min) {
+            if (isSelf) {
+                LogUtils.d("ratioTarget = " + ratioTarget + " ratioCondition=" + ratioCondition + " ratioRange1=" + ratioRange1);
+                LogUtils.d("ratioRange2 = " + ratioTarget + " max=" + max + " min=" + min);
+            }
+            return false;
+        }
+//        if (isSelf) {
+//            LogUtils.d("ratioTarget = " + ratioTarget + " ratioCondition=" + ratioCondition + " ratioRange1=" + ratioRange1);
+//            LogUtils.d("ratioRange2 = " + ratioTarget + " max=" + max + " min=" + min);
+//        }
+
+
+        //分析昨天开盘和今天开盘位置
+        ratioTarget = (todayStock.getClosePrice() - yesStock.getClosePrice()) / yesStock.getClosePrice();
+        ratioCondition = (condition2.getTodayStock().getClosePrice() - condition2.getYesStock().getClosePrice()) / condition2.getYesStock().getClosePrice();
+        ratioRange1 = ratioCondition * proximity1;//0.64 -0.64
+        ratioRange2 = ratioCondition * proximity2;//0.96 -0.96
+        max = ratioRange1 > ratioRange2 ? ratioRange1 : ratioRange2;
+        min = ratioRange1 < ratioRange2 ? ratioRange1 : ratioRange2;
+        if (ratioCondition > 0) {
+            //上涨
+            if (ratioCondition >= 0.08) {
+                max = 0.12f;//最大可以
+            }
+
+        } else {
+            //下跌
+            if (ratioCondition <= -0.08) {
+                min = - 0.12f;
+            }
+        }
+
+        if (ratioTarget > max || ratioTarget < min) {
+            if (isSelf) {
+                LogUtils.d("ratioTarget = " + ratioTarget + " ratioCondition=" + ratioCondition + " ratioRange1=" + ratioRange1);
+                LogUtils.d("ratioRange2 = " + ratioTarget + " max=" + max + " min=" + min);
+            }
+            return false;
+        }
+//        if (isSelf) {
+//            LogUtils.d("ratioTarget = " + ratioTarget + " ratioCondition=" + ratioCondition + " ratioRange1=" + ratioRange1);
+//            LogUtils.d("ratioRange2 = " + ratioTarget + " max=" + max + " min=" + min);
+//        }
+
 
         //发现都符合哦
         d(TAG, "发现都符合：targetStock=" + todayStock.toString());

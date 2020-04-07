@@ -12,7 +12,7 @@ import jason.jan.stockanalysis.BuildConfig;
 
 public class LogUtils {
 
-    private static boolean isDebug = BuildConfig.DEBUG;
+    private static boolean isDebug = true;
 
     private static String APP_TAG = "TEST##StockAnalysis";
 
