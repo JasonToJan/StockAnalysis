@@ -155,6 +155,7 @@ public class Stock {
                 + "\nminPrice = " + minPrice
                 + "\nopenPrice = " + openPrice
                 + "\nclosePrice = " + closePrice
+                + "\ncurrentTime = " + currentTime
                 + "\nvolume = " + volume;
     }
 

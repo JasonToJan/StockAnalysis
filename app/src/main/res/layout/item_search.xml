@@ -147,7 +147,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/linear_tag"
                 android:layout_marginTop="@dimen/dp_7"
-                android:layout_toEndOf="@+id/ib_volume_tv"
                 android:visibility="gone"
                 android:gravity="center"
                 android:textStyle="bold"

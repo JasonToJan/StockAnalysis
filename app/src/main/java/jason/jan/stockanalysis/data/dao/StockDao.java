@@ -49,7 +49,7 @@ public interface StockDao {
     @Query("SELECT DISTINCT code FROM Stock")
     List<String> getDistinctCode();
 
-    @Query("SELECT * FROM Stock WHERE code = :code")
+    @Query("SELECT * FROM Stock WHERE code = :code ORDER BY currentTime ASC")
     List<Stock> getStocksByCode(String code);
 
     @Query("SELECT max(volume) FROM Stock WHERE code = :code AND currentTime > currentTime - :range AND currentTime < currentTime + :range")

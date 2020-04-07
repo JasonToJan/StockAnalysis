@@ -18,6 +18,7 @@ import jason.jan.stockanalysis.data.http.RepositoryImpl;
 import jason.jan.stockanalysis.entity.Condition2;
 import jason.jan.stockanalysis.entity.Stock;
 import jason.jan.stockanalysis.utils.DataUtils;
+import jason.jan.stockanalysis.utils.LogUtils;
 
 import static jason.jan.stockanalysis.utils.LogUtils.d;
 
@@ -100,7 +101,7 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
         for (int i = 0; i < theCodeStocks.size(); i++) {
             if (theCodeStocks.get(i).getDate().equals(date)) {
                 //limit限制长度，offset从哪里开始
-                float maxVolume = getRepository().getDatabase().stockDao().getMaxVolumeByCode(code, 60, i <= 30 ? 0 : i - 30);
+                float maxVolume = findRecentlyMax(theCodeStocks,i);
                 condition.setTodayStock(theCodeStocks.get(i));
                 if (i >= 2) {
                     condition.setYesStock(theCodeStocks.get(i - 1));
@@ -108,6 +109,7 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
                     d(TAG, "找到目标信息：" + condition.getTodayStock().toString());
                     d(TAG, "找到目标昨日信息：" + condition.getYesStock().toString());
                     d(TAG, "找到目标前日信息：" + condition.getBeforeYesStock().toString());
+                    d(TAG, "maxVolume = " + maxVolume);
                     condition.setMaxVolume(maxVolume);
                 }
             }
@@ -139,6 +141,21 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
         }
 
         callback.finishAllStock();
+    }
+
+    private float findRecentlyMax(List<Stock> allList, int position) {
+        if (allList == null || allList.size() == 0) return 0;
+        float result = allList.get(0).getVolume();
+        int from = position > 30 ? position - 30 : 0;
+        for (int i = 0; i < allList.size(); i++) {
+            if (i == from) {
+                result = allList.get(i).getVolume();
+            }
+            if (i < from + 60) {
+                result = result > allList.get(i).getVolume() ? result : allList.get(i).getVolume();
+            }
+        }
+        return result;
     }
 
     /**
@@ -176,6 +193,7 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
             for (int i = 0; i < theCodeStocks.size(); i++) {
                 if (i >= 2) {
                     Stock nextStock = (i == theCodeStocks.size() - 1) ? null : theCodeStocks.get(i + 1);
+
                     boolean isTarget = doAnalaysisTheCodeTheStock(theCodeStocks.get(i), theCodeStocks.get(i - 1), theCodeStocks.get(i - 2), nextStock, listVolumeMaxs.get(i), condition2);
                     if (isTarget) {
                         resultSize++;
@@ -210,6 +228,12 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
 
         if (todayStock == null || yesStock == null || beforYesStock == null) return false;
 
+        boolean isSelf = false;
+        if (todayStock.getCode().equals(condition2.getTodayStock().getCode()) && todayStock.getDate().equals(condition2.getTodayStock().getDate())) {
+            isSelf = true;
+            d(TAG, " 此时正在分析自己...");
+        }
+
         //分析今天涨幅是否符合 -0.8 -0.64
         float ratioTarget = (todayStock.getClosePrice() - todayStock.getOpenPrice()) / todayStock.getOpenPrice();
         float ratioCondition = (condition2.getTodayStock().getClosePrice() - condition2.getTodayStock().getOpenPrice()) / condition2.getTodayStock().getOpenPrice();
@@ -218,7 +242,13 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
         float max = ratioRange1 > ratioRange2 ? ratioRange1 : ratioRange2;
         float min = ratioRange1 < ratioRange2 ? ratioRange1 : ratioRange2;
 
-        if (ratioTarget > max || ratioTarget < min) return false;
+        if (ratioTarget > max || ratioTarget < min) {
+            if (isSelf) {
+                LogUtils.d("ratioTarget = " + ratioTarget + " ratioCondition=" + ratioCondition + " ratioRange1=" + ratioRange1);
+                LogUtils.d("ratioRange2 = " + ratioTarget + " max=" + max + " min=" + min);
+            }
+            return false;
+        }
 
         //分析昨天涨幅
         ratioTarget = (yesStock.getClosePrice() - yesStock.getOpenPrice()) / yesStock.getOpenPrice();
@@ -228,7 +258,13 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
         max = ratioRange1 > ratioRange2 ? ratioRange1 : ratioRange2;
         min = ratioRange1 < ratioRange2 ? ratioRange1 : ratioRange2;
 
-        if (ratioTarget > max || ratioTarget < min) return false;
+        if (ratioTarget > max || ratioTarget < min) {
+            if (isSelf) {
+                LogUtils.d("ratioTarget = " + ratioTarget + " ratioCondition=" + ratioCondition + " ratioRange1=" + ratioRange1);
+                LogUtils.d("ratioRange2 = " + ratioTarget + " max=" + max + " min=" + min);
+            }
+            return false;
+        }
 
         //分析前天涨幅
         ratioTarget = (beforYesStock.getClosePrice() - beforYesStock.getOpenPrice()) / beforYesStock.getOpenPrice();
@@ -238,7 +274,13 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
         max = ratioRange1 > ratioRange2 ? ratioRange1 : ratioRange2;
         min = ratioRange1 < ratioRange2 ? ratioRange1 : ratioRange2;
 
-        if (ratioTarget > max || ratioTarget < min) return false;
+        if (ratioTarget > max || ratioTarget < min) {
+            if (isSelf) {
+                LogUtils.d("ratioTarget = " + ratioTarget + " ratioCondition=" + ratioCondition + " ratioRange1=" + ratioRange1);
+                LogUtils.d("ratioRange2 = " + ratioTarget + " max=" + max + " min=" + min);
+            }
+            return false;
+        }
 
         //分析今天成交量占历史成交量的多少
         ratioTarget = (todayStock.getVolume() - maxVolume) / maxVolume;
@@ -248,7 +290,13 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
         max = ratioRange1 > ratioRange2 ? ratioRange1 : ratioRange2;
         min = ratioRange1 < ratioRange2 ? ratioRange1 : ratioRange2;
 
-        if (ratioTarget > max || ratioTarget < min) return false;
+        if (ratioTarget > max || ratioTarget < min) {
+            if (isSelf) {
+                LogUtils.d("ratioTarget = " + ratioTarget + " ratioCondition=" + ratioCondition + " ratioRange1=" + ratioRange1);
+                LogUtils.d("ratioRange2 = " + ratioTarget + " max=" + max + " min=" + min);
+            }
+            return false;
+        }
 
         //分析昨天成交量占历史成交量的多少
         ratioTarget = (yesStock.getVolume() - maxVolume) / maxVolume;
@@ -258,7 +306,13 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
         max = ratioRange1 > ratioRange2 ? ratioRange1 : ratioRange2;
         min = ratioRange1 < ratioRange2 ? ratioRange1 : ratioRange2;
 
-        if (ratioTarget > max || ratioTarget < min) return false;
+        if (ratioTarget > max || ratioTarget < min) {
+            if (isSelf) {
+                LogUtils.d("ratioTarget = " + ratioTarget + " ratioCondition=" + ratioCondition + " ratioRange1=" + ratioRange1);
+                LogUtils.d("ratioRange2 = " + ratioTarget + " max=" + max + " min=" + min);
+            }
+            return false;
+        }
 
         //分析前日成交量占历史成交量的多少
         ratioTarget = (beforYesStock.getVolume() - maxVolume) / maxVolume;
@@ -268,7 +322,13 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
         max = ratioRange1 > ratioRange2 ? ratioRange1 : ratioRange2;
         min = ratioRange1 < ratioRange2 ? ratioRange1 : ratioRange2;
 
-        if (ratioTarget > max || ratioTarget < min) return false;
+        if (ratioTarget > max || ratioTarget < min) {
+            if (isSelf) {
+                LogUtils.d("ratioTarget = " + ratioTarget + " ratioCondition=" + ratioCondition + " ratioRange1=" + ratioRange1);
+                LogUtils.d("ratioRange2 = " + ratioTarget + " max=" + max + " min=" + min);
+            }
+            return false;
+        }
 
         //发现都符合哦
         d(TAG, "发现都符合：targetStock=" + todayStock.toString());

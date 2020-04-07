@@ -30,7 +30,7 @@ import jason.jan.stockanalysis.view.CustomProgress;
  * Creator: Wang
  * Date: 2020/4/2 20:19
  */
-public class Analysis2Fragment extends BaseFragment<AnalysisF2ViewModel, FragmentAnalysis2Binding> {
+public class Analysis2Fragment extends BaseFragment<AnalysisF2ViewModel, FragmentAnalysis2Binding> implements AnalysisResultAdatper.GetProbilityCallback {
 
     private static final String TAG = "QueryFragment";
 
@@ -90,7 +90,7 @@ public class Analysis2Fragment extends BaseFragment<AnalysisF2ViewModel, Fragmen
                 }
 
                 if (analysisAdapter != null) {
-                    analysisAdapter.replaceData(resultList);
+                    analysisAdapter.replaceMyData(resultList,Analysis2Fragment.this);
                 }
 
                 binding.fa2SmartRefreshLayout.finishRefresh(1500);
@@ -110,7 +110,7 @@ public class Analysis2Fragment extends BaseFragment<AnalysisF2ViewModel, Fragmen
             }
 
             if (analysisAdapter != null) {
-                analysisAdapter.replaceData(resultList);
+                analysisAdapter.replaceMyData(resultList,Analysis2Fragment.this);
             }
 
             binding.fa2SmartRefreshLayout.finishLoadMore(1500);
@@ -124,6 +124,28 @@ public class Analysis2Fragment extends BaseFragment<AnalysisF2ViewModel, Fragmen
 
         binding.fa2AnalysisBtn.setOnClickListener(this);
         binding.fa2DateTv.setOnClickListener(this);
+    }
+
+    @Override
+    public void getUpPro(float up0_2, float up2_4, float up4_6, float up6_8, float up8_10) {
+
+        binding.fa2Up2ProTv.setText(up0_2+"\nup0->2" );
+        binding.fa2Up4ProTv.setText(up2_4+"\nup2->4");
+        binding.fa2Up6ProTv.setText(up4_6+"\nup4->6");
+        binding.fa2Up8ProTv.setText(up6_8+"\nup6->8");
+        binding.fa2Up10ProTv.setText(up8_10+"\nup8->10");
+        binding.fa2Up010ProTv.setText((up0_2 + up2_4 + up4_6 + up6_8 + up8_10)+"\nup10\n");
+    }
+
+    @Override
+    public void getDownPro(float down0_2, float down2_4, float down4_6, float down6_8, float down8_10) {
+
+        binding.fa2Down2ProTv.setText("down0->2\n" + down0_2);
+        binding.fa2Down4ProTv.setText("down2->4\n" + down2_4);
+        binding.fa2Down6ProTv.setText("down4->6\n" + down4_6);
+        binding.fa2Down8ProTv.setText("down6->8\n" + down6_8);
+        binding.fa2Down10ProTv.setText("down8->10\n" + down8_10);
+        binding.fa2Down010ProTv.setText("down10\n" + (down0_2 + down2_4 + down4_6 + down6_8 + down8_10));
     }
 
     @Override
@@ -213,5 +235,6 @@ public class Analysis2Fragment extends BaseFragment<AnalysisF2ViewModel, Fragmen
 
         return true;
     }
+
 
 }
