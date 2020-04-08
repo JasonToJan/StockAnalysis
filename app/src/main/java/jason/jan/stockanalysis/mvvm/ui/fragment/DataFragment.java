@@ -230,7 +230,7 @@ public class DataFragment extends BaseFragment<DataFViewModel, FragmentDataBindi
 
                 customProgress = CustomProgress.show(_mActivity, "正在查询并插入历史股票数据...", true, null);
                 binding.fdLogTv.setText("");
-                mViewModel.deleteCurrentMonthStock(true, new DataFViewModel.AddStockCallback() {
+                mViewModel.deleteCurrentMonthStock(true, offsetNum, new DataFViewModel.AddStockCallback() {
                     int currentSize = 0;
 
                     @Override
@@ -280,7 +280,7 @@ public class DataFragment extends BaseFragment<DataFViewModel, FragmentDataBindi
         DialogUtils.showTipsThenCallback(_mActivity, "您确定要清空所有股票这个月的历史记录吗？", new DialogUtils.IDialogTwoButtonCallback() {
             @Override
             public void onPositiveCallback(DialogPlus dialog) {
-                mViewModel.deleteCurrentMonthStock(false, null);
+                mViewModel.deleteCurrentMonthStock(false, offsetNum,null);
             }
 
             @Override

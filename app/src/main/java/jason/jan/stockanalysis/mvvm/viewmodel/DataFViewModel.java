@@ -134,7 +134,7 @@ public class DataFViewModel extends BaseViewModel<RepositoryImpl> {
      *
      * @param isNeedAddAgain
      */
-    public void deleteCurrentMonthStock(boolean isNeedAddAgain, AddStockCallback callback) {
+    public void deleteCurrentMonthStock(boolean isNeedAddAgain, int offsetNum, AddStockCallback callback) {
         Observable.just(1)
                 .observeOn(Schedulers.io())
                 .subscribe(new io.reactivex.Observer<Integer>() {
@@ -152,10 +152,12 @@ public class DataFViewModel extends BaseViewModel<RepositoryImpl> {
                         String realDay = "01";
                         String dateBegin = year + "-" + realMonth + "-" + realDay;
                         long currentMonthMills = MyTimeUtils.dateToStamp(dateBegin);
-                        getRepository().getDatabase().stockDao().deleteCurrentMonth(currentMonthMills);
+                        if (!isNeedAddAgain) {
+                            getRepository().getDatabase().stockDao().deleteCurrentMonth(currentMonthMills);
+                        }
 
                         if (isNeedAddAgain) {
-                            new MyAddDataAsync(true, callback).execute();
+                            new MyAddDataAsync(true, offsetNum, callback).execute();
                         }
                     }
 
@@ -385,7 +387,7 @@ public class DataFViewModel extends BaseViewModel<RepositoryImpl> {
             LogUtils.d(TAG, "from=" + MAX_SIZE + " offset=" + offsetNum);
             int realCount = MAX_SIZE;
             if (offsetNum == DataFragment.BEGIN_NUM) {
-                realCount =  MAX_SIZE - DataFragment.BEGIN_NUM % MAX_SIZE;
+                realCount = MAX_SIZE - DataFragment.BEGIN_NUM % MAX_SIZE;
             }
             List<StockName> stockNames = getRepository().getDatabase().stockNameDao().queryAllStockNameAsyncByOffset(realCount, offsetNum);
             if (stockNames == null || stockNames.size() == 0) return null;
