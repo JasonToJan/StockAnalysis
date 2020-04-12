@@ -81,6 +81,7 @@ public class MyApplication extends Application {
 
         preference = new PreferenceImpl(this);
         preference.getRecordAllNameFirst();
+        preference.getRecordOtherNameFirst();
     }
 
     public PreferenceImpl getPreference(){

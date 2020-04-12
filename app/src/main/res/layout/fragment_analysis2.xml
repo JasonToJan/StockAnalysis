@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
-    <androidx.core.widget.NestedScrollView
+    <ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -59,7 +59,7 @@
 
                 <TextView
                     android:id="@+id/fa2_date_tv"
-                    android:layout_width="0dp"
+                    android:layout_width="@dimen/dp_60"
                     android:layout_weight="1"
                     android:layout_height="@dimen/dp_30"
                     android:hint="必填"
@@ -118,21 +118,134 @@
                     android:background="@drawable/btn_selector"
                     />
 
-                <TextView
-                    android:id="@+id/fa2_search_num_tv"
+                <Button
+                    android:id="@+id/fa2_analysis_btn2"
                     android:layout_width="200dp"
                     android:layout_height="@dimen/dp_50"
                     android:layout_gravity="center"
                     android:layout_margin="5dp"
-                    android:text="(..条记录)"
-                    android:gravity="center"
-                    android:textSize="15sp"
-                    android:textColor="@color/colorAccent"
-                    android:visibility="gone"
+                    android:text="分析最近两天很像的"
+                    android:background="@drawable/btn_selector"
                     />
 
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="相似度%"
+                    android:textColor="@color/colorBlack"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="16sp"
+                    android:layout_marginStart="@dimen/sp_10"
+                    />
+
+                <EditText
+                    android:id="@+id/fa2_tomorrow_proximity_et"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp_30"
+                    android:hint="百分比"
+                    android:textColor="@color/colorBlack"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:inputType="number"
+                    android:layout_marginStart="@dimen/sp_10"
+                    android:background="@drawable/edit_selector"
+                    android:maxLines="1"
+                    android:digits="1234567890"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="后天开盘上升%"
+                    android:textColor="@color/colorBlack"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="16sp"
+                    android:layout_marginStart="@dimen/sp_10"
+                    />
+
+                <EditText
+                    android:id="@+id/fa2_open_up_tv"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.8"
+                    android:layout_height="@dimen/dp_30"
+                    android:hint="百分比"
+                    android:textColor="@color/colorBlack"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="16sp"
+                    android:layout_marginStart="@dimen/sp_10"
+                    android:background="@drawable/edit_selector"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:layout_marginEnd="5dp"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_80"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="start"
+                >
+
+                <Button
+                    android:id="@+id/fa2_analysis_btn3"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:text="明天收盘买？"
+                    android:background="@drawable/btn_selector"
+                    />
+
+                <Button
+                    android:id="@+id/fa2_analysis_btn4"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:text="明天涨停？"
+                    android:background="@drawable/btn_selector"
+                    />
+
+                <Button
+                    android:id="@+id/fa2_analysis_btn5"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:text="明天跌停？"
+                    android:background="@drawable/btn_selector"
+                    />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/fa2_search_num_tv"
+                android:layout_width="200dp"
+                android:layout_height="@dimen/dp_50"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:text="(..条记录)"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:textColor="@color/colorAccent"
+                android:visibility="gone"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -172,7 +285,6 @@
                     android:layout_margin="5dp"
                     android:textColor="@color/colorWhite"
                     android:gravity="center"
-                    android:padding="@dimen/dp_16"
                     android:textSize="@dimen/sp_12"
                     android:background="@color/red5"
                     />
@@ -186,7 +298,6 @@
                     android:layout_margin="5dp"
                     android:textColor="@color/colorWhite"
                     android:gravity="center"
-                    android:padding="@dimen/dp_16"
                     android:textSize="@dimen/sp_12"
                     android:background="@color/red4"
                     />
@@ -200,7 +311,6 @@
                     android:layout_margin="5dp"
                     android:textColor="@color/colorWhite"
                     android:gravity="center"
-                    android:padding="@dimen/dp_16"
                     android:textSize="@dimen/sp_12"
                     android:background="@color/red3"
                     />
@@ -214,7 +324,6 @@
                     android:layout_margin="5dp"
                     android:textColor="@color/colorWhite"
                     android:gravity="center"
-                    android:padding="@dimen/dp_16"
                     android:textSize="@dimen/sp_12"
                     android:background="@color/red2"
                     />
@@ -228,7 +337,6 @@
                     android:layout_margin="5dp"
                     android:textColor="@color/colorWhite"
                     android:gravity="center"
-                    android:padding="@dimen/dp_16"
                     android:textSize="@dimen/sp_12"
                     android:background="@color/red1"
                     />
@@ -243,8 +351,8 @@
                     android:layout_marginEnd="10dp"
                     android:textColor="@color/colorWhite"
                     android:gravity="center"
-                    android:padding="@dimen/dp_16"
                     android:textSize="@dimen/sp_12"
+                    tools:text="23.35%"
                     android:background="@color/colorAccent"
                     />
                 
@@ -263,6 +371,7 @@
                     android:id="@+id/fa2_down2_pro_tv"
                     android:layout_width="0dp"
                     android:layout_weight="1"
+                    tools:text="23.35%"
                     android:layout_height="@dimen/dp_50"
                     android:layout_gravity="center"
                     android:layout_margin="5dp"
@@ -364,6 +473,6 @@
 
         </LinearLayout>
 
-    </androidx.core.widget.NestedScrollView>
+    </ScrollView>
 
 </layout>

@@ -1,5 +1,7 @@
 package jason.jan.stockanalysis.mvvm.ui.adapter;
 
+import android.graphics.Color;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
@@ -21,6 +23,8 @@ import jason.jan.stockanalysis.entity.Stock;
  * Date: 2020/4/6 10:29
  */
 public class AnalysisResultAdatper extends BaseQuickAdapter<AnalysisStock, BaseViewHolder> {
+
+    int type;
 
     /**
      * 获取概率回调
@@ -48,13 +52,20 @@ public class AnalysisResultAdatper extends BaseQuickAdapter<AnalysisStock, BaseV
                 .setText(R.id.iar_max_pri_tv, "最高价：" + item.getMaxPrice() + "")
                 .setText(R.id.iar_volume_tv, "成交量：" + item.getVolume() + "");
 
-        helper.setVisible(R.id.iar_forecast_tv, item.getIsForecast() == 1);
+        helper.setVisible(R.id.iar_forecast_tv,false);
+        if (type == 1) {
+            helper.setVisible(R.id.iar_forecast_tv, item.getIsForecast() == 1);
+        } else if (type >= 2 && item.getNextStock() != null) {
+            helper.setVisible(R.id.iar_forecast_tv,true);
+            helper.setText(R.id.iar_forecast_tv,"参考："+item.getNextStock().getCode()+" "+item.getNextStock().getDate());
+        }
 
         //判断后期开盘
         Stock nextStock = item.getNextStock();
-        if (nextStock == null) return;
+        if (nextStock == null || type >= 2) return;
 
         CardView cardView = helper.getView(R.id.iar_root_cv);
+        cardView.setCardBackgroundColor(Color.WHITE);
         float offset = nextStock.getClosePrice() - item.getClosePrice();
         if (offset > 0) {
             //上升
@@ -148,4 +159,11 @@ public class AnalysisResultAdatper extends BaseQuickAdapter<AnalysisStock, BaseV
 
     }
 
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 }

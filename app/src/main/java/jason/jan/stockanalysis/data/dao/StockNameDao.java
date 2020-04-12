@@ -40,6 +40,9 @@ public interface StockNameDao {
     @Query("SELECT * From StockName LIMIT :count")
     List<StockName> queryAllStockNameAsync(int count);
 
+    @Query("SELECT * From StockName")
+    List<StockName> queryMyAllStockNameAsync();
+
     /**
      * 不包括offset
      * @param count
@@ -51,4 +54,7 @@ public interface StockNameDao {
 
     @Query("SELECT count(*) From StockName")
     LiveData<Integer> queryCount();
+
+    @Query("SELECT count(*) From StockName")
+    int queryCountAsync();
 }

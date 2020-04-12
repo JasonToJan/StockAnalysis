@@ -5,7 +5,6 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-
 import jason.jan.stockanalysis.data.dao.StockDao;
 import jason.jan.stockanalysis.data.dao.StockNameDao;
 import jason.jan.stockanalysis.entity.Stock;
@@ -33,5 +32,6 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract StockDao stockDao();
 
     public abstract StockNameDao stockNameDao();
+
 
 }

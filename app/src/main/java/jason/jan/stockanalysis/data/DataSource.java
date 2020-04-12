@@ -47,6 +47,18 @@ public class DataSource {
      */
     private List<AnalysisStock> analysisList2;
     /**
+     * 明天买
+     */
+    private List<AnalysisStock> analysisTomorrowBuy;
+    /**
+     * 明天涨停
+     */
+    private List<AnalysisStock> analysisTomorrowUp;
+    /**
+     * 明天跌停
+     */
+    private List<AnalysisStock> analysisTomorrowDown;
+    /**
      * 分析参数
      */
     private List<Condition> analysisParams;
@@ -54,6 +66,30 @@ public class DataSource {
      * 搜索列表
      */
     private List<Stock> searchList;
+
+    public List<AnalysisStock> getAnalysisTomorrowBuy() {
+        return analysisTomorrowBuy;
+    }
+
+    public void setAnalysisTomorrowBuy(List<AnalysisStock> analysisTomorrowBuy) {
+        this.analysisTomorrowBuy = analysisTomorrowBuy;
+    }
+
+    public List<AnalysisStock> getAnalysisTomorrowUp() {
+        return analysisTomorrowUp;
+    }
+
+    public void setAnalysisTomorrowUp(List<AnalysisStock> analysisTomorrowUp) {
+        this.analysisTomorrowUp = analysisTomorrowUp;
+    }
+
+    public List<AnalysisStock> getAnalysisTomorrowDown() {
+        return analysisTomorrowDown;
+    }
+
+    public void setAnalysisTomorrowDown(List<AnalysisStock> analysisTomorrowDown) {
+        this.analysisTomorrowDown = analysisTomorrowDown;
+    }
 
     public List<AnalysisStock> getAnalysisList2() {
         return analysisList2;

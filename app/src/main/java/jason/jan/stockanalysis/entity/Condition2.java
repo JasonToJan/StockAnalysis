@@ -18,6 +18,8 @@ public class Condition2 {
 
     Stock beforeYesStock;//前天
 
+    Stock before2YesStock;//大前天
+
     public Condition2() {
     }
 
@@ -26,6 +28,14 @@ public class Condition2 {
         this.todayStock = todayStock;
         this.yesStock = yesStock;
         this.beforeYesStock = beforeYesStock;
+    }
+
+    public Stock getBefore2YesStock() {
+        return before2YesStock;
+    }
+
+    public void setBefore2YesStock(Stock before2YesStock) {
+        this.before2YesStock = before2YesStock;
     }
 
     public float getMaxVolume() {

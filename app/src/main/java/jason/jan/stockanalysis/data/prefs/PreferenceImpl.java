@@ -28,7 +28,13 @@ public class PreferenceImpl implements IPreference {
      * 是否是第一次启动 以此决定是否弹出弹框
      */
     public boolean isRecordAllName = true;
-    private static final String IS_RECORD_ALL_NAME = "is_record_all_name";
+    private static final String IS_RECORD_ALL_NAME = "is_record_all_name_4_11_42";
+
+    /**
+     * 是否是第一次启动 以此决定是否弹出弹框
+     */
+    public boolean isRecordOtherName4_11 = true;
+    private static final String IS_RECORD_OTHER_NAME4_11 = "is_record_other_name_4_11_43";
 
     public PreferenceImpl(Application application) {
         LogUtils.d(TAG, "开始初始化PreferenceImpl");
@@ -49,5 +55,21 @@ public class PreferenceImpl implements IPreference {
     @Override
     public void getRecordAllNameFirst() {
         isRecordAllName = mPreferences.getBoolean(IS_RECORD_ALL_NAME, false);
+    }
+
+    @Override
+    public void setHasRecordOtherName(boolean isRecord) {
+        this.isRecordOtherName4_11 = isRecord;
+        mPreferences.edit().putBoolean(IS_RECORD_OTHER_NAME4_11, isRecord).apply();
+    }
+
+    @Override
+    public boolean hasRecordOtherName() {
+        return isRecordOtherName4_11;
+    }
+
+    @Override
+    public void getRecordOtherNameFirst() {
+        isRecordOtherName4_11 = mPreferences.getBoolean(IS_RECORD_OTHER_NAME4_11, false);
     }
 }

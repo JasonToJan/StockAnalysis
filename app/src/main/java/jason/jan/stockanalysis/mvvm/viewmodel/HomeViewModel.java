@@ -19,6 +19,7 @@ import jason.jan.stockanalysis.R;
 import jason.jan.stockanalysis.base.BaseViewModel;
 import jason.jan.stockanalysis.data.http.RepositoryImpl;
 import jason.jan.stockanalysis.entity.BannerBean;
+import jason.jan.stockanalysis.entity.StockName;
 import jason.jan.stockanalysis.entity.Resource;
 import jason.jan.stockanalysis.entity.Stock;
 import jason.jan.stockanalysis.entity.StockName;
@@ -39,10 +40,19 @@ public class HomeViewModel extends BaseViewModel<RepositoryImpl> {
         super(application);
     }
 
+    public interface RecordNameCallback {
+
+        void finishRecord();
+
+        void failedRecord();
+    }
+
     /**
      * 记录所有股票名称
      */
     public void recordAllName() {
+
+
         if (MyApplication.getInstance().getPreference().hasRecordAllName()) {
             LogUtils.d(TAG, "抱歉，已经记录过名称哦!");
             return;
@@ -95,6 +105,9 @@ public class HomeViewModel extends BaseViewModel<RepositoryImpl> {
                     @Override
                     public void onComplete() {
 
+                        if(!MyApplication.getInstance().getPreference().hasRecordOtherName()) {
+                           recordOtherName();
+                        }
                     }
                 });
     }
@@ -126,6 +139,81 @@ public class HomeViewModel extends BaseViewModel<RepositoryImpl> {
 
                     }
                 });
+    }
+
+    /**
+     * 记录所有股票名称
+     */
+    public void recordOtherName() {
+        if (MyApplication.getInstance().getPreference().hasRecordOtherName()) {
+            LogUtils.d(TAG, "抱歉，已经记录过名称哦!");
+            return;
+        }
+
+        Observable.just(1)
+                .observeOn(Schedulers.io())
+                .subscribe(new Observer<Integer>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Integer list) {
+
+                        LogUtils.d(TAG, "开始记录名称了");
+
+                        ArrayList<String> fileList = AssetsUtils.getFromAssets(MyApplication.getInstance(), "new_stock_name");
+                        if (fileList == null || fileList.size() == 0) return;
+
+                        List<StockName> dataBaseStockNames = getRepository().getDatabase().stockNameDao().queryMyAllStockNameAsync();
+
+                        ArrayList<StockName> needInsertList = new ArrayList<>();
+                        for (int i = 0; i < fileList.size(); i++) {
+                            String line = fileList.get(i);
+                            String[] lineSplit = line.split("\\s+");
+                            if (lineSplit.length >= 2) {
+                                //LogUtils.d(TAG, "line1=" + lineSplit[0] + " line2=" + lineSplit[1]);
+                                if (alreadyExist(lineSplit[0], dataBaseStockNames)) {
+                                    //LogUtils.d(TAG, "抱歉，已经存在了哦" + lineSplit[0] + " " + lineSplit[1]);
+                                } else {
+                                    //LogUtils.d(TAG, "需要插入数据库哦" + lineSplit[0] + " " + lineSplit[1]);
+                                    if (!lineSplit[0].startsWith("3")) {
+                                        needInsertList.add(new StockName(lineSplit[0], lineSplit[1]));
+                                    }
+                                }
+                            }
+                        }
+
+                        int size = needInsertList.size();
+                        StockName[] stockNames = new StockName[size];
+                        for (int i = 0; i < size; i++) {
+                            stockNames[i] = needInsertList.get(i);
+                            //LogUtils.d(TAG, "code=" + arrayList.get(i).code + " name=" + arrayList.get(i).getName());
+                        }
+                        LogUtils.d(TAG, "插入长度为：" + size);
+                        getRepository().getDatabase().stockNameDao().insertMany(stockNames);
+                        MyApplication.getInstance().getPreference().setHasRecordOtherName(true);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LogUtils.e("Error##" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
+    }
+
+    private boolean alreadyExist(String code, List<StockName> stockNames) {
+        for (int i = 0; i < stockNames.size(); i++) {
+            if (stockNames.get(i).getCode().equals(code)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

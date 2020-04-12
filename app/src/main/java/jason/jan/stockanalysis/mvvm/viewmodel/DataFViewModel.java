@@ -45,7 +45,7 @@ public class DataFViewModel extends BaseViewModel<RepositoryImpl> {
     /**
      * 当前最大数量
      */
-    public static final int MAX_CURRENT = 2100;
+    public static final int MAX_CURRENT = 3000;
     /**
      * 所有股票限制大小
      */

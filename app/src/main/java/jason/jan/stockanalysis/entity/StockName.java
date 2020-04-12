@@ -1,5 +1,6 @@
 package jason.jan.stockanalysis.entity;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
@@ -10,12 +11,10 @@ import androidx.room.PrimaryKey;
  * Creator: Wang
  * Date: 2020/4/5 8:08
  */
-@Entity(indices = {@Index(value = {"id"}, unique = true)})
+@Entity(primaryKeys = {"code"})
 public class StockName {
 
-    @PrimaryKey(autoGenerate = true)
-    public int id;
-
+    @NonNull
     public String code;
 
     public String name;
@@ -26,14 +25,6 @@ public class StockName {
     public StockName(String code, String name) {
         this.code = code;
         this.name = name;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getCode() {

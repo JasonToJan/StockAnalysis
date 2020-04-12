@@ -13,4 +13,10 @@ public interface IPreference {
     void setHasRecordName(boolean isRecord);
 
     void getRecordAllNameFirst();
+
+    void setHasRecordOtherName(boolean isRecord);
+
+    boolean hasRecordOtherName();
+
+    void getRecordOtherNameFirst();
 }
