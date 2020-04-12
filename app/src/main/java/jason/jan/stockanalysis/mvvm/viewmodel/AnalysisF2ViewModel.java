@@ -828,7 +828,7 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
                 Stock tomorrowStock = theCodeStocks.get(i + 1);
                 Stock tomorrow2Stock = theCodeStocks.get(i + 2);
                 boolean isTarget = isTomorrowDownType(todayStock, tomorrowStock);
-                if (isTarget) {
+                if (isTarget && !todayStock.getDate().equals("2020-01-23")) {
                     Condition2 condition2 = new Condition2();
                     condition2.setProximity(PROXIMITY);
                     condition2.setMaxVolume(listVolumeMaxs.get(i));
