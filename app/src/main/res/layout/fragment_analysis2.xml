@@ -166,7 +166,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="后天开盘上升%"
+                    android:text="后天升%"
                     android:textColor="@color/colorBlack"
                     android:layout_gravity="center_vertical"
                     android:textSize="16sp"
@@ -175,6 +175,32 @@
 
                 <EditText
                     android:id="@+id/fa2_open_up_tv"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.8"
+                    android:layout_height="@dimen/dp_30"
+                    android:hint="百分比"
+                    android:textColor="@color/colorBlack"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="16sp"
+                    android:layout_marginStart="@dimen/sp_10"
+                    android:background="@drawable/edit_selector"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:layout_marginEnd="5dp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="5日%"
+                    android:textColor="@color/colorBlack"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="16sp"
+                    android:layout_marginStart="@dimen/sp_10"
+                    />
+
+                <EditText
+                    android:id="@+id/fa2_5day_up_tv"
                     android:layout_width="0dp"
                     android:layout_weight="0.8"
                     android:layout_height="@dimen/dp_30"
@@ -229,6 +255,38 @@
                     android:layout_gravity="center"
                     android:layout_margin="5dp"
                     android:text="明天跌停？"
+                    android:background="@drawable/btn_selector"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_80"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="start"
+                >
+
+                <Button
+                    android:id="@+id/fa2_analysis_btn6"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:text="近5日必上涨？"
+                    android:background="@drawable/btn_selector"
+                    />
+
+                <Button
+                    android:id="@+id/fa2_analysis_btn7"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:text="近5日必下跌"
                     android:background="@drawable/btn_selector"
                     />
 

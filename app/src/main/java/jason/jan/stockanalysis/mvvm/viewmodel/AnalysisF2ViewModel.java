@@ -19,6 +19,7 @@ import jason.jan.stockanalysis.data.DataSource;
 import jason.jan.stockanalysis.data.http.RepositoryImpl;
 import jason.jan.stockanalysis.entity.AnalysisStock;
 import jason.jan.stockanalysis.entity.Condition2;
+import jason.jan.stockanalysis.entity.Condition5;
 import jason.jan.stockanalysis.entity.Stock;
 import jason.jan.stockanalysis.utils.DataUtils;
 import jason.jan.stockanalysis.utils.LogUtils;
@@ -37,10 +38,22 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
 
     public float TOMORROW_BUY_UP_OFFSET = 4.0f;//明天开盘比今天收盘高3%
 
-    public float PROXIMITY = 90;//相似度80%就可以放在条件里面了
+    public float FIVE_DAY_UP_OFFSET = 110;//五天上涨百分比
+
+    public float PROXIMITY = 98;//相似度80%就可以放在条件里面了
+
+    public float AVERAGE_PROXIMITY = 90;//平均价格相似度90%就可以放在条件里面了
 
     public float getTOMORROW_BUY_UP_OFFSET() {
         return TOMORROW_BUY_UP_OFFSET;
+    }
+
+    public float getFIVE_DAY_UP_OFFSET() {
+        return FIVE_DAY_UP_OFFSET;
+    }
+
+    public void setFIVE_DAY_UP_OFFSET(float FIVE_DAY_UP_OFFSET) {
+        this.FIVE_DAY_UP_OFFSET = FIVE_DAY_UP_OFFSET;
     }
 
     public void setTOMORROW_BUY_UP_OFFSET(float TOMORROW_BUY_UP_OFFSET) {
@@ -59,6 +72,11 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
      * 当前时间，就是最近的条件，这样不用重新查找数据库了
      */
     private List<Condition2> currentTimeCondition = new ArrayList<>();
+
+    /**
+     * 当前时间，就是最近的条件，这样不用重新查找数据库了
+     */
+    private List<Condition5> currentTimeCondition5 = new ArrayList<>();
 
     public AnalysisF2ViewModel(@NonNull Application application) {
         super(application);
@@ -245,6 +263,66 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
     }
 
     /**
+     * 预测5日涨停
+     */
+    public void doAnalysis5DayUp(AnalysisCallback callback) {
+
+        Observable.just(1)
+                .observeOn(Schedulers.io())
+                .subscribe(new io.reactivex.Observer<Integer>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+                        doAnalysis5DayUpInner(callback);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.failedAnalysis(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    /**
+     * 预测5日跌停
+     */
+    public void doAnalysis5DayDown(AnalysisCallback callback) {
+
+        Observable.just(1)
+                .observeOn(Schedulers.io())
+                .subscribe(new io.reactivex.Observer<Integer>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+                        doAnalysis5DayDownInner(callback);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.failedAnalysis(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    /**
      * 分析明天收盘买，后天开盘能够比收盘大的
      *
      * @param callback
@@ -306,7 +384,7 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
 
             d(TAG, "今天的记录条数为：" + currentTimeCondition.size());
             for (int i = 0; i < currentTimeCondition.size(); i++) {
-                boolean isMatched = isMatched(0,currentTimeCondition.get(i), listCondition);
+                boolean isMatched = isMatched(0, currentTimeCondition.get(i), listCondition);
                 if (isMatched) {
                     callback.finishOneStock(currentTimeCondition.get(i).getTodayStock().getCode(), 1);
                 }
@@ -384,6 +462,156 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
                 boolean isMatched = isMatched(1, currentTimeCondition.get(i), listCondition);
                 if (isMatched) {
                     callback.finishOneStock(currentTimeCondition.get(i).getTodayStock().getCode(), 1);
+                }
+            }
+
+            callback.finishAllStock();
+        } catch (Throwable e) {
+            d("Error", "##" + e.getMessage());
+            callback.failedAnalysis(e);
+        }
+    }
+
+    /**
+     * 分析5日会涨
+     *
+     * @param callback
+     */
+    private void doAnalysis5DayUpInner(AnalysisCallback callback) {
+
+        try {
+            //遍历股票，一只股票一只股票来
+            List<String> codes = getRepository().getDatabase().stockDao().getDistinctCode();
+            if (codes == null || codes.size() == 0) {
+                d(TAG, "sorry, the database has no stock's code...Please add some data.");
+                callback.failedAnalysis(new Throwable("sorry, the database has no stock's code...Please add some data."));
+                return;
+            }
+
+            d(TAG, "数据库股票代码长度为：" + codes.size());
+            if (currentTimeCondition5.size() != 0) {
+                currentTimeCondition5.clear();
+            }
+
+            //保存最终结果
+            if (DataSource.getInstance().getAnalysis5DayUp() == null) {
+                DataSource.getInstance().setAnalysis5DayUp(new ArrayList<>());
+            }
+            DataSource.getInstance().getAnalysis5DayUp().clear();
+
+            long maxCurrentTime = getRepository().getDatabase().stockDao().getMaxCurrentTime();
+            d(TAG, "当前最大时间为：" + maxCurrentTime);
+
+            List<Condition5> listCondition = new ArrayList<>();//明天买，后天卖的所有可能性
+            for (int i = 0; i < codes.size(); i++) {
+                //这是某一只股票了，然后分析这只股票5日的所有类型，返回一个Condition5
+                List<Condition5> currentCodeConditions = findConditionFor5DayUp(codes.get(i), maxCurrentTime);
+                if (currentCodeConditions.size() != 0) {
+                    listCondition.addAll(currentCodeConditions);
+                }
+            }
+
+            //此时条件长度为0，就不用分析了
+            if (listCondition.size() == 0) {
+                d(TAG, "sorry, there is no possible occured.");
+                callback.failedAnalysis(new Throwable("sorry, there is no possible occured."));
+                return;
+            } else {
+                d(TAG, "当前总共有" + listCondition.size() + " 次发生了这种情况，接下来遍历今天所有股票，查找有没有相似的...");
+                //d(TAG," is null ? "+listCondition.get(0).getTodayStock().toString());
+                //d(TAG," is null ? "+listCondition.get(0).getYesStock().toString());
+                //d(TAG," is null ? "+listCondition.get(0).getBeforeYesStock().toString());
+            }
+
+            //分析所有今天的股票，看看有没有符合条件的
+            //搜索数据库，最近一天的股票时间，因为有可能节假日
+
+            if (currentTimeCondition5.size() == 0) {
+                d(TAG, "sorry, there is no current day record");
+                callback.failedAnalysis(new Throwable("sorry, there is no possible occured."));
+                return;
+            }
+
+            d(TAG, "今天的记录条数为：" + currentTimeCondition5.size());
+            for (int i = 0; i < currentTimeCondition5.size(); i++) {
+                boolean isMatched = isMatched5Day(0, currentTimeCondition5.get(i), listCondition);
+                if (isMatched) {
+                    callback.finishOneStock(currentTimeCondition5.get(i).getCurrentDay().getCode(), 1);
+                }
+            }
+
+            callback.finishAllStock();
+        } catch (Throwable e) {
+            d("Error", "##" + e.getMessage());
+            callback.failedAnalysis(e);
+        }
+    }
+
+    /**
+     * 分析5日会涨
+     *
+     * @param callback
+     */
+    private void doAnalysis5DayDownInner(AnalysisCallback callback) {
+
+        try {
+            //遍历股票，一只股票一只股票来
+            List<String> codes = getRepository().getDatabase().stockDao().getDistinctCode();
+            if (codes == null || codes.size() == 0) {
+                d(TAG, "sorry, the database has no stock's code...Please add some data.");
+                callback.failedAnalysis(new Throwable("sorry, the database has no stock's code...Please add some data."));
+                return;
+            }
+
+            d(TAG, "数据库股票代码长度为：" + codes.size());
+            if (currentTimeCondition5.size() != 0) {
+                currentTimeCondition5.clear();
+            }
+
+            //保存最终结果
+            if (DataSource.getInstance().getAnalysis5DayDown() == null) {
+                DataSource.getInstance().setAnalysis5DayDown(new ArrayList<>());
+            }
+            DataSource.getInstance().getAnalysis5DayDown().clear();
+
+            long maxCurrentTime = getRepository().getDatabase().stockDao().getMaxCurrentTime();
+            d(TAG, "当前最大时间为：" + maxCurrentTime);
+
+            List<Condition5> listCondition = new ArrayList<>();//明天买，后天卖的所有可能性
+            for (int i = 0; i < codes.size(); i++) {
+                //这是某一只股票了，然后分析这只股票明天买后天卖能赚钱的所有类型，返回一个Condition2
+                List<Condition5> currentCodeConditions = findConditionFor5DayDown(codes.get(i), maxCurrentTime);
+                if (currentCodeConditions.size() != 0) {
+                    listCondition.addAll(currentCodeConditions);
+                }
+            }
+
+            //此时条件长度为0，就不用分析了
+            if (listCondition.size() == 0) {
+                d(TAG, "sorry, there is no possible occured.");
+                callback.failedAnalysis(new Throwable("sorry, there is no possible occured."));
+                return;
+            } else {
+                d(TAG, "当前总共有" + listCondition.size() + " 次发生了这种情况，接下来遍历今天所有股票，查找有没有相似的...");
+                //d(TAG," is null ? "+listCondition.get(0).getTodayStock().toString());
+                //d(TAG," is null ? "+listCondition.get(0).getYesStock().toString());
+                //d(TAG," is null ? "+listCondition.get(0).getBeforeYesStock().toString());
+            }
+
+            //分析所有今天的股票，看看有没有符合条件的
+            //搜索数据库，最近一天的股票时间，因为有可能节假日
+
+            if (currentTimeCondition5.size() == 0) {
+                d(TAG, "sorry, there is no current day record");
+                callback.failedAnalysis(new Throwable("sorry, there is no possible occured."));
+                return;
+            }
+
+            d(TAG, "今天的记录条数为：" + currentTimeCondition5.size());
+            for (int i = 0; i < currentTimeCondition5.size(); i++) {
+                boolean isMatched = isMatched5Day(1, currentTimeCondition5.get(i), listCondition);
+                if (isMatched) {
+                    callback.finishOneStock(currentTimeCondition5.get(i).getCurrentDay().getCode(), 1);
                 }
             }
 
@@ -668,6 +896,112 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
     }
 
     /**
+     * 分析这一天的股票是否符合条件
+     *
+     * @param condition5s
+     * @return
+     */
+    private boolean isMatched5Day(int type, Condition5 targetDay, List<Condition5> condition5s) {
+
+
+        //首先得查找到这只股票最近数据
+        if (targetDay == null || condition5s == null || condition5s.size() == 0) return false;
+
+        float proximity1, proximity2, ratioRange1, ratioRange2, max, min;
+
+        proximity1 = PROXIMITY / 100;//0.9
+        proximity2 = 2 - proximity1;//1.1
+
+        for (int i = 0; i < condition5s.size(); i++) {
+
+            Condition5 condition5 = condition5s.get(i);
+            ratioRange1 = condition5.getRatio_0_5() * proximity1;
+            ratioRange2 = condition5.getRatio_0_5() * proximity2;
+            max = ratioRange1 > ratioRange2 ? ratioRange1 : ratioRange2;
+            min = ratioRange1 < ratioRange2 ? ratioRange1 : ratioRange2;
+
+            if (targetDay.getRatio_0_5() < min || targetDay.getRatio_0_5() > max) {
+                continue;
+            }
+
+            ratioRange1 = condition5.getRatio_5_10() * proximity1;
+            ratioRange2 = condition5.getRatio_5_10() * proximity2;
+            max = ratioRange1 > ratioRange2 ? ratioRange1 : ratioRange2;
+            min = ratioRange1 < ratioRange2 ? ratioRange1 : ratioRange2;
+
+            if (targetDay.getRatio_5_10() < min || targetDay.getRatio_5_10() > max) {
+                continue;
+            }
+
+            ratioRange1 = condition5.getRatio_10_15() * proximity1;
+            ratioRange2 = condition5.getRatio_10_15() * proximity2;
+            max = ratioRange1 > ratioRange2 ? ratioRange1 : ratioRange2;
+            min = ratioRange1 < ratioRange2 ? ratioRange1 : ratioRange2;
+
+            if (targetDay.getRatio_10_15() < min || targetDay.getRatio_10_15() > max) {
+                continue;
+            }
+
+            ratioRange1 = condition5.getRatio_15_20() * proximity1;
+            ratioRange2 = condition5.getRatio_15_20() * proximity2;
+            max = ratioRange1 > ratioRange2 ? ratioRange1 : ratioRange2;
+            min = ratioRange1 < ratioRange2 ? ratioRange1 : ratioRange2;
+
+            if (targetDay.getRatio_15_20() < min || targetDay.getRatio_15_20() > max) {
+                continue;
+            }
+
+            ratioRange1 = condition5.getRatio_20_25() * proximity1;
+            ratioRange2 = condition5.getRatio_20_25() * proximity2;
+            max = ratioRange1 > ratioRange2 ? ratioRange1 : ratioRange2;
+            min = ratioRange1 < ratioRange2 ? ratioRange1 : ratioRange2;
+
+            if (targetDay.getRatio_20_25() < min || targetDay.getRatio_20_25() > max) {
+                continue;
+            }
+
+            ratioRange1 = condition5.getRatio_25_30() * proximity1;
+            ratioRange2 = condition5.getRatio_25_30() * proximity2;
+            max = ratioRange1 > ratioRange2 ? ratioRange1 : ratioRange2;
+            min = ratioRange1 < ratioRange2 ? ratioRange1 : ratioRange2;
+
+            if (targetDay.getRatio_25_30() < min || targetDay.getRatio_25_30() > max) {
+                continue;
+            }
+
+            AnalysisStock stock = new AnalysisStock();
+            stock.setCode(targetDay.getCurrentDay().getCode());
+            stock.setDate(targetDay.getCurrentDay().getDate());
+            stock.setVolume(targetDay.getCurrentDay().getVolume());
+            stock.setOpenPrice(targetDay.getCurrentDay().getOpenPrice());
+            stock.setClosePrice(targetDay.getCurrentDay().getClosePrice());
+            stock.setMinPrice(targetDay.getCurrentDay().getMinPrice());
+            stock.setMaxPrice(targetDay.getCurrentDay().getMaxPrice());
+            stock.setNextStock(targetDay.getTommorrowStock());
+            stock.setName(targetDay.getCurrentDay().getName());
+
+            if (type == 0) {
+                if (DataSource.getInstance().getAnalysis5DayUp() == null) {
+                    DataSource.getInstance().setAnalysis5DayUp(new ArrayList<>());
+                }
+                DataSource.getInstance().getAnalysis5DayUp().add(stock);
+            } else if (type == 1) {
+                if (DataSource.getInstance().getAnalysis5DayDown() == null) {
+                    DataSource.getInstance().setAnalysis5DayDown(new ArrayList<>());
+                }
+                DataSource.getInstance().getAnalysis5DayDown().add(stock);
+            }
+
+            LogUtils.d(TAG, "符合条件哦" + stock.toString());
+
+            return true;
+
+        }
+
+        return false;
+    }
+
+    /**
      * 检测明天买后天卖的条件
      *
      * @return
@@ -783,6 +1117,97 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
         }
 
         return condition2s;
+    }
+
+    /**
+     * 检测5日上涨的条件
+     *
+     * @return
+     */
+    private List<Condition5> findConditionFor5DayUp(String code, long currentTime) {
+        List<Condition5> condition5s = new ArrayList<>();
+        List<Stock> theCodeStocks = getRepository().getDatabase().stockDao().getStocksByCode(code);
+
+        if (theCodeStocks == null || theCodeStocks.size() <= 3) {
+            d(TAG, "这个股票没有历史记录哦，继续分析下一只吧...");
+            return condition5s;
+        }
+
+//        //每天附近最大成交量
+//        List<Float> listVolumeMaxs = new ArrayList<>();
+//        for (int i = 0; i < theCodeStocks.size(); i++) {
+//            float maxVolume = findRecentlyMax(theCodeStocks, i);
+//
+//            //d(TAG, "maxVolume = " + maxVolume);
+//            listVolumeMaxs.add(maxVolume);
+//        }
+
+        //可以遍历分析这只股票了
+        int size = theCodeStocks.size();
+        for (int i = 0; i < size; i++) {
+            if (i == size - 1 && i >= 30) {
+                if (theCodeStocks.get(i).getCurrentTime() == currentTime) {
+                    Condition5 condition5 = getCondition5ByPosition(i, theCodeStocks);
+                    if (condition5 != null) {
+                        currentTimeCondition5.add(condition5);
+                        LogUtils.d(TAG, "condition5=" + condition5.getRatio_0_5());
+                    }
+                }
+            }
+            if (i >= 30 && i < size - 5) {
+                Condition5 condition5 = isRecent5DayUpType(i, theCodeStocks);
+                if (condition5 != null) {
+                    condition5s.add(condition5);
+                }
+            }
+        }
+
+        return condition5s;
+    }
+
+    /**
+     * 检测5日下跌的条件
+     *
+     * @return
+     */
+    private List<Condition5> findConditionFor5DayDown(String code, long currentTime) {
+        List<Condition5> condition5s = new ArrayList<>();
+        List<Stock> theCodeStocks = getRepository().getDatabase().stockDao().getStocksByCode(code);
+
+        if (theCodeStocks == null || theCodeStocks.size() <= 3) {
+            d(TAG, "这个股票没有历史记录哦，继续分析下一只吧...");
+            return condition5s;
+        }
+
+        //每天附近最大成交量
+//        List<Float> listVolumeMaxs = new ArrayList<>();
+//        for (int i = 0; i < theCodeStocks.size(); i++) {
+//            float maxVolume = findRecentlyMax(theCodeStocks, i);
+//
+//            //d(TAG, "maxVolume = " + maxVolume);
+//            listVolumeMaxs.add(maxVolume);
+//        }
+
+        //可以遍历分析这只股票了
+        int size = theCodeStocks.size();
+        for (int i = 0; i < size; i++) {
+            if (i == size - 1 && i >= 30) {
+                if (theCodeStocks.get(i).getCurrentTime() == currentTime) {
+                    Condition5 condition5 = getCondition5ByPosition(i, theCodeStocks);
+                    if (condition5 != null) {
+                        currentTimeCondition5.add(condition5);
+                    }
+                }
+            }
+            if (i >= 30 && i < size - 5) {//8
+                Condition5 condition5 = isRecent5DayDownType(i, theCodeStocks);
+                if (condition5 != null) {
+                    condition5s.add(condition5);
+                }
+            }
+        }
+
+        return condition5s;
     }
 
     /**
@@ -905,6 +1330,254 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
         }
 
         return false;
+    }
+
+    /**
+     * 最近5日下跌类型
+     *
+     * @param position
+     * @param stockList
+     * @return
+     */
+    private Condition5 isRecent5DayDownType(int position, List<Stock> stockList) {
+
+        Condition5 condition5 = null;
+
+        if (stockList == null || stockList.size() <= 30) return null;
+
+        float currentPrice = stockList.get(position).getClosePrice();
+
+        float day5 = 0, day4 = 0, day3 = 0, day2 = 0, day1 = 0;
+        int offset = 0;
+        for (int i = 0; i < stockList.size(); i++) {
+            if (i == position && position >= 30) {
+
+                do {
+                    day1 = stockList.get(i - (offset++)).getClosePrice();//0 5 10 15 20 25
+                    day2 = stockList.get(i - (offset++)).getClosePrice();//1 6 11 16 21 26
+                    day3 = stockList.get(i - (offset++)).getClosePrice();//2 7 12 17 22 27
+                    day4 = stockList.get(i - (offset++)).getClosePrice();//3 8 13 18 23 28
+                    day5 = stockList.get(i - (offset++)).getClosePrice();//4 9 14 19 24 29
+
+                    if (condition5 == null) {
+                        condition5 = new Condition5();
+                    }
+
+                    float ratio = (day1 + day2 + day3 + day4 + day5) / 5 / currentPrice;
+                    LogUtils.d(TAG, "offset=" + offset);
+                    switch (offset) {
+                        case 5:
+                            condition5.setRatio_0_5(ratio);
+                            break;
+
+                        case 10:
+                            condition5.setRatio_5_10(ratio);
+                            break;
+
+                        case 15:
+                            condition5.setRatio_10_15(ratio);
+                            break;
+
+                        case 20:
+                            condition5.setRatio_15_20(ratio);
+                            break;
+
+                        case 25:
+                            condition5.setRatio_20_25(ratio);
+                            break;
+
+                        case 30:
+                            condition5.setRatio_25_30(ratio);
+                            break;
+                    }
+
+                } while (offset < 30);
+
+                //分析之后的
+                day1 = stockList.get(i + 1).getClosePrice();//0 5 10 15 20 25
+                day2 = stockList.get(i + 2).getClosePrice();//1 6 11 16 21 26
+                day3 = stockList.get(i + 3).getClosePrice();//2 7 12 17 22 27
+                day4 = stockList.get(i + 4).getClosePrice();//3 8 13 18 23 28
+                day5 = stockList.get(i + 5).getClosePrice();//4 9 14 19 24 29
+                float ratio = (day1 + day2 + day3 + day4 + day5) / 5 / currentPrice;
+
+                if (ratio * FIVE_DAY_UP_OFFSET / 100 < condition5.getRatio_0_5()) {
+                    condition5.setCurrentDay(stockList.get(position));
+                    condition5.setProximity(PROXIMITY);
+                    if (stockList.size() > position - 1) {
+                        condition5.setTommorrowStock(stockList.get(position + 1));
+                    }
+                    return condition5;
+
+                } else {
+                    return null;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * 最近5日上涨类型
+     *
+     * @param position
+     * @param stockList
+     * @return
+     */
+    private Condition5 isRecent5DayUpType(int position, List<Stock> stockList) {
+
+        Condition5 condition5 = null;
+
+        if (stockList == null || stockList.size() <= 30) return null;
+
+        float currentPrice = stockList.get(position).getClosePrice();
+
+        float day5 = 0, day4 = 0, day3 = 0, day2 = 0, day1 = 0;
+        int offset = 0;
+        for (int i = 0; i < stockList.size(); i++) {
+            if (i == position && position >= 30) {
+
+                do {
+                    day1 = stockList.get(i - (offset++)).getClosePrice();//0 5 10 15 20 25
+                    day2 = stockList.get(i - (offset++)).getClosePrice();//1 6 11 16 21 26
+                    day3 = stockList.get(i - (offset++)).getClosePrice();//2 7 12 17 22 27
+                    day4 = stockList.get(i - (offset++)).getClosePrice();//3 8 13 18 23 28
+                    day5 = stockList.get(i - (offset++)).getClosePrice();//4 9 14 19 24 29
+
+                    if (condition5 == null) {
+                        condition5 = new Condition5();
+                    }
+
+                    float ratio = (day1 + day2 + day3 + day4 + day5) / 5 / currentPrice;
+                    //LogUtils.d(TAG, "offset=" + offset);
+
+                    switch (offset) {
+                        case 5:
+                            condition5.setRatio_0_5(ratio);
+                            break;
+
+                        case 10:
+                            condition5.setRatio_5_10(ratio);
+                            break;
+
+                        case 15:
+                            condition5.setRatio_10_15(ratio);
+                            break;
+
+                        case 20:
+                            condition5.setRatio_15_20(ratio);
+                            break;
+
+                        case 25:
+                            condition5.setRatio_20_25(ratio);
+                            break;
+
+                        case 30:
+                            condition5.setRatio_25_30(ratio);
+                            break;
+                    }
+
+                } while (offset < 30);
+
+                //分析之后的
+                day1 = stockList.get(i + 1).getClosePrice();//0 5 10 15 20 25
+                day2 = stockList.get(i + 2).getClosePrice();//1 6 11 16 21 26
+                day3 = stockList.get(i + 3).getClosePrice();//2 7 12 17 22 27
+                day4 = stockList.get(i + 4).getClosePrice();//3 8 13 18 23 28
+                day5 = stockList.get(i + 5).getClosePrice();//4 9 14 19 24 29
+                float ratio = (day1 + day2 + day3 + day4 + day5) / 5 / currentPrice;//0.9
+
+                //LogUtils.d(TAG, "ratio="+ratio+" "+condition5.getRatio_0_5() * FIVE_DAY_UP_OFFSET / 100);
+                if (ratio > condition5.getRatio_0_5() * FIVE_DAY_UP_OFFSET / 100) {
+                    condition5.setCurrentDay(stockList.get(position));
+                    condition5.setProximity(PROXIMITY);
+                    if (stockList.size() > position - 1) {
+                        condition5.setTommorrowStock(stockList.get(position + 1));
+                    }
+                    return condition5;
+
+                } else {
+                    return null;
+                }
+
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * 通过位置得到5日均线
+     *
+     * @param position
+     * @param stockList
+     * @return
+     */
+    private Condition5 getCondition5ByPosition(int position, List<Stock> stockList) {
+        Condition5 condition5 = null;
+
+        if (stockList == null || stockList.size() <= 30) return null;
+
+        float currentPrice = stockList.get(position).getClosePrice();
+
+        float day5 = 0, day4 = 0, day3 = 0, day2 = 0, day1 = 0;
+        int offset = 0;
+        for (int i = 0; i < stockList.size(); i++) {
+            if (i == position && position >= 30) {
+
+                do {
+                    day1 = stockList.get(i - (offset++)).getClosePrice();//0 5 10 15 20 25
+                    day2 = stockList.get(i - (offset++)).getClosePrice();//1 6 11 16 21 26
+                    day3 = stockList.get(i - (offset++)).getClosePrice();//2 7 12 17 22 27
+                    day4 = stockList.get(i - (offset++)).getClosePrice();//3 8 13 18 23 28
+                    day5 = stockList.get(i - (offset++)).getClosePrice();//4 9 14 19 24 29
+
+                    if (condition5 == null) {
+                        condition5 = new Condition5();
+                    }
+
+                    float ratio = (day1 + day2 + day3 + day4 + day5) / 5 / currentPrice;
+                    switch (offset) {
+                        case 5:
+                            condition5.setRatio_0_5(ratio);
+                            break;
+
+                        case 10:
+                            condition5.setRatio_5_10(ratio);
+                            break;
+
+                        case 15:
+                            condition5.setRatio_10_15(ratio);
+                            break;
+
+                        case 20:
+                            condition5.setRatio_15_20(ratio);
+                            break;
+
+                        case 25:
+                            condition5.setRatio_20_25(ratio);
+                            break;
+
+                        case 30:
+                            condition5.setRatio_25_30(ratio);
+                            break;
+                    }
+
+                } while (offset < 30);
+
+            }
+        }
+
+        if (condition5 != null) {
+            condition5.setCurrentDay(stockList.get(position));
+            condition5.setProximity(PROXIMITY);
+            if (stockList.size() - 1 > position) {
+                condition5.setTommorrowStock(stockList.get(position + 1));
+            }
+        }
+
+        return condition5;
     }
 
     private void doAnalysisInner(String code, String date, String pro, AnalysisCallback callback) {

@@ -53,7 +53,7 @@ public class Analysis2Fragment extends BaseFragment<AnalysisF2ViewModel, Fragmen
     private AnalysisResultAdatper analysisAdapter;
     private ArrayList<AnalysisStock> resultList = new ArrayList<>();//adapter数据集合
     private CustomProgress customProgress;
-    private int type = 0;//0,1,2,3,4
+    private int type = 0;//0,1,2,3,4,5,6
     DecimalFormat fnum = new DecimalFormat("##0.00");
 
     //属性集合------------end-------------------//
@@ -175,6 +175,8 @@ public class Analysis2Fragment extends BaseFragment<AnalysisF2ViewModel, Fragmen
         binding.fa2AnalysisBtn3.setOnClickListener(this);//明天收盘买
         binding.fa2AnalysisBtn4.setOnClickListener(this);//涨停
         binding.fa2AnalysisBtn5.setOnClickListener(this);//跌停
+        binding.fa2AnalysisBtn6.setOnClickListener(this);//5日涨停
+        binding.fa2AnalysisBtn7.setOnClickListener(this);//5日跌停
         binding.fa2DateTv.setOnClickListener(this);
     }
 
@@ -229,6 +231,16 @@ public class Analysis2Fragment extends BaseFragment<AnalysisF2ViewModel, Fragmen
             case R.id.fa2_analysis_btn5:
                 type = 4;
                 doAnalysisDown();
+                break;
+
+            case R.id.fa2_analysis_btn6:
+                type = 5;
+                doAnalysis5DayUp();
+                break;
+
+            case R.id.fa2_analysis_btn7:
+                type = 6;
+                doAnalysis5DayDown();
                 break;
 
             case R.id.fa2_date_tv:
@@ -615,6 +627,184 @@ public class Analysis2Fragment extends BaseFragment<AnalysisF2ViewModel, Fragmen
 
                         if (analysisAdapter != null) {
                             analysisAdapter.setType(4);
+                            analysisAdapter.replaceData(resultList);
+                        }
+
+
+                    }
+                });
+            }
+
+            @Override
+            public void failedAnalysis(Throwable e) {
+                _mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.fa2AllSizeTv.setText("查找失败：\n" + e.getMessage());
+
+                        if (customProgress != null) {
+                            customProgress.dismiss();
+                            customProgress = null;
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    private void doAnalysis5DayUp() {
+        if (!CommonUtils.doFirstClick200()) return;
+
+        customProgress = CustomProgress.show(_mActivity, "正在分析近5日可能上涨的股票...", true, null);
+
+        if (!binding.fa2TomorrowProximityEt.getText().toString().isEmpty()) {
+            try {
+                float proximity = Float.parseFloat(binding.fa2TomorrowProximityEt.getText().toString());
+                mViewModel.setPROXIMITY(proximity);
+                LogUtils.d(TAG, "相似度：" + proximity);
+            } catch (Throwable e) {
+                LogUtils.d("Error", "##" + e.getMessage());
+            }
+        }
+
+        if (!binding.fa25dayUpTv.getText().toString().isEmpty()) {
+            try {
+                float up = Float.parseFloat(binding.fa25dayUpTv.getText().toString());
+                mViewModel.setFIVE_DAY_UP_OFFSET(up);
+                LogUtils.d(TAG, "上升概率：" + up);
+            } catch (Throwable e) {
+                LogUtils.d("Error", "##" + e.getMessage());
+            }
+        }
+
+        mViewModel.doAnalysis5DayUp(new AnalysisF2ViewModel.AnalysisCallback() {
+            int sizeAll = 0;
+
+            @Override
+            public void finishOneStock(String code, int size) {
+                _mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        sizeAll += size;
+                        binding.fa2AllSizeTv.setText(String.format("已找到%d条数据...", sizeAll));
+                    }
+                });
+            }
+
+            @Override
+            public void finishAllStock() {
+                _mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.fa2AllSizeTv.setText(String.format("总共找到%d条数据！", sizeAll));
+
+                        if (customProgress != null) {
+                            customProgress.dismiss();
+                            customProgress = null;
+                        }
+
+                        //adapter
+                        pagePosition = 0;
+                        List<AnalysisStock> listResult = DataSource.getInstance().getAnalysis5DayUp();
+                        if (listResult == null || listResult.size() == 0) return;
+
+                        resultList.clear();
+                        for (int i = 0; i < listResult.size(); i++) {
+                            if (i > PAGE_MAX) break;
+                            resultList.add(listResult.get(i));
+                        }
+
+                        if (analysisAdapter != null) {
+                            analysisAdapter.setType(5);
+                            analysisAdapter.replaceData(resultList);
+                        }
+
+
+                    }
+                });
+            }
+
+            @Override
+            public void failedAnalysis(Throwable e) {
+                _mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.fa2AllSizeTv.setText("查找失败：\n" + e.getMessage());
+
+                        if (customProgress != null) {
+                            customProgress.dismiss();
+                            customProgress = null;
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    private void doAnalysis5DayDown() {
+        if (!CommonUtils.doFirstClick200()) return;
+
+        customProgress = CustomProgress.show(_mActivity, "正在分析近5日可能下跌的股票...", true, null);
+
+        if (!binding.fa2TomorrowProximityEt.getText().toString().isEmpty()) {
+            try {
+                float proximity = Float.parseFloat(binding.fa2TomorrowProximityEt.getText().toString());
+                mViewModel.setPROXIMITY(proximity);
+                LogUtils.d(TAG, "相似度：" + proximity);
+            } catch (Throwable e) {
+                LogUtils.d("Error", "##" + e.getMessage());
+            }
+        }
+
+        if (!binding.fa25dayUpTv.getText().toString().isEmpty()) {
+            try {
+                float up = Float.parseFloat(binding.fa25dayUpTv.getText().toString());
+                mViewModel.setFIVE_DAY_UP_OFFSET(up);
+                LogUtils.d(TAG, "上升概率：" + up);
+            } catch (Throwable e) {
+                LogUtils.d("Error", "##" + e.getMessage());
+            }
+        }
+
+        mViewModel.doAnalysis5DayDown(new AnalysisF2ViewModel.AnalysisCallback() {
+            int sizeAll = 0;
+
+            @Override
+            public void finishOneStock(String code, int size) {
+                _mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        sizeAll += size;
+                        binding.fa2AllSizeTv.setText(String.format("已找到%d条数据...", sizeAll));
+                    }
+                });
+            }
+
+            @Override
+            public void finishAllStock() {
+                _mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.fa2AllSizeTv.setText(String.format("总共找到%d条数据！", sizeAll));
+
+                        if (customProgress != null) {
+                            customProgress.dismiss();
+                            customProgress = null;
+                        }
+
+                        //adapter
+                        pagePosition = 0;
+                        List<AnalysisStock> listResult = DataSource.getInstance().getAnalysis5DayDown();
+                        if (listResult == null || listResult.size() == 0) return;
+
+                        resultList.clear();
+                        for (int i = 0; i < listResult.size(); i++) {
+                            if (i > PAGE_MAX) break;
+                            resultList.add(listResult.get(i));
+                        }
+
+                        if (analysisAdapter != null) {
+                            analysisAdapter.setType(6);
                             analysisAdapter.replaceData(resultList);
                         }
 

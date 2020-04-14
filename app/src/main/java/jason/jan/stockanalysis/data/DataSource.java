@@ -66,6 +66,30 @@ public class DataSource {
      * 搜索列表
      */
     private List<Stock> searchList;
+    /**
+     * 近5日上涨
+     */
+    private List<AnalysisStock> analysis5DayUp;
+    /**
+     * 近5日下跌
+     */
+    private List<AnalysisStock> analysis5DayDown;
+
+    public List<AnalysisStock> getAnalysis5DayUp() {
+        return analysis5DayUp;
+    }
+
+    public void setAnalysis5DayUp(List<AnalysisStock> analysis5DayUp) {
+        this.analysis5DayUp = analysis5DayUp;
+    }
+
+    public List<AnalysisStock> getAnalysis5DayDown() {
+        return analysis5DayDown;
+    }
+
+    public void setAnalysis5DayDown(List<AnalysisStock> analysis5DayDown) {
+        this.analysis5DayDown = analysis5DayDown;
+    }
 
     public List<AnalysisStock> getAnalysisTomorrowBuy() {
         return analysisTomorrowBuy;
