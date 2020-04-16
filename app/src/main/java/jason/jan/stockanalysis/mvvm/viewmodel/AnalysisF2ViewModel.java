@@ -44,8 +44,18 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
 
     public float AVERAGE_PROXIMITY = 90;//平均价格相似度90%就可以放在条件里面了
 
+    public float JUMP_WATER_RATIO = 3.0f;//跳水百分比
+
     public float getTOMORROW_BUY_UP_OFFSET() {
         return TOMORROW_BUY_UP_OFFSET;
+    }
+
+    public float getJUMP_WATER_RATIO() {
+        return JUMP_WATER_RATIO;
+    }
+
+    public void setJUMP_WATER_RATIO(float JUMP_WATER_RATIO) {
+        this.JUMP_WATER_RATIO = JUMP_WATER_RATIO;
     }
 
     public float getFIVE_DAY_UP_OFFSET() {
@@ -320,6 +330,124 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
 
                     }
                 });
+    }
+
+    /**
+     * 解析昨天跳水的
+     */
+    public void doAnalysisJumpWater(AnalysisCallback callback) {
+
+        Observable.just(1)
+                .observeOn(Schedulers.io())
+                .subscribe(new io.reactivex.Observer<Integer>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+                        doAnalysisJumpWaterInner(callback);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.failedAnalysis(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    /**
+     * 解析昨天跳水的
+     */
+    public void doAnalysisGoUp(AnalysisCallback callback) {
+
+        Observable.just(1)
+                .observeOn(Schedulers.io())
+                .subscribe(new io.reactivex.Observer<Integer>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+                        doAnalysisGoUpInner(callback);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        callback.failedAnalysis(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    /**
+     * 跳水
+     *
+     * @param callback
+     */
+    private void doAnalysisJumpWaterInner(AnalysisCallback callback) {
+
+        List<String> codes = getRepository().getDatabase().stockDao().getDistinctCode();
+        if (codes == null || codes.size() == 0) {
+            d(TAG, "sorry, the database has no stock's code...Please add some data.");
+            callback.failedAnalysis(new Throwable("sorry, the database has no stock's code...Please add some data."));
+            return;
+        }
+
+        d(TAG, "数据库股票代码长度为：" + codes.size());
+        //保存最终结果
+        if (DataSource.getInstance().getAnalysisJumpWater() == null) {
+            DataSource.getInstance().setAnalysisJumpWater(new ArrayList<>());
+        }
+        DataSource.getInstance().getAnalysisJumpWater().clear();
+
+        for (int i = 0; i < codes.size(); i++) {
+            getTheCodeStockAndAnalysisIsJumpOrUp(0,codes.get(i),callback);
+        }
+
+        callback.finishAllStock();
+
+
+    }
+
+    /**
+     * 冲高
+     *
+     * @param callback
+     */
+    private void doAnalysisGoUpInner(AnalysisCallback callback) {
+
+        List<String> codes = getRepository().getDatabase().stockDao().getDistinctCode();
+        if (codes == null || codes.size() == 0) {
+            d(TAG, "sorry, the database has no stock's code...Please add some data.");
+            callback.failedAnalysis(new Throwable("sorry, the database has no stock's code...Please add some data."));
+            return;
+        }
+
+        d(TAG, "数据库股票代码长度为：" + codes.size());
+        //保存最终结果
+        if (DataSource.getInstance().getAnalysisJumpWater() == null) {
+            DataSource.getInstance().setAnalysisJumpWater(new ArrayList<>());
+        }
+        DataSource.getInstance().getAnalysisJumpWater().clear();
+
+        for (int i = 0; i < codes.size(); i++) {
+            getTheCodeStockAndAnalysisIsJumpOrUp(1,codes.get(i),callback);
+        }
+
+        callback.finishAllStock();
     }
 
     /**
@@ -1747,6 +1875,94 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
 
             //此股票分析完毕
             callback.finishOneStock(code, resultSize);
+
+        } catch (Throwable e) {
+            d("Error", "##" + e.getMessage());
+            callback.failedAnalysis(e);
+        }
+    }
+
+    /**
+     * 获取数据库中的股票信息然后分析
+     *
+     * @param callback
+     */
+    private synchronized void getTheCodeStockAndAnalysisIsJumpOrUp(int type, String code, AnalysisCallback callback) {
+
+        if (TextUtils.isEmpty(code)) {
+            callback.failedAnalysis(new Throwable("the code is null~"));
+            return;
+        }
+
+        try {
+            List<Stock> theCodeStocks = getRepository().getDatabase().stockDao().getStocksByCode(code);
+
+            if (theCodeStocks == null || theCodeStocks.size() <= 2) {
+                d(TAG, "这个股票没有历史记录哦，继续分析下一只吧...");
+                return;
+            }
+
+            List<Float> listVolumeMaxs = new ArrayList<>();
+            for (int i = 0; i < theCodeStocks.size(); i++) {
+                float maxVolume = findRecentlyMax(theCodeStocks, i);
+
+                //d(TAG, "maxVolume = " + maxVolume);
+                listVolumeMaxs.add(maxVolume);
+            }
+
+            //遍历分析这个股票
+            int resultSize = 0;
+            int size = theCodeStocks.size();
+            Stock today = theCodeStocks.get(size - 1);
+            if (size <= 1) {
+                callback.finishOneStock(code, resultSize);
+                return;
+            }
+
+            Stock yesStock = theCodeStocks.get(size - 2);
+
+            if (type == 0) {
+
+                if (yesStock.getClosePrice() < today.getOpenPrice() || yesStock.getClosePrice() < today.getClosePrice()) {
+                    return;
+                }
+
+                if (yesStock.getOpenPrice() < today.getOpenPrice() || yesStock.getOpenPrice() < today.getClosePrice()) {
+                    return;
+                }
+
+                float down = (yesStock.getClosePrice() - today.getClosePrice()) / yesStock.getClosePrice();//0.03
+
+                if (down * 100 > JUMP_WATER_RATIO) {
+                    if (DataSource.getInstance().getAnalysisJumpWater() == null) {
+                        DataSource.getInstance().setAnalysisJumpWater(new ArrayList<>());
+                    }
+                    DataSource.getInstance().getAnalysisJumpWater().add(DataUtils.convertByStock(today, null));
+                    callback.finishOneStock(code, 1);
+                }
+
+            } else {
+
+                if (yesStock.getClosePrice() > today.getOpenPrice() || yesStock.getClosePrice() > today.getClosePrice()) {
+                    return;
+                }
+
+                if (yesStock.getOpenPrice() > today.getOpenPrice() || yesStock.getOpenPrice() > today.getClosePrice()) {
+                    return;
+                }
+
+                float up = (today.getClosePrice() - yesStock.getClosePrice()) / yesStock.getClosePrice();//0.03
+
+                if (up * 100 > JUMP_WATER_RATIO) {
+                    if (DataSource.getInstance().getAnalysisGoUp() == null) {
+                        DataSource.getInstance().setAnalysisGoUp(new ArrayList<>());
+                    }
+                    DataSource.getInstance().getAnalysisGoUp().add(DataUtils.convertByStock(today, null));
+                    callback.finishOneStock(code, 1);
+                }
+
+            }
+
 
         } catch (Throwable e) {
             d("Error", "##" + e.getMessage());
