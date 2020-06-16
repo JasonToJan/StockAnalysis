@@ -82,6 +82,8 @@ public class DataFragment extends BaseFragment<DataFViewModel, FragmentDataBindi
         binding.fdDeleteAllBtn.setOnClickListener(this);
         binding.fdUpdateMonthBtn.setOnClickListener(this);
         binding.fdDeleteMonthBtn.setOnClickListener(this);
+        binding.fdUpdateThreeMonthBtn.setOnClickListener(this);
+        binding.fdDeleteThreeMonthBtn.setOnClickListener(this);
     }
 
     @Override
@@ -101,6 +103,14 @@ public class DataFragment extends BaseFragment<DataFViewModel, FragmentDataBindi
 
             case R.id.fd_delete_month_btn:
                 doDeleteMonth();
+                break;
+
+            case R.id.fd_update_three_month_btn:
+                doUpdateThreeMonth();
+                break;
+
+            case R.id.fd_delete_three_month_btn:
+                doDeleteThreeMonth();
                 break;
         }
     }
@@ -230,7 +240,7 @@ public class DataFragment extends BaseFragment<DataFViewModel, FragmentDataBindi
 
                 customProgress = CustomProgress.show(_mActivity, "正在查询并插入历史股票数据...", true, null);
                 binding.fdLogTv.setText("");
-                mViewModel.deleteCurrentMonthStock(true, offsetNum, new DataFViewModel.AddStockCallback() {
+                mViewModel.deleteThreeMonthStock(true, offsetNum, new DataFViewModel.AddStockCallback() {
                     int currentSize = 0;
 
                     @Override
@@ -281,6 +291,76 @@ public class DataFragment extends BaseFragment<DataFViewModel, FragmentDataBindi
             @Override
             public void onPositiveCallback(DialogPlus dialog) {
                 mViewModel.deleteCurrentMonthStock(false, offsetNum,null);
+            }
+
+            @Override
+            public void onNegativeCallback(DialogPlus dialog) {
+
+            }
+        });
+    }
+
+    private void doUpdateThreeMonth() {
+        if (!CommonUtils.doFirstClick200()) return;
+
+        DataSource.getInstance().setCurrentPosition(4);
+        DialogUtils.showTipsThenCallback(_mActivity, "您确定要更新所有股票最近三个月历史记录吗？", new DialogUtils.IDialogTwoButtonCallback() {
+            @Override
+            public void onPositiveCallback(DialogPlus dialog) {
+
+                customProgress = CustomProgress.show(_mActivity, "正在查询并插入历史股票数据...", true, null);
+                binding.fdLogTv.setText("");
+                mViewModel.deleteThreeMonthStock(true, offsetNum, new DataFViewModel.AddStockCallback() {
+                    int currentSize = 0;
+
+                    @Override
+                    public void successAdd(int size) {
+                        currentSize += size;
+                        binding.fdLogTv.append("当前成功插入了：" + size + "条数据!\n");
+                    }
+
+                    @Override
+                    public void endAdd() {
+                        _mActivity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                binding.fdLogTv.append("\n总共成功插入了：" + currentSize + "条数据!\n(可能有重复的)");
+                                if (customProgress != null) {
+                                    customProgress.dismiss();
+                                    customProgress = null;
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void failAdd(Throwable e) {
+                        ToastUtils.showToast("插入失败：" + e.getMessage());
+                        binding.fdLogTv.setText("插入失败！\n原因：" + e.getMessage());
+                        if (customProgress != null) {
+                            customProgress.dismiss();
+                            customProgress = null;
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onNegativeCallback(DialogPlus dialog) {
+
+            }
+        });
+
+    }
+
+    private void doDeleteThreeMonth() {
+        if (!CommonUtils.doFirstClick200()) return;
+
+        DataSource.getInstance().setCurrentPosition(4);
+        DialogUtils.showTipsThenCallback(_mActivity, "您确定要清空所有股票三个月的历史记录吗？", new DialogUtils.IDialogTwoButtonCallback() {
+            @Override
+            public void onPositiveCallback(DialogPlus dialog) {
+                mViewModel.deleteThreeMonthStock(false, offsetNum,null);
             }
 
             @Override

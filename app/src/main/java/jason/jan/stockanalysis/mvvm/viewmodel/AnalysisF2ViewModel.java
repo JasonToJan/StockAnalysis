@@ -20,6 +20,7 @@ import jason.jan.stockanalysis.data.http.RepositoryImpl;
 import jason.jan.stockanalysis.entity.AnalysisStock;
 import jason.jan.stockanalysis.entity.Condition2;
 import jason.jan.stockanalysis.entity.Condition5;
+import jason.jan.stockanalysis.entity.ConditionAverage;
 import jason.jan.stockanalysis.entity.Stock;
 import jason.jan.stockanalysis.utils.DataUtils;
 import jason.jan.stockanalysis.utils.LogUtils;
@@ -414,7 +415,7 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
         DataSource.getInstance().getAnalysisJumpWater().clear();
 
         for (int i = 0; i < codes.size(); i++) {
-            getTheCodeStockAndAnalysisIsJumpOrUp(0,codes.get(i),callback);
+            getTheCodeStockAndAnalysisIsJumpOrUp(0, codes.get(i), callback);
         }
 
         callback.finishAllStock();
@@ -444,7 +445,7 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
         DataSource.getInstance().getAnalysisJumpWater().clear();
 
         for (int i = 0; i < codes.size(); i++) {
-            getTheCodeStockAndAnalysisIsJumpOrUp(1,codes.get(i),callback);
+            getTheCodeStockAndAnalysisIsJumpOrUp(1, codes.get(i), callback);
         }
 
         callback.finishAllStock();
@@ -1711,30 +1712,37 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
     private void doAnalysisInner(String code, String date, String pro, AnalysisCallback callback) {
 
         //获取查询参数
-        Condition2 condition = new Condition2();
+        ConditionAverage condition = new ConditionAverage();
         condition.setProximity(Float.parseFloat(pro));
         List<Stock> theCodeStocks = getRepository().getDatabase().stockDao().getStocksByCode(code);
         d(TAG, "code=" + code + " date=" + date + " pro=" + pro);
-        for (int i = 0; i < theCodeStocks.size(); i++) {
-            if (theCodeStocks.get(i).getDate().equals(date)) {
-                //limit限制长度，offset从哪里开始
-                float maxVolume = findRecentlyMax(theCodeStocks, i);
-                condition.setTodayStock(theCodeStocks.get(i));
-                if (i >= 3) {
-                    condition.setYesStock(theCodeStocks.get(i - 1));
-                    condition.setBeforeYesStock(theCodeStocks.get(i - 2));
-                    condition.setBefore2YesStock(theCodeStocks.get(i - 3));
-                    d(TAG, "找到目标信息：" + condition.getTodayStock().toString());
-                    d(TAG, "找到目标昨日信息：" + condition.getYesStock().toString());
-                    d(TAG, "找到目标前日信息：" + condition.getBeforeYesStock().toString());
-                    d(TAG, "maxVolume = " + maxVolume);
-                    condition.setMaxVolume(maxVolume);
-                }
+        for (int i = theCodeStocks.size() - 1; i > 0; i--) {
+            if (i >= 2 && theCodeStocks.get(i).getDate().equals(date)) {
+                getFiveAverage(condition, theCodeStocks, i, 0);
+                getFiveAverage(condition, theCodeStocks, i - 1, 1);
+                getFiveAverage(condition, theCodeStocks, i - 2, 2);
+                getTenAverage(condition, theCodeStocks, i, 0);
+                getTenAverage(condition, theCodeStocks, i - 1, 1);
+                getTenAverage(condition, theCodeStocks, i - 2, 2);
+                getTwentyAverage(condition, theCodeStocks, i, 0);
+                getTwentyAverage(condition, theCodeStocks, i - 1, 1);
+                getTwentyAverage(condition, theCodeStocks, i - 2, 2);
             }
-
         }
 
-        if (condition.getYesStock() == null || condition.getBeforeYesStock() == null || condition.getTodayStock() == null) {
+        if (condition.getFiveAverage1() == 0 || condition.getTenAverage1() == 0 || condition.getTwentyAverage1() == 0) {
+            d(TAG, "sorry, can't find target stock's info...");
+            callback.failedAnalysis(new Throwable("sorry, can't find target stock's info..."));
+            return;
+        }
+
+        if (condition.getFiveAverage2() == 0 || condition.getTenAverage2() == 0 || condition.getTwentyAverage2() == 0) {
+            d(TAG, "sorry, can't find target stock's info...");
+            callback.failedAnalysis(new Throwable("sorry, can't find target stock's info..."));
+            return;
+        }
+
+        if (condition.getFiveAverage3() == 0 || condition.getTenAverage3() == 0 || condition.getTwentyAverage3() == 0) {
             d(TAG, "sorry, can't find target stock's info...");
             callback.failedAnalysis(new Throwable("sorry, can't find target stock's info..."));
             return;
@@ -1759,6 +1767,106 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
         }
 
         callback.finishAllStock();
+    }
+
+    private ConditionAverage getCurrentConditionAverage(List<Stock> stockList, int currentPosition) {
+        if (stockList == null || stockList.size() <= currentPosition || currentPosition < 19)
+            return null;
+
+        ConditionAverage condition = new ConditionAverage();
+
+        getFiveAverage(condition, stockList, currentPosition, 0);
+        getFiveAverage(condition, stockList, currentPosition - 1, 1);
+        getFiveAverage(condition, stockList, currentPosition - 2, 2);
+        getTenAverage(condition, stockList, currentPosition, 0);
+        getTenAverage(condition, stockList, currentPosition - 1, 1);
+        getTenAverage(condition, stockList, currentPosition - 2, 2);
+        getTwentyAverage(condition, stockList, currentPosition, 0);
+        getTwentyAverage(condition, stockList, currentPosition - 1, 1);
+        getTwentyAverage(condition, stockList, currentPosition - 2, 2);
+
+        return condition;
+    }
+
+    /**
+     * 五日均线
+     */
+    private void getFiveAverage(ConditionAverage condition, List<Stock> stockList, int currentPosition, int type) {
+        if (stockList == null || stockList.size() <= currentPosition || currentPosition < 4) return;
+
+        float sum = 0;
+        for (int i = 0; i < 5; i++) {
+            sum += stockList.get(currentPosition - i).getClosePrice();
+        }
+
+        float currentPrice = stockList.get(currentPosition).getClosePrice();
+        float fiveAverage = sum / 5 / currentPrice;
+        switch (type) {
+            case 0:
+                condition.setFiveAverage1(fiveAverage);
+                break;
+            case 1:
+                condition.setFiveAverage2(fiveAverage);
+                break;
+            case 2:
+                condition.setFiveAverage3(fiveAverage);
+                break;
+        }
+
+        //LogUtils.d(TAG, "五日均线为：" + fiveAverage);
+    }
+
+    /**
+     * 十日均线
+     */
+    private void getTenAverage(ConditionAverage condition, List<Stock> stockList, int currentPosition, int type) {
+        if (stockList == null || stockList.size() <= currentPosition || currentPosition < 9) return;
+
+        float sum = 0;
+        for (int i = 0; i < 10; i++) {
+            sum += stockList.get(currentPosition - i).getClosePrice();
+        }
+        float currentPrice = stockList.get(currentPosition).getClosePrice();
+        float tenAverage = sum / 10 / currentPrice;
+        switch (type) {
+            case 0:
+                condition.setTenAverage1(tenAverage);
+                break;
+            case 1:
+                condition.setTenAverage2(tenAverage);
+                break;
+            case 2:
+                condition.setTenAverage3(tenAverage);
+                break;
+        }
+        //LogUtils.d(TAG, "十日均线为：" + tenAverage);
+    }
+
+    /**
+     * 二十日均线
+     */
+    private void getTwentyAverage(ConditionAverage condition, List<Stock> stockList, int currentPosition, int type) {
+        if (stockList == null || stockList.size() <= currentPosition || currentPosition < 19)
+            return;
+
+        float sum = 0;
+        for (int i = 0; i < 20; i++) {
+            sum += stockList.get(currentPosition - i).getClosePrice();
+        }
+        float currentPrice = stockList.get(currentPosition).getClosePrice();
+        float twentyAverage = sum / 20 / currentPrice;
+        switch (type) {
+            case 0:
+                condition.setTwentyAverage1(twentyAverage);
+                break;
+            case 1:
+                condition.setTwentyAverage2(twentyAverage);
+                break;
+            case 2:
+                condition.setTwentyAverage3(twentyAverage);
+                break;
+        }
+        //LogUtils.d(TAG, "二十日均线为：" + twentyAverage);
     }
 
     private void doAnalysisInner2Days(String code, String date, String pro, AnalysisCallback callback) {
@@ -1824,6 +1932,50 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
             }
         }
         return result;
+    }
+
+    /**
+     * 获取数据库中的股票信息然后分析
+     *
+     * @param callback
+     * @param conditionAverage 均线分析
+     */
+    private synchronized void getTheCodeStockAndAnalysis(int type, String code, ConditionAverage conditionAverage, AnalysisCallback callback) {
+
+        if (TextUtils.isEmpty(code)) {
+            callback.failedAnalysis(new Throwable("the code is null~"));
+            return;
+        }
+
+        try {
+            List<Stock> theCodeStocks = getRepository().getDatabase().stockDao().getStocksByCode(code);
+
+            if (theCodeStocks == null || theCodeStocks.size() <= 2) {
+                d(TAG, "这个股票没有历史记录哦，继续分析下一只吧...");
+                return;
+            }
+
+            //遍历分析这个股票
+            int resultSize = 0;
+
+            boolean isTarget = false;
+            for (int i = 19; i < theCodeStocks.size(); i++) {
+
+                Stock nextStock = (i == theCodeStocks.size() - 1) ? null : theCodeStocks.get(i + 1);
+                ConditionAverage condition = getCurrentConditionAverage(theCodeStocks, i);
+                isTarget = doAnalaysisTheCodeTheStock(condition, theCodeStocks.get(i), nextStock, conditionAverage);
+                if (isTarget) {
+                    resultSize++;
+                }
+            }
+
+            //此股票分析完毕
+            callback.finishOneStock(code, resultSize);
+
+        } catch (Throwable e) {
+            d("Error", "##" + e.getMessage());
+            callback.failedAnalysis(e);
+        }
     }
 
     /**
@@ -2159,6 +2311,89 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
             DataSource.getInstance().setAnalysisList2(new ArrayList<>());
         }
         //d(TAG, " 经过匹对，此股符合条件...加入结果集合");
+        DataSource.getInstance().getAnalysisList2().add(DataUtils.convertByStock(todayStock, nextStock));
+
+        return true;
+    }
+
+    /**
+     * 具体分析
+     *
+     * @return
+     */
+    private boolean doAnalaysisTheCodeTheStock(ConditionAverage currentAverage, Stock todayStock, Stock nextStock, ConditionAverage conditionAverage) {
+
+        if (currentAverage == null) return false;
+        float proximity1 = conditionAverage.getProximity() / 100.0f;//0.8
+        float proximity2 = 2 - proximity1;//1.2
+
+        float max = conditionAverage.getFiveAverage1() * proximity2;
+        float min = conditionAverage.getFiveAverage1() * proximity1;
+        //LogUtils.d(TAG, " max=" + max + " min=" + min + " fiveAverage=" + currentAverage.getTenAverage1());
+        if (currentAverage.getFiveAverage1() > max || currentAverage.getFiveAverage1() < min) {
+
+            return false;
+        }
+
+        max = conditionAverage.getFiveAverage2() * proximity2;
+        min = conditionAverage.getFiveAverage2() * proximity1;
+        //LogUtils.d(TAG, " max=" + max + " min=" + min + " fiveAverage=" + currentAverage.getFiveAverage2());
+        if (currentAverage.getFiveAverage2() > max || currentAverage.getFiveAverage2() < min) {
+
+            return false;
+        }
+
+        max = conditionAverage.getFiveAverage3() * proximity2;
+        min = conditionAverage.getFiveAverage3() * proximity1;
+        //LogUtils.d(TAG, " max=" + max + " min=" + min + " fiveAverage=" + currentAverage.getFiveAverage3());
+        if (currentAverage.getFiveAverage3() > max || currentAverage.getFiveAverage3() < min) {
+
+            return false;
+        }
+
+        max = conditionAverage.getTenAverage1() * proximity2;
+        min = conditionAverage.getTenAverage1() * proximity1;
+        if (currentAverage.getTenAverage1() > max || currentAverage.getTenAverage1() < min) {
+
+            return false;
+        }
+
+        max = conditionAverage.getTenAverage2() * proximity2;
+        min = conditionAverage.getTenAverage2() * proximity1;
+        if (currentAverage.getTenAverage2() > max || currentAverage.getTenAverage2() < min) {
+
+            return false;
+        }
+
+        max = conditionAverage.getTenAverage3() * proximity2;
+        min = conditionAverage.getTenAverage3() * proximity1;
+        if (currentAverage.getTenAverage3() > max || currentAverage.getTenAverage3() < min) {
+
+            return false;
+        }
+
+        max = conditionAverage.getTwentyAverage1() * proximity2;
+        min = conditionAverage.getTwentyAverage1() * proximity1;
+        if (currentAverage.getTwentyAverage1() > max || currentAverage.getTwentyAverage1() < min) {
+
+            return false;
+        }
+
+        max = conditionAverage.getTwentyAverage2() * proximity2;
+        min = conditionAverage.getTwentyAverage2() * proximity1;
+        if (currentAverage.getTwentyAverage2() > max || currentAverage.getTwentyAverage2() < min) {
+
+            return false;
+        }
+
+        max = conditionAverage.getTwentyAverage3() * proximity2;
+        min = conditionAverage.getTwentyAverage3() * proximity1;
+        if (currentAverage.getTwentyAverage3() > max || currentAverage.getTwentyAverage3() < min) {
+
+            return false;
+        }
+
+        d(TAG, " 经过匹对，此股符合条件...加入结果集合");
         DataSource.getInstance().getAnalysisList2().add(DataUtils.convertByStock(todayStock, nextStock));
 
         return true;

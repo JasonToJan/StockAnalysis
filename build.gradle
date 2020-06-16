@@ -5,7 +5,7 @@ buildscript {
     ext.kotlin_version = '1.3.41'
     ext.booster_version = '1.4.0'//test4
 
-    repositories {//test45
+    repositories {//test451231
         google()
         jcenter()
         maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }

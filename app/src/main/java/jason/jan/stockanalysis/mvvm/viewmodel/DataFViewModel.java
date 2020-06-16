@@ -174,6 +174,50 @@ public class DataFViewModel extends BaseViewModel<RepositoryImpl> {
     }
 
     /**
+     * 是否需要重新添加这个月的股票信息
+     *
+     * @param isNeedAddAgain
+     */
+    public void deleteThreeMonthStock(boolean isNeedAddAgain, int offsetNum, AddStockCallback callback) {
+        Observable.just(1)
+                .observeOn(Schedulers.io())
+                .subscribe(new io.reactivex.Observer<Integer>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+                        Calendar calendar = Calendar.getInstance();
+                        int year = calendar.get(Calendar.YEAR);
+                        int currentMonth = calendar.get(Calendar.MONTH) + 1 - 2;
+                        String realMonth = currentMonth < 10 ? "0" + currentMonth : "" + currentMonth;
+                        String realDay = "01";
+                        String dateBegin = year + "-" + realMonth + "-" + realDay;
+                        long currentMonthMills = MyTimeUtils.dateToStamp(dateBegin);
+                        if (!isNeedAddAgain) {
+                            getRepository().getDatabase().stockDao().deleteCurrentMonth(currentMonthMills);
+                        }
+
+                        if (isNeedAddAgain) {
+                            new MyAddDataAsync(false, offsetNum, 3, callback).execute();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    /**
      * 采用AsyncTask搜索数据
      *
      * @param callback
@@ -359,6 +403,11 @@ public class DataFViewModel extends BaseViewModel<RepositoryImpl> {
          */
         boolean isOnlyCurrentMonth;
 
+        /**
+         * 间隔多少个月
+         */
+        int offsetMonth = 0;
+
         int offsetNum = 0;
 
         MyAddDataAsync(AddStockCallback callback) {
@@ -374,6 +423,13 @@ public class DataFViewModel extends BaseViewModel<RepositoryImpl> {
             this.callback = callback;
             this.isOnlyCurrentMonth = isOnlyCurrentMonth;
             this.offsetNum = offsetNum;
+        }
+
+        MyAddDataAsync(boolean isOnlyCurrentMonth, int offsetNum, int offsetMonth, AddStockCallback callback) {
+            this.callback = callback;
+            this.isOnlyCurrentMonth = isOnlyCurrentMonth;
+            this.offsetNum = offsetNum;
+            this.offsetMonth = offsetMonth;
         }
 
         @Override
@@ -401,7 +457,7 @@ public class DataFViewModel extends BaseViewModel<RepositoryImpl> {
             for (int n = 0; n < size; n++) {
 
                 try {
-                    Thread.sleep(300);
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     LogUtils.d(TAG, "Error##" + e.getMessage());
                 }
@@ -415,7 +471,7 @@ public class DataFViewModel extends BaseViewModel<RepositoryImpl> {
                 final int currentN = n;
 
                 //是否仅仅更新当前月份
-                int MONTH_SIZE = isOnlyCurrentMonth ? 1 : HISTORY_MONTH_SIZE;
+                int MONTH_SIZE = isOnlyCurrentMonth ? 1 : offsetMonth == 0 ? HISTORY_MONTH_SIZE : offsetMonth;
 
                 for (int i = 0; i < MONTH_SIZE; i++) {
 
@@ -472,7 +528,7 @@ public class DataFViewModel extends BaseViewModel<RepositoryImpl> {
 
 
                         try {
-                            Thread.sleep(300);
+                            Thread.sleep(100);
                         } catch (InterruptedException e) {
                             LogUtils.d(TAG, "Error##" + e.getMessage());
                         }
@@ -539,5 +595,6 @@ public class DataFViewModel extends BaseViewModel<RepositoryImpl> {
         }
 
     }
+
 
 }
