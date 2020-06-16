@@ -71,7 +71,7 @@ public class MyApplication extends Application {
                  */
                 .handleException(e -> {
                     // 以Bugtags为例子: 把捕获到的 Exception 传到 Bugtags 后台。
-                    // Bugtags.sendException(e);
+                    // Bugtags.sendException(e)
                     LogUtils.e("", "##" + "Fragment catch Error:" + e.getMessage());
                 })
                 .install();

@@ -46,7 +46,7 @@ android {
     lintOptions {
         abortOnError false
     }
-
+    //test1add
     signingConfigs {
         release {
             storeFile file(config.SIGN_STOREFILE)
@@ -76,21 +76,21 @@ android {
         }
     }
 
-    applicationVariants.all {
-        def buildType = it.buildType.name
-        def fileName
-        def createTime = new Date().format("YYYYMMdd", TimeZone.getTimeZone("GMT+08:00"))
-        if (buildType == "release") {
-            it.getPackageApplication().outputDirectory = new File(project.rootDir.absolutePath + "/apks/${createTime}")
-        }
-        it.outputs.each {
-            if (buildType == "release") {
-                fileName = "StockAnalysis_v${defaultConfig.versionName}_release().apk"
-                println "文件名：-----------------${fileName}"
-                it.outputFileName = fileName
-            }
-        }
-    }
+//    applicationVariants.all {
+//        def buildType = it.buildType.name
+//        def fileName
+//        def createTime = new Date().format("YYYYMMdd", TimeZone.getTimeZone("GMT+08:00"))
+////        if (buildType == "release") {
+////            it.getPackageApplication().outputDirectory = new File(project.rootDir.absolutePath + "/apks/${createTime}")
+////        }
+//        it.outputs.each {
+//            if (buildType == "release") {
+//                fileName = "StockAnalysis_v${defaultConfig.versionName}_release().apk"
+//                println "文件名：-----------------${fileName}"
+//                it.outputFileName = fileName
+//            }
+//        }
+//    }
 }
 
 

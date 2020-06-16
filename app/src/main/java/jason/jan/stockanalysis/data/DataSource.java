@@ -74,6 +74,30 @@ public class DataSource {
      * 近5日下跌
      */
     private List<AnalysisStock> analysis5DayDown;
+    /**
+     * 跳水
+     */
+    private List<AnalysisStock> analysisJumpWater;
+    /**
+     * 冲高
+     */
+    private List<AnalysisStock> analysisGoUp;
+
+    public List<AnalysisStock> getAnalysisJumpWater() {
+        return analysisJumpWater;
+    }
+
+    public void setAnalysisJumpWater(List<AnalysisStock> analysisJumpWater) {
+        this.analysisJumpWater = analysisJumpWater;
+    }
+
+    public List<AnalysisStock> getAnalysisGoUp() {
+        return analysisGoUp;
+    }
+
+    public void setAnalysisGoUp(List<AnalysisStock> analysisGoUp) {
+        this.analysisGoUp = analysisGoUp;
+    }
 
     public List<AnalysisStock> getAnalysis5DayUp() {
         return analysis5DayUp;

@@ -6,6 +6,7 @@ import com.blankj.utilcode.util.TimeUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
@@ -27,6 +28,8 @@ public class DataUtils {
     private static final String TAG = "DataUtils";
 
     private static SimpleDateFormat formatToTarget = new SimpleDateFormat("yyyy-MM-dd");
+
+    private static SimpleDateFormat requestFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
     public static final String[] upOrDown = new String[]{"高","低","..."};
 
@@ -154,6 +157,7 @@ public class DataUtils {
         requestMap.clear();
         requestMap.put(Api.YI_APPID_STR, Api.YI_APPID);
         requestMap.put(Api.YI_SIGN_STR, Api.YI_SIGN);
+        requestMap.put(Api.YI_TIMESTAMP_STR, requestFormat.format(new Date()));
         requestMap.put(Api.YI_CODE, code);
         requestMap.put(Api.YI_BEGAIN, begin);
         requestMap.put(Api.YI_END, end);

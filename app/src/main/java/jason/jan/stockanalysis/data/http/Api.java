@@ -26,6 +26,8 @@ public interface Api {
 
     String YI_SIGN_STR = "showapi_sign";
 
+    String YI_TIMESTAMP_STR = "showapi_timestamp";
+
     String YI_BEGAIN = "begin";
 
     String YI_END = "end";
