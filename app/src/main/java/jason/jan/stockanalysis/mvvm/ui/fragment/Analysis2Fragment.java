@@ -527,9 +527,9 @@ public class Analysis2Fragment extends BaseFragment<AnalysisF2ViewModel, Fragmen
 
         customProgress = CustomProgress.show(_mActivity, "正在分析明天可能会涨停的股票", true, null);
 
-        if (!binding.fa2TomorrowProximityEt.getText().toString().isEmpty()) {
+        if (!binding.fa2ProTv.getText().toString().isEmpty()) {
             try {
-                float proximity = Float.parseFloat(binding.fa2TomorrowProximityEt.getText().toString());
+                float proximity = Float.parseFloat(binding.fa2ProTv.getText().toString());
                 mViewModel.setPROXIMITY(proximity);
                 LogUtils.d(TAG, "相似度：" + proximity);
             } catch (Throwable e) {

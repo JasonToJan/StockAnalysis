@@ -24,6 +24,7 @@ import jason.jan.stockanalysis.entity.ConditionAverage;
 import jason.jan.stockanalysis.entity.Stock;
 import jason.jan.stockanalysis.utils.DataUtils;
 import jason.jan.stockanalysis.utils.LogUtils;
+import jason.jan.stockanalysis.utils.MyTimeUtils;
 
 import static jason.jan.stockanalysis.utils.LogUtils.d;
 
@@ -37,11 +38,13 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
 
     private static final String TAG = "AnalysisF2ViewModel";
 
+    private Calendar calendar;
+
     public float TOMORROW_BUY_UP_OFFSET = 4.0f;//明天开盘比今天收盘高3%
 
     public float FIVE_DAY_UP_OFFSET = 110;//五天上涨百分比
 
-    public float PROXIMITY = 98;//相似度80%就可以放在条件里面了
+    public float PROXIMITY = 99;//相似度80%就可以放在条件里面了
 
     public float AVERAGE_PROXIMITY = 90;//平均价格相似度90%就可以放在条件里面了
 
@@ -83,6 +86,11 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
      * 当前时间，就是最近的条件，这样不用重新查找数据库了
      */
     private List<Condition2> currentTimeCondition = new ArrayList<>();
+
+    /**
+     * 当前时间，就是最近的条件，这样不用重新查找数据库了
+     */
+    private List<ConditionAverage> currentTimeConditionAverage = new ArrayList<>();
 
     /**
      * 当前时间，就是最近的条件，这样不用重新查找数据库了
@@ -543,8 +551,8 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
             }
 
             d(TAG, "数据库股票代码长度为：" + codes.size());
-            if (currentTimeCondition.size() != 0) {
-                currentTimeCondition.clear();
+            if (currentTimeConditionAverage.size() != 0) {
+                currentTimeConditionAverage.clear();
             }
 
             //保存最终结果
@@ -553,13 +561,18 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
             }
             DataSource.getInstance().getAnalysisTomorrowUp().clear();
 
-            long maxCurrentTime = getRepository().getDatabase().stockDao().getMaxCurrentTime();
-            d(TAG, "当前最大时间为：" + maxCurrentTime);
+            //long maxCurrentTime = getRepository().getDatabase().stockDao().getMaxCurrentTime();
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int currentMonth = calendar.get(Calendar.MONTH) + 1;
+            int currentDay = calendar.get(Calendar.DATE);
+            long currentMonthMills = MyTimeUtils.dateToStamp(year+"-"+(currentMonth < 10 ? "0"+currentMonth : currentMonth)+"-"+(currentDay < 10 ? "0"+currentDay : currentDay));
+            d(TAG, "当前时间为：" + currentMonthMills);
 
-            List<Condition2> listCondition = new ArrayList<>();//明天涨停的所有类型
+            List<ConditionAverage> listCondition = new ArrayList<>();//明天涨停的所有类型
             for (int i = 0; i < codes.size(); i++) {
                 //这是某一只股票了，然后分析这只股票明天会涨停类型，返回一个Condition2
-                List<Condition2> currentCodeConditions = findConditionForTomorrowUp(codes.get(i), maxCurrentTime);
+                List<ConditionAverage> currentCodeConditions = findConditionForTomorrowUp(codes.get(i), currentMonthMills);
                 if (currentCodeConditions.size() != 0) {
                     listCondition.addAll(currentCodeConditions);
                 }
@@ -580,17 +593,17 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
             //分析所有今天的股票，看看有没有符合条件的
             //搜索数据库，最近一天的股票时间，因为有可能节假日
 
-            if (currentTimeCondition.size() == 0) {
+            if (currentTimeConditionAverage.size() == 0) {
                 d(TAG, "sorry, there is no current day record");
                 callback.failedAnalysis(new Throwable("sorry, there is no possible occured."));
                 return;
             }
 
-            d(TAG, "今天的记录条数为：" + currentTimeCondition.size());
-            for (int i = 0; i < currentTimeCondition.size(); i++) {
-                boolean isMatched = isMatched(1, currentTimeCondition.get(i), listCondition);
+            d(TAG, "今天的记录条数为：" + currentTimeConditionAverage.size());
+            for (int i = 0; i < currentTimeConditionAverage.size(); i++) {
+                boolean isMatched = isMatched(1, currentTimeConditionAverage.get(i), listCondition);
                 if (isMatched) {
-                    callback.finishOneStock(currentTimeCondition.get(i).getTodayStock().getCode(), 1);
+                    callback.finishOneStock(currentTimeConditionAverage.get(i).getTodayStock().getCode(), 1);
                 }
             }
 
@@ -1027,6 +1040,117 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
     /**
      * 分析这一天的股票是否符合条件
      *
+     * @param conditionAverages
+     * @return
+     */
+    private boolean isMatched(int type, ConditionAverage currentAverage, List<ConditionAverage> conditionAverages) {
+
+
+        //首先得查找到这只股票最近数据
+        if (currentAverage == null || conditionAverages == null || conditionAverages.size() == 0) return false;
+
+
+        for (int i = 0; i < conditionAverages.size(); i++) {
+
+
+            ConditionAverage conditionAverage = conditionAverages.get(i);
+
+            float proximity1 = conditionAverage.getProximity() / 100.0f;//0.8
+            float proximity2 = 2 - proximity1;//1.2
+
+            float max = conditionAverage.getFiveAverage1() * proximity2;
+            float min = conditionAverage.getFiveAverage1() * proximity1;
+            //LogUtils.d(TAG, " max=" + max + " min=" + min + " fiveAverage=" + currentAverage.getTenAverage1());
+            if (currentAverage.getFiveAverage1() > max || currentAverage.getFiveAverage1() < min) {
+
+                continue;
+            }
+
+            max = conditionAverage.getFiveAverage2() * proximity2;
+            min = conditionAverage.getFiveAverage2() * proximity1;
+            //LogUtils.d(TAG, " max=" + max + " min=" + min + " fiveAverage=" + currentAverage.getFiveAverage2());
+            if (currentAverage.getFiveAverage2() > max || currentAverage.getFiveAverage2() < min) {
+
+                continue;
+            }
+
+            max = conditionAverage.getFiveAverage3() * proximity2;
+            min = conditionAverage.getFiveAverage3() * proximity1;
+            //LogUtils.d(TAG, " max=" + max + " min=" + min + " fiveAverage=" + currentAverage.getFiveAverage3());
+            if (currentAverage.getFiveAverage3() > max || currentAverage.getFiveAverage3() < min) {
+
+                continue;
+            }
+
+            max = conditionAverage.getTenAverage1() * proximity2;
+            min = conditionAverage.getTenAverage1() * proximity1;
+            if (currentAverage.getTenAverage1() > max || currentAverage.getTenAverage1() < min) {
+
+                continue;
+            }
+
+            max = conditionAverage.getTenAverage2() * proximity2;
+            min = conditionAverage.getTenAverage2() * proximity1;
+            if (currentAverage.getTenAverage2() > max || currentAverage.getTenAverage2() < min) {
+
+                continue;
+            }
+
+            max = conditionAverage.getTenAverage3() * proximity2;
+            min = conditionAverage.getTenAverage3() * proximity1;
+            if (currentAverage.getTenAverage3() > max || currentAverage.getTenAverage3() < min) {
+
+                continue;
+            }
+
+            max = conditionAverage.getTwentyAverage1() * proximity2;
+            min = conditionAverage.getTwentyAverage1() * proximity1;
+            if (currentAverage.getTwentyAverage1() > max || currentAverage.getTwentyAverage1() < min) {
+
+                continue;
+            }
+
+            max = conditionAverage.getTwentyAverage2() * proximity2;
+            min = conditionAverage.getTwentyAverage2() * proximity1;
+            if (currentAverage.getTwentyAverage2() > max || currentAverage.getTwentyAverage2() < min) {
+
+                continue;
+            }
+
+            max = conditionAverage.getTwentyAverage3() * proximity2;
+            min = conditionAverage.getTwentyAverage3() * proximity1;
+            if (currentAverage.getTwentyAverage3() > max || currentAverage.getTwentyAverage3() < min) {
+
+                continue;
+            }
+
+            d(TAG, " 经过匹对，此股符合条件...加入结果集合");
+            AnalysisStock stock = new AnalysisStock();
+            stock.setCode(currentAverage.getTodayStock().getCode());
+            stock.setDate(currentAverage.getTodayStock().getDate());
+            stock.setVolume(currentAverage.getTodayStock().getVolume());
+            stock.setOpenPrice(currentAverage.getTodayStock().getOpenPrice());
+            stock.setClosePrice(currentAverage.getTodayStock().getClosePrice());
+            stock.setMinPrice(currentAverage.getTodayStock().getMinPrice());
+            stock.setMaxPrice(currentAverage.getTodayStock().getMaxPrice());
+            stock.setNextStock(conditionAverages.get(i).getTodayStock());
+            stock.setName(currentAverage.getTodayStock().getName());
+
+            if (DataSource.getInstance().getAnalysisTomorrowUp() == null) {
+                DataSource.getInstance().setAnalysisTomorrowUp(new ArrayList<>());
+            }
+            DataSource.getInstance().getAnalysisTomorrowUp().add(stock);
+
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * 分析这一天的股票是否符合条件
+     *
      * @param condition5s
      * @return
      */
@@ -1194,8 +1318,8 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
      *
      * @return
      */
-    private List<Condition2> findConditionForTomorrowUp(String code, long currentTime) {
-        List<Condition2> condition2s = new ArrayList<>();
+    private List<ConditionAverage> findConditionForTomorrowUp(String code, long currentTime) {
+        List<ConditionAverage> condition2s = new ArrayList<>();
         List<Stock> theCodeStocks = getRepository().getDatabase().stockDao().getStocksByCode(code);
 
         if (theCodeStocks == null || theCodeStocks.size() <= 3) {
@@ -1203,43 +1327,50 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
             return condition2s;
         }
 
-        //每天附近最大成交量
-        List<Float> listVolumeMaxs = new ArrayList<>();
-        for (int i = 0; i < theCodeStocks.size(); i++) {
-            float maxVolume = findRecentlyMax(theCodeStocks, i);
-
-            //d(TAG, "maxVolume = " + maxVolume);
-            listVolumeMaxs.add(maxVolume);
-        }
-
         //可以遍历分析这只股票了
         int size = theCodeStocks.size();
         for (int i = 0; i < size; i++) {
             if (i == size - 1 && i >= 3) {
+                d(TAG, "当前时间为："+theCodeStocks.get(i).getCurrentTime()+" "+currentTime);
                 if (theCodeStocks.get(i).getCurrentTime() == currentTime) {
-                    Condition2 currentConditon = new Condition2();
+                    ConditionAverage currentConditon = new ConditionAverage();
+                    getFiveAverage(currentConditon, theCodeStocks, i, 0);
+                    getFiveAverage(currentConditon, theCodeStocks, i - 1, 1);
+                    getFiveAverage(currentConditon, theCodeStocks, i - 2, 2);
+                    getTenAverage(currentConditon, theCodeStocks, i, 0);
+                    getTenAverage(currentConditon, theCodeStocks, i - 1, 1);
+                    getTenAverage(currentConditon, theCodeStocks, i - 2, 2);
+                    getTwentyAverage(currentConditon, theCodeStocks, i, 0);
+                    getTwentyAverage(currentConditon, theCodeStocks, i - 1, 1);
+                    getTwentyAverage(currentConditon, theCodeStocks, i - 2, 2);
+                    currentConditon.setProximity(PROXIMITY);
                     currentConditon.setTodayStock(theCodeStocks.get(i));
-                    currentConditon.setYesStock(theCodeStocks.get(i - 1));
-                    currentConditon.setBeforeYesStock(theCodeStocks.get(i - 2));
-                    currentConditon.setMaxVolume(listVolumeMaxs.get(i));
-                    currentTimeCondition.add(currentConditon);
+
+                    currentTimeConditionAverage.add(currentConditon);
                 }
             }
             if (i >= 3 && i < size - 2) {
-                Stock yesStock = theCodeStocks.get(i - 1);
-                Stock beforeYesStock = theCodeStocks.get(i - 2);
+
                 Stock todayStock = theCodeStocks.get(i);
                 Stock tomorrowStock = theCodeStocks.get(i + 1);
-                Stock tomorrow2Stock = theCodeStocks.get(i + 2);
                 boolean isTarget = isTomorrowUpType(todayStock, tomorrowStock);
+
                 if (isTarget) {
-                    Condition2 condition2 = new Condition2();
-                    condition2.setProximity(PROXIMITY);
-                    condition2.setMaxVolume(listVolumeMaxs.get(i));
-                    condition2.setTodayStock(todayStock);
-                    condition2.setYesStock(yesStock);
-                    condition2.setBeforeYesStock(beforeYesStock);
-                    condition2s.add(condition2);
+                    ConditionAverage currentConditon = new ConditionAverage();
+                    getFiveAverage(currentConditon, theCodeStocks, i, 0);
+                    getFiveAverage(currentConditon, theCodeStocks, i - 1, 1);
+                    getFiveAverage(currentConditon, theCodeStocks, i - 2, 2);
+                    getTenAverage(currentConditon, theCodeStocks, i, 0);
+                    getTenAverage(currentConditon, theCodeStocks, i - 1, 1);
+                    getTenAverage(currentConditon, theCodeStocks, i - 2, 2);
+                    getTwentyAverage(currentConditon, theCodeStocks, i, 0);
+                    getTwentyAverage(currentConditon, theCodeStocks, i - 1, 1);
+                    getTwentyAverage(currentConditon, theCodeStocks, i - 2, 2);
+                    currentConditon.setProximity(PROXIMITY);
+                    currentConditon.setTodayStock(theCodeStocks.get(i));
+                    currentConditon.setTodayStock(theCodeStocks.get(i));
+
+                    condition2s.add(currentConditon);
                     //d(TAG," is null ? "+todayStock.toString());
                 }
             }

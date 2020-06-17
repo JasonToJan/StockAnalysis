@@ -44,6 +44,8 @@ public class ConditionAverage {
 
     private float twentyAverage3;
 
+    private Stock todayStock;
+
     /**
      * 明天的股票信息
      */
@@ -138,5 +140,13 @@ public class ConditionAverage {
 
     public void setTommorrowStock(Stock tommorrowStock) {
         this.tommorrowStock = tommorrowStock;
+    }
+
+    public Stock getTodayStock() {
+        return todayStock;
+    }
+
+    public void setTodayStock(Stock todayStock) {
+        this.todayStock = todayStock;
     }
 }
