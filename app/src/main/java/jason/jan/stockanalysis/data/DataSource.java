@@ -47,6 +47,10 @@ public class DataSource {
      */
     private List<AnalysisStock> analysisList2;
     /**
+     * 明天涨停分析列表
+     */
+    private List<AnalysisStock> analysisTomorrowUpPro;
+    /**
      * 明天买
      */
     private List<AnalysisStock> analysisTomorrowBuy;
@@ -196,4 +200,11 @@ public class DataSource {
     }
 
 
+    public List<AnalysisStock> getAnalysisTomorrowUpPro() {
+        return analysisTomorrowUpPro;
+    }
+
+    public void setAnalysisTomorrowUpPro(List<AnalysisStock> analysisTomorrowUpPro) {
+        this.analysisTomorrowUpPro = analysisTomorrowUpPro;
+    }
 }

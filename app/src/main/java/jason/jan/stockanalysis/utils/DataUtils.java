@@ -63,6 +63,25 @@ public class DataUtils {
         return analysisStock;
     }
 
+    public static AnalysisStock convertByUpProStock(Stock currentStock, float proUp) {
+
+        AnalysisStock analysisStock = new AnalysisStock();
+        analysisStock.setCode(currentStock.getCode());
+        analysisStock.setName(currentStock.getName());
+        analysisStock.setClosePrice(currentStock.getClosePrice());
+        analysisStock.setCurrentTime(currentStock.getCurrentTime());
+        analysisStock.setIsForecast(currentStock.getIsForecast());
+        analysisStock.setDate(currentStock.getDate());
+        analysisStock.setMaxPrice(currentStock.getMaxPrice());
+        analysisStock.setMinPrice(currentStock.getMinPrice());
+        analysisStock.setOpenPrice(currentStock.getOpenPrice());
+        analysisStock.setVolume(currentStock.getVolume());
+        analysisStock.setUpPro(proUp);
+        analysisStock.setHasPro(true);
+
+        return analysisStock;
+    }
+
     public static List<BulkStock> convertStockList(List<Stock> list) {
 
         ArrayList<BulkStock> listTarget = new ArrayList();

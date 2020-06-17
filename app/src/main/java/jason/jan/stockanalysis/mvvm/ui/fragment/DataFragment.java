@@ -240,7 +240,7 @@ public class DataFragment extends BaseFragment<DataFViewModel, FragmentDataBindi
 
                 customProgress = CustomProgress.show(_mActivity, "正在查询并插入历史股票数据...", true, null);
                 binding.fdLogTv.setText("");
-                mViewModel.deleteThreeMonthStock(true, offsetNum, new DataFViewModel.AddStockCallback() {
+                mViewModel.deleteCurrentMonthStock(true, offsetNum, new DataFViewModel.AddStockCallback() {
                     int currentSize = 0;
 
                     @Override

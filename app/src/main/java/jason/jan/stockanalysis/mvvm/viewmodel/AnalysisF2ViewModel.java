@@ -46,6 +46,8 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
 
     public float PROXIMITY = 99;//相似度80%就可以放在条件里面了
 
+    public static final float PRO_DEFAULT = 99;//默认明天涨停的均线相似度
+
     public float AVERAGE_PROXIMITY = 90;//平均价格相似度90%就可以放在条件里面了
 
     public float JUMP_WATER_RATIO = 3.0f;//跳水百分比
@@ -236,7 +238,8 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
 
                     @Override
                     public void onNext(Integer integer) {
-                        doAnalysisTomorrowUpInner(callback);
+                        //doAnalysisTomorrowUpInner(callback);
+                        doAnalysisTomorrowUpProInner(callback);
                     }
 
                     @Override
@@ -534,6 +537,105 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
         }
     }
 
+    private void doAnalysisTomorrowUpProInner(AnalysisCallback callback) {
+
+        //遍历今天所有股票
+        List<String> codes = getRepository().getDatabase().stockDao().getDistinctCode();
+        if (codes == null || codes.size() == 0) {
+            d(TAG, "sorry, the database has no stock's code...Please add some data.");
+            callback.failedAnalysis(new Throwable("sorry, the database has no stock's code...Please add some data."));
+            return;
+        }
+
+        d(TAG, "数据库股票代码长度为：" + codes.size());
+        if (currentTimeConditionAverage.size() != 0) {
+            currentTimeConditionAverage.clear();
+        }
+
+        //保存最终结果
+        if (DataSource.getInstance().getAnalysisTomorrowUp() == null) {
+            DataSource.getInstance().setAnalysisTomorrowUp(new ArrayList<>());
+        }
+        DataSource.getInstance().getAnalysisTomorrowUp().clear();
+
+        //long maxCurrentTime = getRepository().getDatabase().stockDao().getMaxCurrentTime();
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int currentMonth = calendar.get(Calendar.MONTH) + 1;
+        int currentDay = calendar.get(Calendar.DATE);
+        long currentMonthMills = MyTimeUtils.dateToStamp(year + "-" + (currentMonth < 10 ? "0" + currentMonth : currentMonth) + "-" + (currentDay < 10 ? "0" + currentDay : currentDay));
+        d(TAG, "当前时间为：" + currentMonthMills);
+
+
+        for (int i = 0; i < codes.size(); i++) {
+            //这是某一只股票了，然后分析这只股票明天会涨停类型，返回一个Condition2
+            findConditionForTomorrowUp(codes.get(i), currentMonthMills);
+        }
+
+        if (currentTimeConditionAverage.size() == 0) {
+            d(TAG, "sorry, there is no current day record");
+            callback.failedAnalysis(new Throwable("sorry, there is no possible occured."));
+            return;
+        }
+
+        try {
+            d(TAG, "今天的记录条数为：" + currentTimeConditionAverage.size());
+            for (int i = 0; i < currentTimeConditionAverage.size(); i++) {
+
+                final int position = i;
+                doAnalysisInnerForTommorrowUp(currentTimeConditionAverage.get(i), new AnalysisCallback() {
+
+                    @Override
+                    public void finishOneStock(String code, int size) {
+
+                    }
+
+                    @Override
+                    public void finishAllStock() {
+
+                        Stock currentStock = currentTimeConditionAverage.get(position).getTodayStock();
+
+                        if (DataSource.getInstance().getAnalysisList2() != null && DataSource.getInstance().getAnalysisList2().size() != 0) {
+                            d(TAG, "已完成这只股票分析，name="+currentStock.getName()+" 相似长度为" + DataSource.getInstance().getAnalysisList2().size());
+
+                            List<AnalysisStock> list = DataSource.getInstance().getAnalysisList2();
+                            float proSum = 0;
+                            int hasNullNextNum = 0;
+                            for (int i = 0; i < list.size(); i++) {
+                                if (list.get(i).getNextStock() == null) {
+                                    hasNullNextNum ++;
+                                } else {
+                                    proSum += (list.get(i).getNextStock().getClosePrice() - list.get(i).getClosePrice()) / list.get(i).getClosePrice();
+                                }
+                            }
+                            if (list.size() - hasNullNextNum != 0) {
+                                float upPro = proSum / (list.size() - hasNullNextNum);
+                                LogUtils.d("发现该股票："+currentStock.getName()+" 明日上涨概率为："+ upPro);
+
+                                DataSource.getInstance().getAnalysisTomorrowUp().add(DataUtils.convertByUpProStock(currentStock,upPro));
+                            }
+
+                        }
+
+                        callback.finishOneStock(currentStock.getCode(), 1);
+                    }
+
+                    @Override
+                    public void failedAnalysis(Throwable e) {
+
+                    }
+                });
+
+            }
+
+            callback.finishAllStock();
+        } catch (Throwable e) {
+            d("Error", "##" + e.getMessage());
+            callback.failedAnalysis(e);
+        }
+
+    }
+
     /**
      * 分析明天会涨停
      *
@@ -566,7 +668,7 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
             int year = calendar.get(Calendar.YEAR);
             int currentMonth = calendar.get(Calendar.MONTH) + 1;
             int currentDay = calendar.get(Calendar.DATE);
-            long currentMonthMills = MyTimeUtils.dateToStamp(year+"-"+(currentMonth < 10 ? "0"+currentMonth : currentMonth)+"-"+(currentDay < 10 ? "0"+currentDay : currentDay));
+            long currentMonthMills = MyTimeUtils.dateToStamp(year + "-" + (currentMonth < 10 ? "0" + currentMonth : currentMonth) + "-" + (currentDay < 10 ? "0" + currentDay : currentDay));
             d(TAG, "当前时间为：" + currentMonthMills);
 
             List<ConditionAverage> listCondition = new ArrayList<>();//明天涨停的所有类型
@@ -1047,7 +1149,8 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
 
 
         //首先得查找到这只股票最近数据
-        if (currentAverage == null || conditionAverages == null || conditionAverages.size() == 0) return false;
+        if (currentAverage == null || conditionAverages == null || conditionAverages.size() == 0)
+            return false;
 
 
         for (int i = 0; i < conditionAverages.size(); i++) {
@@ -1245,7 +1348,7 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
                 DataSource.getInstance().getAnalysis5DayDown().add(stock);
             }
 
-            LogUtils.d(TAG, "符合条件哦" + stock.toString());
+            d(TAG, "符合条件哦" + stock.toString());
 
             return true;
 
@@ -1331,7 +1434,7 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
         int size = theCodeStocks.size();
         for (int i = 0; i < size; i++) {
             if (i == size - 1 && i >= 3) {
-                d(TAG, "当前时间为："+theCodeStocks.get(i).getCurrentTime()+" "+currentTime);
+                d(TAG, "当前时间为：" + theCodeStocks.get(i).getCurrentTime() + " " + currentTime);
                 if (theCodeStocks.get(i).getCurrentTime() == currentTime) {
                     ConditionAverage currentConditon = new ConditionAverage();
                     getFiveAverage(currentConditon, theCodeStocks, i, 0);
@@ -1410,7 +1513,7 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
                     Condition5 condition5 = getCondition5ByPosition(i, theCodeStocks);
                     if (condition5 != null) {
                         currentTimeCondition5.add(condition5);
-                        LogUtils.d(TAG, "condition5=" + condition5.getRatio_0_5());
+                        d(TAG, "condition5=" + condition5.getRatio_0_5());
                     }
                 }
             }
@@ -1624,7 +1727,7 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
                     }
 
                     float ratio = (day1 + day2 + day3 + day4 + day5) / 5 / currentPrice;
-                    LogUtils.d(TAG, "offset=" + offset);
+                    d(TAG, "offset=" + offset);
                     switch (offset) {
                         case 5:
                             condition5.setRatio_0_5(ratio);
@@ -1838,6 +1941,48 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
         }
 
         return condition5;
+    }
+
+    private void doAnalysisInnerForTommorrowUp(ConditionAverage condition, AnalysisCallback callback) {
+
+
+        if (condition.getFiveAverage1() == 0 || condition.getTenAverage1() == 0 || condition.getTwentyAverage1() == 0) {
+            d(TAG, "sorry, can't find target stock's info...");
+            callback.failedAnalysis(new Throwable("sorry, can't find target stock's info..."));
+            return;
+        }
+
+        if (condition.getFiveAverage2() == 0 || condition.getTenAverage2() == 0 || condition.getTwentyAverage2() == 0) {
+            d(TAG, "sorry, can't find target stock's info...");
+            callback.failedAnalysis(new Throwable("sorry, can't find target stock's info..."));
+            return;
+        }
+
+        if (condition.getFiveAverage3() == 0 || condition.getTenAverage3() == 0 || condition.getTwentyAverage3() == 0) {
+            d(TAG, "sorry, can't find target stock's info...");
+            callback.failedAnalysis(new Throwable("sorry, can't find target stock's info..."));
+            return;
+        }
+
+        List<String> codes = getRepository().getDatabase().stockDao().getDistinctCode();
+        if (codes == null || codes.size() == 0) {
+            d(TAG, "sorry, the database has no stock's code...Please add some data.");
+            callback.failedAnalysis(new Throwable("sorry, the database has no stock's code...Please add some data."));
+            return;
+        }
+
+        d(TAG, "数据库股票代码长度为：" + codes.size());
+        //保存最终结果
+        if (DataSource.getInstance().getAnalysisList2() == null) {
+            DataSource.getInstance().setAnalysisList2(new ArrayList<>());
+        }
+        DataSource.getInstance().getAnalysisList2().clear();
+
+        for (int i = 0; i < codes.size(); i++) {
+            getTheCodeStockAndAnalysis(0, codes.get(i), condition, callback);
+        }
+
+        callback.finishAllStock();
     }
 
     private void doAnalysisInner(String code, String date, String pro, AnalysisCallback callback) {
@@ -2524,7 +2669,7 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
             return false;
         }
 
-        d(TAG, " 经过匹对，此股符合条件...加入结果集合");
+        //d(TAG, " 经过匹对，此股符合条件...加入结果集合");
         DataSource.getInstance().getAnalysisList2().add(DataUtils.convertByStock(todayStock, nextStock));
 
         return true;

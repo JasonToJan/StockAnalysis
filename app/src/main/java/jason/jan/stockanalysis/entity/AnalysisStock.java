@@ -8,6 +8,10 @@ package jason.jan.stockanalysis.entity;
  */
 public class AnalysisStock {
 
+    private boolean hasPro;//是否有预测值
+
+    private float upPro;//明日上涨百分比
+
     private String code;//股票代码
 
     private long currentTime;//今日时间戳，0点的即可
@@ -143,5 +147,21 @@ public class AnalysisStock {
 
     public void setNextStock(Stock nextStock) {
         this.nextStock = nextStock;
+    }
+
+    public boolean isHasPro() {
+        return hasPro;
+    }
+
+    public void setHasPro(boolean hasPro) {
+        this.hasPro = hasPro;
+    }
+
+    public float getUpPro() {
+        return upPro;
+    }
+
+    public void setUpPro(float upPro) {
+        this.upPro = upPro;
     }
 }

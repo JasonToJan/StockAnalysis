@@ -11,6 +11,8 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -196,6 +198,17 @@ public class Analysis2Fragment extends BaseFragment<AnalysisF2ViewModel, Fragmen
         binding.fa2AnalysisBtn8.setOnClickListener(this);//最近跳水
         binding.fa2AnalysisBtn9.setOnClickListener(this);//最近冲高
         binding.fa2DateTv.setOnClickListener(this);
+
+        binding.faBtn1.setOnClickListener(this);
+        binding.faBtn2.setOnClickListener(this);
+        binding.faBtn3.setOnClickListener(this);
+        binding.faBtn4.setOnClickListener(this);
+        binding.faBtn5.setOnClickListener(this);
+        binding.faBtn6.setOnClickListener(this);
+        binding.faBtn7.setOnClickListener(this);
+        binding.faBtn8.setOnClickListener(this);
+        binding.faBtn9.setOnClickListener(this);
+
     }
 
     @Override
@@ -566,7 +579,21 @@ public class Analysis2Fragment extends BaseFragment<AnalysisF2ViewModel, Fragmen
                         //adapter
                         pagePosition = 0;
                         List<AnalysisStock> listResult = DataSource.getInstance().getAnalysisTomorrowUp();
+
                         if (listResult == null || listResult.size() == 0) return;
+
+                        Collections.sort(listResult, new Comparator<AnalysisStock>() {
+                            @Override
+                            public int compare(AnalysisStock a1, AnalysisStock a2) {
+                                if (a1.getUpPro() > a2.getUpPro()) {
+                                    return 1;
+                                }
+                                if (a1.getUpPro() == a2.getUpPro()) {
+                                    return 0;
+                                }
+                                return -1;
+                            }
+                        });
 
                         resultList.clear();
                         for (int i = 0; i < listResult.size(); i++) {
