@@ -226,7 +226,7 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
     /**
      * 预测明天涨停
      */
-    public void doAnalysisUp(AnalysisCallback callback) {
+    public void doAnalysisUp(int begin, int end, AnalysisCallback callback) {
 
         Observable.just(1)
                 .observeOn(Schedulers.io())
@@ -239,7 +239,7 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
                     @Override
                     public void onNext(Integer integer) {
                         //doAnalysisTomorrowUpInner(callback);
-                        doAnalysisTomorrowUpProInner(callback);
+                        doAnalysisTomorrowUpProInner(begin, end, callback);
                     }
 
                     @Override
@@ -537,7 +537,7 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
         }
     }
 
-    private void doAnalysisTomorrowUpProInner(AnalysisCallback callback) {
+    private void doAnalysisTomorrowUpProInner(int begin, int end, AnalysisCallback callback) {
 
         //遍历今天所有股票
         List<String> codes = getRepository().getDatabase().stockDao().getDistinctCode();
@@ -564,8 +564,13 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
         int currentMonth = calendar.get(Calendar.MONTH) + 1;
         int currentDay = calendar.get(Calendar.DATE);
         long currentMonthMills = MyTimeUtils.dateToStamp(year + "-" + (currentMonth < 10 ? "0" + currentMonth : currentMonth) + "-" + (currentDay < 10 ? "0" + currentDay : currentDay));
-        d(TAG, "当前时间为：" + currentMonthMills);
+        //d(TAG, "当前时间为：" + currentMonthMills);
 
+        List<Stock> list = getRepository().getDatabase().stockDao().getStocksByCurrentTime(currentMonthMills);
+        if (list == null || list.size() == 0) {
+            d(TAG, "最大时间有问题哦，需要减一天");
+            currentMonthMills -= 24 * 3600 * 1000;
+        }
 
         for (int i = 0; i < codes.size(); i++) {
             //这是某一只股票了，然后分析这只股票明天会涨停类型，返回一个Condition2
@@ -580,7 +585,7 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
 
         try {
             d(TAG, "今天的记录条数为：" + currentTimeConditionAverage.size());
-            for (int i = 0; i < currentTimeConditionAverage.size(); i++) {
+            for (int i = begin; i < end; i++) {
 
                 final int position = i;
                 doAnalysisInnerForTommorrowUp(currentTimeConditionAverage.get(i), new AnalysisCallback() {

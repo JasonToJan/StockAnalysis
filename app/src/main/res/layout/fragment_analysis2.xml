@@ -253,89 +253,61 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_80"
-                android:layout_gravity="center"
-                android:gravity="center">
+                android:layout_height="@dimen/dp_50">
 
-                <Button
-                    android:layout_width="@dimen/dp_40"
+
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="从"
+                    android:textColor="@color/colorBlack"
                     android:layout_gravity="center_vertical"
-                    android:text="1"
-                    android:id="@+id/fa_btn1"
-                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:layout_marginStart="@dimen/sp_10"
                     />
 
-                <Button
-                    android:layout_width="@dimen/dp_40"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="2"
-                    android:id="@+id/fa_btn2"
+                <EditText
+                    android:id="@+id/fa2_begin_et"
                     android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp_30"
+                    android:hint="必填"
+                    android:textColor="@color/colorBlack"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:inputType="number"
+                    android:layout_marginStart="@dimen/sp_10"
+                    android:background="@drawable/edit_selector"
+                    android:maxLines="1"
+                    android:digits="1234567890"
                     />
 
-                <Button
-                    android:layout_width="@dimen/dp_40"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="到"
+                    android:textColor="@color/colorBlack"
                     android:layout_gravity="center_vertical"
-                    android:text="3"
-                    android:id="@+id/fa_btn3"
-                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:layout_marginStart="@dimen/sp_10"
                     />
 
-                <Button
-                    android:layout_width="@dimen/dp_40"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="4"
-                    android:id="@+id/fa_btn4"
+                <EditText
+                    android:id="@+id/fa2_end_et"
                     android:layout_weight="1"
-                    />
-
-                <Button
-                    android:layout_width="@dimen/dp_40"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp_30"
+                    android:hint="必填"
+                    android:textColor="@color/colorBlack"
                     android:layout_gravity="center_vertical"
-                    android:text="5"
-                    android:id="@+id/fa_btn5"
-                    android:layout_weight="1"
-                    />
-
-                <Button
-                    android:layout_width="@dimen/dp_40"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="6"
-                    android:id="@+id/fa_btn6"
-                    android:layout_weight="1"
-                    />
-
-                <Button
-                    android:layout_width="@dimen/dp_40"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="7"
-                    android:id="@+id/fa_btn7"
-                    android:layout_weight="1"
-                    />
-
-                <Button
-                    android:layout_width="@dimen/dp_40"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="8"
-                    android:id="@+id/fa_btn8"
-                    android:layout_weight="1"
-                    />
-
-                <Button
-                    android:layout_width="@dimen/dp_40"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="9"
-                    android:id="@+id/fa_btn9"
-                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:inputType="number"
+                    android:layout_marginStart="@dimen/sp_10"
+                    android:background="@drawable/edit_selector"
+                    android:maxLines="1"
+                    android:digits="1234567890"
                     />
 
             </LinearLayout>

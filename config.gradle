@@ -6,8 +6,8 @@ ext {
             buildToolsVersion: "29.0.2",
             minSdkVersion    : 21,
             targetSdkVersion : 29,
-            versionCode      : 17,
-            versionName      : "1.1.7",
+            versionCode      : 20,
+            versionName      : "1.2.0",
             kotlin_version   : "1.3.50",
 
             isAssembling     : true, //是否组装在一起，组装成一个大型App，如果不是就是零碎的组件

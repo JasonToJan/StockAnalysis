@@ -60,6 +60,11 @@ public class AnalysisResultAdatper extends BaseQuickAdapter<AnalysisStock, BaseV
             helper.setText(R.id.iar_forecast_tv,"参考："+item.getNextStock().getCode()+" "+item.getNextStock().getDate());
         }
 
+        if (item.isHasPro()) {
+            helper.setVisible(R.id.iar_upPro_tv, true);
+            helper.setText(R.id.iar_upPro_tv, "上涨概率为："+item.getUpPro());
+        }
+
         //判断后期开盘
         Stock nextStock = item.getNextStock();
         if (nextStock == null || type >= 2) return;

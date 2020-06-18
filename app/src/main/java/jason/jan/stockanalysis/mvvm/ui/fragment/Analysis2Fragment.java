@@ -29,6 +29,8 @@ import jason.jan.stockanalysis.utils.LogUtils;
 import jason.jan.stockanalysis.utils.ToastUtils;
 import jason.jan.stockanalysis.view.CustomProgress;
 
+import static jason.jan.stockanalysis.utils.LogUtils.d;
+
 /**
  * Description: 增加股票记录碎片
  * *
@@ -198,16 +200,6 @@ public class Analysis2Fragment extends BaseFragment<AnalysisF2ViewModel, Fragmen
         binding.fa2AnalysisBtn8.setOnClickListener(this);//最近跳水
         binding.fa2AnalysisBtn9.setOnClickListener(this);//最近冲高
         binding.fa2DateTv.setOnClickListener(this);
-
-        binding.faBtn1.setOnClickListener(this);
-        binding.faBtn2.setOnClickListener(this);
-        binding.faBtn3.setOnClickListener(this);
-        binding.faBtn4.setOnClickListener(this);
-        binding.faBtn5.setOnClickListener(this);
-        binding.faBtn6.setOnClickListener(this);
-        binding.faBtn7.setOnClickListener(this);
-        binding.faBtn8.setOnClickListener(this);
-        binding.faBtn9.setOnClickListener(this);
 
     }
 
@@ -455,9 +447,9 @@ public class Analysis2Fragment extends BaseFragment<AnalysisF2ViewModel, Fragmen
             try {
                 float up = Float.parseFloat(binding.fa2OpenUpTv.getText().toString());
                 mViewModel.setTOMORROW_BUY_UP_OFFSET(up);
-                LogUtils.d(TAG, "上升概率：" + up);
+                d(TAG, "上升概率：" + up);
             } catch (Throwable e) {
-                LogUtils.d("Error", "##" + e.getMessage());
+                d("Error", "##" + e.getMessage());
             }
         }
 
@@ -465,9 +457,9 @@ public class Analysis2Fragment extends BaseFragment<AnalysisF2ViewModel, Fragmen
             try {
                 float proximity = Float.parseFloat(binding.fa2TomorrowProximityEt.getText().toString());
                 mViewModel.setPROXIMITY(proximity);
-                LogUtils.d(TAG, "相似度：" + proximity);
+                d(TAG, "相似度：" + proximity);
             } catch (Throwable e) {
-                LogUtils.d("Error", "##" + e.getMessage());
+                d("Error", "##" + e.getMessage());
             }
         }
 
@@ -544,13 +536,32 @@ public class Analysis2Fragment extends BaseFragment<AnalysisF2ViewModel, Fragmen
             try {
                 float proximity = Float.parseFloat(binding.fa2ProTv.getText().toString());
                 mViewModel.setPROXIMITY(proximity);
-                LogUtils.d(TAG, "相似度：" + proximity);
+                d(TAG, "相似度：" + proximity);
             } catch (Throwable e) {
-                LogUtils.d("Error", "##" + e.getMessage());
+                d("Error", "##" + e.getMessage());
             }
         }
 
-        mViewModel.doAnalysisUp(new AnalysisF2ViewModel.AnalysisCallback() {
+        String begin = binding.fa2BeginEt.getText().toString();
+        String end = binding.fa2EndEt.getText().toString();
+        int beginInt = 0;
+        int endInt = 0;
+        try {
+            if (!binding.fa2BeginEt.getText().toString().isEmpty() && !binding.fa2EndEt.getText().toString().isEmpty()) {
+                try {
+                    beginInt = Integer.parseInt(binding.fa2BeginEt.getText().toString());
+                    endInt = Integer.parseInt(binding.fa2EndEt.getText().toString());
+
+                    d(TAG, "从：" + beginInt + " 到：" + endInt);
+                } catch (Throwable e) {
+                    d("Error", "##" + e.getMessage());
+                }
+            }
+        } catch (Throwable e) {
+            d("Error", "##" + e.getMessage());
+        }
+
+        mViewModel.doAnalysisUp(beginInt, endInt, new AnalysisF2ViewModel.AnalysisCallback() {
             int sizeAll = 0;
 
             @Override
@@ -586,12 +597,12 @@ public class Analysis2Fragment extends BaseFragment<AnalysisF2ViewModel, Fragmen
                             @Override
                             public int compare(AnalysisStock a1, AnalysisStock a2) {
                                 if (a1.getUpPro() > a2.getUpPro()) {
-                                    return 1;
+                                    return -1;
                                 }
                                 if (a1.getUpPro() == a2.getUpPro()) {
                                     return 0;
                                 }
-                                return -1;
+                                return 1;
                             }
                         });
 
@@ -637,9 +648,9 @@ public class Analysis2Fragment extends BaseFragment<AnalysisF2ViewModel, Fragmen
             try {
                 float proximity = Float.parseFloat(binding.fa2TomorrowProximityEt.getText().toString());
                 mViewModel.setPROXIMITY(proximity);
-                LogUtils.d(TAG, "相似度：" + proximity);
+                d(TAG, "相似度：" + proximity);
             } catch (Throwable e) {
-                LogUtils.d("Error", "##" + e.getMessage());
+                d("Error", "##" + e.getMessage());
             }
         }
 
@@ -716,9 +727,9 @@ public class Analysis2Fragment extends BaseFragment<AnalysisF2ViewModel, Fragmen
             try {
                 float proximity = Float.parseFloat(binding.fa2TomorrowProximityEt.getText().toString());
                 mViewModel.setPROXIMITY(proximity);
-                LogUtils.d(TAG, "相似度：" + proximity);
+                d(TAG, "相似度：" + proximity);
             } catch (Throwable e) {
-                LogUtils.d("Error", "##" + e.getMessage());
+                d("Error", "##" + e.getMessage());
             }
         }
 
@@ -726,9 +737,9 @@ public class Analysis2Fragment extends BaseFragment<AnalysisF2ViewModel, Fragmen
             try {
                 float up = Float.parseFloat(binding.fa25dayUpTv.getText().toString());
                 mViewModel.setFIVE_DAY_UP_OFFSET(up);
-                LogUtils.d(TAG, "上升概率：" + up);
+                d(TAG, "上升概率：" + up);
             } catch (Throwable e) {
-                LogUtils.d("Error", "##" + e.getMessage());
+                d("Error", "##" + e.getMessage());
             }
         }
 
@@ -805,9 +816,9 @@ public class Analysis2Fragment extends BaseFragment<AnalysisF2ViewModel, Fragmen
             try {
                 float proximity = Float.parseFloat(binding.fa2TomorrowProximityEt.getText().toString());
                 mViewModel.setPROXIMITY(proximity);
-                LogUtils.d(TAG, "相似度：" + proximity);
+                d(TAG, "相似度：" + proximity);
             } catch (Throwable e) {
-                LogUtils.d("Error", "##" + e.getMessage());
+                d("Error", "##" + e.getMessage());
             }
         }
 
@@ -815,9 +826,9 @@ public class Analysis2Fragment extends BaseFragment<AnalysisF2ViewModel, Fragmen
             try {
                 float up = Float.parseFloat(binding.fa25dayUpTv.getText().toString());
                 mViewModel.setFIVE_DAY_UP_OFFSET(up);
-                LogUtils.d(TAG, "上升概率：" + up);
+                d(TAG, "上升概率：" + up);
             } catch (Throwable e) {
-                LogUtils.d("Error", "##" + e.getMessage());
+                d("Error", "##" + e.getMessage());
             }
         }
 
@@ -894,9 +905,9 @@ public class Analysis2Fragment extends BaseFragment<AnalysisF2ViewModel, Fragmen
             try {
                 float proximity = Float.parseFloat(binding.fa2ProTv.getText().toString());
                 mViewModel.setJUMP_WATER_RATIO(proximity);
-                LogUtils.d(TAG, "相似度：" + proximity);
+                d(TAG, "相似度：" + proximity);
             } catch (Throwable e) {
-                LogUtils.d("Error", "##" + e.getMessage());
+                d("Error", "##" + e.getMessage());
             }
         }
 
@@ -973,9 +984,9 @@ public class Analysis2Fragment extends BaseFragment<AnalysisF2ViewModel, Fragmen
             try {
                 float proximity = Float.parseFloat(binding.fa2ProTv.getText().toString());
                 mViewModel.setJUMP_WATER_RATIO(proximity);
-                LogUtils.d(TAG, "相似度：" + proximity);
+                d(TAG, "相似度：" + proximity);
             } catch (Throwable e) {
-                LogUtils.d("Error", "##" + e.getMessage());
+                d("Error", "##" + e.getMessage());
             }
         }
 
