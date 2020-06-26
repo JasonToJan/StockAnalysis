@@ -570,7 +570,20 @@ public class AnalysisF2ViewModel extends BaseViewModel<RepositoryImpl> {
         if (list == null || list.size() == 0) {
             d(TAG, "最大时间有问题哦，需要减一天");
             currentMonthMills -= 24 * 3600 * 1000;
+            list = getRepository().getDatabase().stockDao().getStocksByCurrentTime(currentMonthMills);
+
+            if (list == null || list.size() == 0) {
+                d(TAG, "最大时间有问题哦，需要减一天");
+                currentMonthMills -= 24 * 3600 * 1000;
+                list = getRepository().getDatabase().stockDao().getStocksByCurrentTime(currentMonthMills);
+
+                if (list == null || list.size() == 0) {
+                    d(TAG, "最大时间有问题哦，需要减一天");
+                    currentMonthMills -= 24 * 3600 * 1000;
+                }
+            }
         }
+
 
         for (int i = 0; i < codes.size(); i++) {
             //这是某一只股票了，然后分析这只股票明天会涨停类型，返回一个Condition2
